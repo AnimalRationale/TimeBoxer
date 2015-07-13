@@ -31,13 +31,13 @@ public class AboutDialog {
         versionInfo(callingActivity);
         String aboutVersion = sVersionName + "." + sVersionCode;
         LayoutInflater layoutInflater = LayoutInflater.from(callingActivity);
-        View aboutDialog = layoutInflater.inflate(R.layout.about_dialog, null);
+        View aboutDialog = layoutInflater.inflate(R.layout.dialog_about, null);
         TextView textAbout = (TextView) aboutDialog.findViewById(R.id.aboutDialogInfo);
         textAbout.setText(aboutVersion);
         new AlertDialog.Builder(callingActivity)
                 .setTitle(callingActivity.getResources().getString(R.string.about_dialog_title)
                         + callingActivity.getString(R.string.app_name))
-                .setIcon(R.drawable.ic_launcher)
+                .setIcon(null)
                 .setCancelable(true)
                 .setPositiveButton(callingActivity.getResources().getString(R.string.about_dialog_ok), null)
                 .setView(aboutDialog)

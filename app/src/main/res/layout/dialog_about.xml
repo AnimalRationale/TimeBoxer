@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/about_dialog_version"
+            android:text="@string/dialog_about_version"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
         <TextView
             android:id="@+id/aboutDialogInfo"

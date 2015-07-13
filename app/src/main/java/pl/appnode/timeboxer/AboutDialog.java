@@ -22,8 +22,8 @@ public class AboutDialog {
             sVersionCode = String.valueOf(info.versionCode);
         }
         catch (PackageManager.NameNotFoundException ex) {
-            sVersionName = context.getResources().getString(R.string.about_dialog_ver_name_err);
-            sVersionCode = context.getResources().getString(R.string.about_dialog_ver_code_err);
+            sVersionName = context.getResources().getString(R.string.dialog_about_version_name_error);
+            sVersionCode = context.getResources().getString(R.string.dialog_about_version_code_error);
         }
     }
 
@@ -35,11 +35,11 @@ public class AboutDialog {
         TextView textAbout = (TextView) aboutDialog.findViewById(R.id.aboutDialogInfo);
         textAbout.setText(aboutVersion);
         new AlertDialog.Builder(callingActivity)
-                .setTitle(callingActivity.getResources().getString(R.string.about_dialog_title)
+                .setTitle(callingActivity.getResources().getString(R.string.dialog_about_title)
                         + callingActivity.getString(R.string.app_name))
                 .setIcon(null)
                 .setCancelable(true)
-                .setPositiveButton(callingActivity.getResources().getString(R.string.about_dialog_ok), null)
+                .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_about_ok), null)
                 .setView(aboutDialog)
                 .show();
     }

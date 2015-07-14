@@ -3,6 +3,9 @@ package pl.appnode.timeboxer;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
@@ -23,45 +26,64 @@ import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 
 public class TimersBroadcastService extends Service {
 
+    private static final String TAG = "TimersBroadcastService";
+
     private List<TimerInfo> createList() {
-        SharedPreferences alarmsPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
+        SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         String alarmPrefix;
         int timeFactor = SECOND_IN_MILLIS;
 
-        List<TimerInfo> result = new ArrayList<TimerInfo>();
+        List<TimerInfo> timersList = new ArrayList<TimerInfo>();
         for (int i = 1; i <= TIMERS_COUNT; i++) {
-            TimerInfo alarm = new TimerInfo();
-            alarmPrefix = "Alarm_" + i;
-            alarm.mName = alarmsPrefs.getString(alarmPrefix, "Def Alarm " + i);
-            alarm.mDuration = alarmsPrefs.getInt(alarmPrefix + "_Duration", DEFAULT_TIMER_DURATION
+            TimerInfo timer = new TimerInfo();
+            alarmPrefix = "Timer_" + i;
+            timer.mName = timersPrefs.getString(alarmPrefix, "Timer " + i);
+            timer.mDuration = timersPrefs.getInt(alarmPrefix + "_Duration", DEFAULT_TIMER_DURATION
                     + (i * DEFAULT_TIMER_DURATION_MODIFIER));
-            alarm.mTimeUnit = alarmsPrefs.getInt(alarmPrefix + "_TimeUnit", SECOND);
-            switch (alarm.mTimeUnit) {
-                case SECOND:  alarm.mTimeUnitSymbol = getResources().getString(R.string.time_unit_seconds);
+            timer.mTimeUnit = timersPrefs.getInt(alarmPrefix + "_TimeUnit", SECOND);
+            switch (timer.mTimeUnit) {
+                case SECOND:  timer.mTimeUnitSymbol = getResources().getString(R.string.time_unit_seconds);
                     timeFactor = SECOND_IN_MILLIS;
                     break;
-                case MINUTE:  alarm.mTimeUnitSymbol = getResources().getString(R.string.time_unit_minutes);
+                case MINUTE:  timer.mTimeUnitSymbol = getResources().getString(R.string.time_unit_minutes);
                     timeFactor = MINUTE_IN_MILLIS;
                     break;
             }
-            alarm.mStatus = alarmsPrefs.getInt(alarmPrefix + "_State", 0);
-            alarm.mRingtoneUri = alarmsPrefs.getString(alarmPrefix + "_Ringtone", setRingtone());
-            alarm.mRingtoneVolume = alarmsPrefs.getInt(alarmPrefix + "_RingtoneVol", setMaxVolume());
-            alarm.mFullscreenOff = alarmsPrefs.getBoolean(alarmPrefix + "_FullScreenOff", true);
-            alarm.mFinishTime = alarmsPrefs.getLong(alarmPrefix + "_FinishTime", 0);
-            if (alarm.mStatus == 1 & alarm.mFinishTime > SystemClock.elapsedRealtime()) {
-                int continuation = (int) (((alarm.mFinishTime - SystemClock.elapsedRealtime()) + timeFactor) / timeFactor);
+            timer.mStatus = timersPrefs.getInt(alarmPrefix + "_State", 0);
+            timer.mRingtoneUri = timersPrefs.getString(alarmPrefix + "_Ringtone", setRingtone());
+            timer.mRingtoneVolume = timersPrefs.getInt(alarmPrefix + "_RingtoneVol", setMaxVolume());
+            timer.mFullscreenSwitchOff = timersPrefs.getBoolean(alarmPrefix + "_FullScreenOff", true);
+            timer.mFinishTime = timersPrefs.getLong(alarmPrefix + "_FinishTime", 0);
+            if (timer.mStatus == 1 & timer.mFinishTime > SystemClock.elapsedRealtime()) {
+                int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime()) + timeFactor) / timeFactor);
                 if (continuation < 100) {
-                    alarm.mDurationCounter = continuation;
-                    sAlarmState[i - 1] = RESTORE;
+                    timer.mDurationCounter = continuation;
+                    // sAlarmState[i - 1] = RESTORE;
                     Log.d(TAG, "Alarm #" + i + " set to RESTORE.");
                 }
-            } else alarm.mDurationCounter = alarm.mDuration;
-            result.add(alarm);
-            Log.d(TAG, "Result add #" + i);
+            } else timer.mDurationCounter = timer.mDuration;
+            timersList.add(timer);
+            Log.d(TAG, "List of timers #" + i);
         }
-        Log.d(TAG, "RETURN!");
-        return result;
+        Log.d(TAG, "List created.");
+        return timersList;
+    }
+
+    private static String setRingtone() {
+        Uri ringtoneUri;
+        ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (ringtoneUri == null) {
+            ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            if (ringtoneUri == null) {
+                ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            }
+        }
+        return ringtoneUri.toString();
+    }
+
+    private int setMaxVolume() {
+        AudioManager audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
+        return audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
     }
     
     @Override

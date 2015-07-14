@@ -5,7 +5,7 @@ package pl.appnode.timeboxer;
 public final class Constants {
     private Constants() {} /** Private constructor of final class to prevent instantiating. */
 
-    public static final String ALARMS_PREFS_FILE = "AlarmsPrefsFile";
+    public static final String ALARMS_PREFS_FILE = "TimersPrefsFile";
     public static final int DEFAULT_TIMER_DURATION = 12;
     public static final int DEFAULT_TIMER_DURATION_MODIFIER = 4;
     public static final int OFF = 0;

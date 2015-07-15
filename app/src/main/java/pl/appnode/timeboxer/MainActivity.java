@@ -14,12 +14,16 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
     protected static TimersAdapter mTimersAdapter;
+    protected static boolean sIsTimersBroadcastService = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent serviceIntent = new Intent(AppContextHelper.getContext(), TimersBroadcastService.class);
-        startService(serviceIntent);
+        if (!sIsTimersBroadcastService) {
+            Intent serviceIntent = new Intent(AppContextHelper.getContext(), TimersBroadcastService.class);
+            AppContextHelper.getContext().startService(serviceIntent);
+            Log.d(TAG, "Starting service, service = " + sIsTimersBroadcastService);
+        }
         setContentView(R.layout.activity_main);
         RecyclerView recyclerTimersList = (RecyclerView) findViewById(R.id.timersList);
         recyclerTimersList.setItemAnimator(null);

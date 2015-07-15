@@ -1,6 +1,6 @@
 package pl.appnode.timeboxer;
 
-public class TimerInfo {
+public class TimerItem {
 
     String mName;
     int mDuration;

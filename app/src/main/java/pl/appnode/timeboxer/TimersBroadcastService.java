@@ -27,14 +27,27 @@ import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 public class TimersBroadcastService extends Service {
 
     private static final String TAG = "TimersBroadcastService";
+    protected static List<TimerItem> mTimersList = new ArrayList<>(TIMERS_COUNT);
 
-    private List<TimerInfo> createList() {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        int startMode = START_STICKY;
+        createTimersList();
+        Log.d(TAG, "Starting broadcast service.");
+        return startMode;
+    }
+
+    private void createTimersList() {
         SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         String alarmPrefix;
         int timeFactor = SECOND_IN_MILLIS;
-        List<TimerInfo> timersList = new ArrayList<TimerInfo>();
         for (int i = 1; i <= TIMERS_COUNT; i++) {
-            TimerInfo timer = new TimerInfo();
+            TimerItem timer = new TimerItem();
             alarmPrefix = "Timer_" + i;
             timer.mName = timersPrefs.getString(alarmPrefix, "Timer " + i);
             timer.mDuration = timersPrefs.getInt(alarmPrefix + "_Duration", DEFAULT_TIMER_DURATION
@@ -61,11 +74,10 @@ public class TimersBroadcastService extends Service {
                     Log.d(TAG, "Alarm #" + i + " restored with duration: " + continuation);
                 }
             } else timer.mDurationCounter = timer.mDuration;
-            timersList.add(timer);
-            Log.d(TAG, "List of timers #" + i);
+            mTimersList.add(timer);
+            Log.d(TAG, "Timer #" + i + " added to list.");
         }
-        Log.d(TAG, "List created.");
-        return timersList;
+        Log.d(TAG, "TimersList created.");
     }
 
     private static String setRingtone() {

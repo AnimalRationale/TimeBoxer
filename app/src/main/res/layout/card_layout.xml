@@ -15,7 +15,7 @@
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:padding="6dip">
         <Button
-            android:id="@+id/round_btn1"
+            android:id="@+id/button_round_01"
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:layout_alignParentBottom="true"
@@ -28,9 +28,9 @@
             android:textAllCaps="false"
             android:textColor="#fff" />
         <SeekBar
-            android:id="@+id/minutes_seek"
+            android:id="@+id/time_seek_bar"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/round_btn1"
+            android:layout_toRightOf="@id/button_round_01"
             android:gravity="bottom"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -40,11 +40,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dip"
-            android:layout_above="@id/minutes_seek"
+            android:layout_above="@id/time_seek_bar"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_toRightOf="@id/round_btn1"
+            android:layout_toRightOf="@id/button_round_01"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/card_name"
             android:textColor="@color/primary"

@@ -8,9 +8,9 @@ public final class Constants {
     public static final String ALARMS_PREFS_FILE = "TimersPrefsFile";
     public static final int DEFAULT_TIMER_DURATION = 12;
     public static final int DEFAULT_TIMER_DURATION_MODIFIER = 4;
-    public static final int OFF = 0;
-    public static final int SWITCHING = 1;
-    public static final int ON = 2;
+    public static final int IDLE = 0;
+    public static final int RUNNING = 1;
+    public static final int FINISHED = 2;
     public static final int RESTORE = 3;
     public static final int SECOND = 0;
     public static final int MINUTE = 1;

@@ -17,7 +17,7 @@ import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION_MODIFIER;
 import static pl.appnode.timeboxer.Constants.MINUTE_IN_MILLIS;
-import static pl.appnode.timeboxer.Constants.RESTORE;
+import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.Constants.MINUTE;
 import static pl.appnode.timeboxer.Constants.SECOND_IN_MILLIS;
@@ -32,7 +32,6 @@ public class TimersBroadcastService extends Service {
         SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         String alarmPrefix;
         int timeFactor = SECOND_IN_MILLIS;
-
         List<TimerInfo> timersList = new ArrayList<TimerInfo>();
         for (int i = 1; i <= TIMERS_COUNT; i++) {
             TimerInfo timer = new TimerInfo();
@@ -54,12 +53,12 @@ public class TimersBroadcastService extends Service {
             timer.mRingtoneVolume = timersPrefs.getInt(alarmPrefix + "_RingtoneVol", setMaxVolume());
             timer.mFullscreenSwitchOff = timersPrefs.getBoolean(alarmPrefix + "_FullScreenOff", true);
             timer.mFinishTime = timersPrefs.getLong(alarmPrefix + "_FinishTime", 0);
-            if (timer.mStatus == 1 & timer.mFinishTime > SystemClock.elapsedRealtime()) {
+            if (timer.mStatus == RUNNING & timer.mFinishTime > SystemClock.elapsedRealtime()) {
                 int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime()) + timeFactor) / timeFactor);
                 if (continuation < 100) {
                     timer.mDurationCounter = continuation;
-                    // sAlarmState[i - 1] = RESTORE;
-                    Log.d(TAG, "Alarm #" + i + " set to RESTORE.");
+                    // TODO start timer for continuation
+                    Log.d(TAG, "Alarm #" + i + " restored with duration: " + continuation);
                 }
             } else timer.mDurationCounter = timer.mDuration;
             timersList.add(timer);
@@ -81,8 +80,8 @@ public class TimersBroadcastService extends Service {
         return ringtoneUri.toString();
     }
 
-    private int setMaxVolume() {
-        AudioManager audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
+    private static int setMaxVolume() {
+        AudioManager audioManager = (AudioManager) AppContextHelper.getContext().getSystemService(AUDIO_SERVICE);
         return audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
     }
     

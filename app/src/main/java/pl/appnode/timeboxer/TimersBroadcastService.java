@@ -37,9 +37,9 @@ public class TimersBroadcastService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startMode = START_STICKY;
-        MainActivity.sIsTimersBroadcastService = true;
         createTimersList();
         Log.d(TAG, "Starting broadcast service.");
+        MainActivity.sIsTimersBroadcastService = true;
         return startMode;
     }
 

@@ -31,8 +31,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
 
     @Override
     public void onBindViewHolder(final TimersViewHolder timersViewHolder, final int position) {
-        final TimerItem timerItem = mAdapterTimersList.get(position);
-        timersViewHolder.vTitle.setText(timerItem.mName);
+        final TimerItem timer = mAdapterTimersList.get(position);
+        timersViewHolder.vTitle.setText(timer.mName);
+        timersViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
     }
 
     @Override

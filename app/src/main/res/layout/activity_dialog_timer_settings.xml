@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:id="@+id/layout_root"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/timerEditTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/settings_timer_title"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        <EditText
+            android:id="@+id/timerNameText"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            android:layout_height="wrap_content"
+            android:hint="@string/settings_timer_name_hint" >
+        </EditText>
+        <Switch android:id="@+id/switchFullscreenOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/settings_timer_fullscreen_off_switch"
+            android:textOn="@string/settings_timer_fullscreen_off_switch_on"
+            android:textOff="@string/settings_timer_fullscreen_off_switch_off" />
+        <TextView
+            android:id="@+id/textViewRadioButtons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/settings_timer_units"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+            <RadioButton android:id="@+id/radioSeconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seconds"
+                />
+            <RadioButton android:id="@+id/radioMinutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minutes"
+                />
+        </RadioGroup>
+        <TextView
+            android:id="@+id/textRingtoneName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/settings_timer_ringtone"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+        <Button
+            android:id="@+id/changeRingtone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/settings_timer_ringtone_change"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/primary"
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:layout_marginTop="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.08">
+            <SeekBar
+                android:id="@+id/volumeSeekBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center"
+                android:layout_margin="0dip"
+                android:gravity="center" />
+            <ImageView
+                android:id="@+id/volumeIconMute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:background="@drawable/round_icon_background"
+                android:src="@mipmap/ic_volume_mute_white_18dp"/>
+            <ImageView
+                android:id="@+id/volumeIconUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:background="@drawable/round_icon_background"
+                android:src="@mipmap/ic_volume_up_white_18dp"/>
+
+        </FrameLayout>
+        <ImageButton
+            android:id="@+id/playTimerSettings"
+            android:layout_width="38dip"
+            android:layout_height="38dip"
+            android:background="@drawable/round_button_background"
+            android:src="@mipmap/ic_play_arrow_white_36dp"
+            android:layout_gravity="center"
+            style="?android:attr/borderlessButtonStyle"/>
+        <FrameLayout
+            android:layout_marginTop="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.08">
+            <Button
+                android:id="@+id/cancelTimerSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_gravity="left|top"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/okTimerSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@+id/cancelTimerSettings"
+                android:text="OK"
+                android:layout_gravity="right|top"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>

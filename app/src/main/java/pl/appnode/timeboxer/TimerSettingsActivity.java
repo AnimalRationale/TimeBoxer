@@ -19,13 +19,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import static pl.appnode.timeboxer.Constants.MINUTE;
 import static pl.appnode.timeboxer.Constants.RINGTONE_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.SECOND;
+import static pl.appnode.timeboxer.PreferenceSetupHelper.isDarkTheme;
+import static pl.appnode.timeboxer.PreferenceSetupHelper.themeSetup;
 
 
 public class TimerSettingsActivity extends Activity implements View.OnClickListener {
@@ -53,9 +54,9 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // themeSetup(this); // Setting theme
+        themeSetup(this); // Setting theme
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.alarm_settings_dialog);
+        setContentView(R.layout.activity_dialog_timer_settings);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
         layoutParams.dimAmount=0.8f;
@@ -110,7 +111,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
     private void playRingtone() {
         setVolume();
         mPlayStopButton.setBackgroundResource(R.drawable.round_button_red);
-        mPlayStopButton.setImageResource(R.drawable.ic_stop_white_36dp);
+        mPlayStopButton.setImageResource(R.mipmap.ic_stop_white_36dp);
         mIsPlaying = true;
         mRingtone.play();
     }
@@ -120,7 +121,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         mIsPlaying = false;
         mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mOriginalVolume, 0);
         mPlayStopButton.setBackgroundResource(R.drawable.round_button_green);
-        mPlayStopButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+        mPlayStopButton.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
         Log.d(TAG, "Restored ringtone volume: " + mOriginalVolume);
     }
 
@@ -170,7 +171,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         Intent ringtoneIntent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
         ringtoneIntent.putExtra
                 (RingtoneManager.EXTRA_RINGTONE_TITLE,
-                        getResources().getString(R.string.alarm_settings_ringtone_picker) + mTitle.getText());
+                        getResources().getString(R.string.settings_timer_ringtone_picker) + mTitle.getText());
         ringtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
         ringtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
         ringtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mCurrentRingtoneUri);
@@ -193,11 +194,11 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.okAlarmSettings:
+            case R.id.okTimerSettings:
                 stopRingtone();
                 resultOk();
                 break;
-            case R.id.cancelAlarmSettings:
+            case R.id.cancelTimerSettings:
                 stopRingtone();
                 resultCancel();
                 break;
@@ -205,7 +206,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
                 stopRingtone();
                 ringtonePicker();
                 break;
-            case R.id.playAlarmSettings:
+            case R.id.playTimerSettings:
                 if (mRingtone.isPlaying() || mIsPlaying) {
                     stopRingtone();
                 } else playRingtone();

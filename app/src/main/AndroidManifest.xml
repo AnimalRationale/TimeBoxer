@@ -23,6 +23,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pl.appnode.timeboxer.MainActivity" />
         </activity>
+        <activity
+            android:name=".TimerSettingsActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/settings_timer_activity"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@android:style/android:Theme.Holo.Light.Dialog" >
+        </activity>
         <service
             android:name=".TimersBroadcastService"
             android:exported="false" />

@@ -2,7 +2,6 @@ package pl.appnode.timeboxer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +12,9 @@ import android.view.ViewConfiguration;
 
 import java.lang.reflect.Field;
 
-import static pl.appnode.timeboxer.PreferenceSetupHelper.isDarkTheme;
-import static pl.appnode.timeboxer.PreferenceSetupHelper.orientationSetup;
-import static pl.appnode.timeboxer.PreferenceSetupHelper.themeSetup;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.orientationSetup;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
 
 public class MainActivity extends Activity {

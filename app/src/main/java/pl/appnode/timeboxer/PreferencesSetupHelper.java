@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import android.os.Build;
 
 
-public class PreferenceSetupHelper {
+public class PreferencesSetupHelper {
 
     public static void themeSetup(Context context) {
 

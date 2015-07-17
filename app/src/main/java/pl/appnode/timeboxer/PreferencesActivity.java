@@ -5,8 +5,8 @@ import android.preference.PreferenceActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-import static pl.appnode.timeboxer.PreferenceSetupHelper.orientationSetup;
-import static pl.appnode.timeboxer.PreferenceSetupHelper.themeSetup;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.orientationSetup;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
 public class PreferencesActivity extends PreferenceActivity {
     @Override

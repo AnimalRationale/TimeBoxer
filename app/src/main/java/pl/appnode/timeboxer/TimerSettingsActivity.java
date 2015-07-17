@@ -25,8 +25,8 @@ import android.widget.TextView;
 import static pl.appnode.timeboxer.Constants.MINUTE;
 import static pl.appnode.timeboxer.Constants.RINGTONE_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.SECOND;
-import static pl.appnode.timeboxer.PreferenceSetupHelper.isDarkTheme;
-import static pl.appnode.timeboxer.PreferenceSetupHelper.themeSetup;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
 
 public class TimerSettingsActivity extends Activity implements View.OnClickListener {

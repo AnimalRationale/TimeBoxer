@@ -1,6 +1,7 @@
 package pl.appnode.timeboxer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.List;
+
+import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersViewHolder>{
 
@@ -34,6 +38,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
         final TimerItem timer = mAdapterTimersList.get(position);
         timersViewHolder.vTitle.setText(timer.mName);
         timersViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
+        timersViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
+        timersViewHolder.vMinutesBar.setProgress(timer.mDuration);
     }
 
     @Override
@@ -42,6 +48,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_layout, viewGroup, false);
         CardView card = (CardView) itemView;
+        if (isDarkTheme(mContext)) {
+            card.setCardBackgroundColor(Color.BLACK);
+        } else card.setCardBackgroundColor(Color.WHITE);
         return new TimersViewHolder(itemView);
     }
 

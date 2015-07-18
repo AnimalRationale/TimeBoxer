@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerTimersList.setLayoutManager(llm);
-        mTimersAdapter = new TimersAdapter(TimersBroadcastService.mTimersList, MainActivity.this);
+        mTimersAdapter = new TimersAdapter(this);
         recyclerTimersList.setAdapter(mTimersAdapter);
         Log.d(TAG, "TimersAdapter");
     }

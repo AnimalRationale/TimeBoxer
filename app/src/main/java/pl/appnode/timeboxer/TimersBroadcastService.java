@@ -27,7 +27,7 @@ import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 public class TimersBroadcastService extends Service {
 
     private static final String TAG = "TimersBroadcastService";
-    protected static List<TimerItem> mTimersList = new ArrayList<>(TIMERS_COUNT);
+    protected static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
 
     @Override
     public void onCreate() {
@@ -75,7 +75,7 @@ public class TimersBroadcastService extends Service {
                     Log.d(TAG, "Alarm #" + i + " restored with duration: " + continuation);
                 }
             } else timer.mDurationCounter = timer.mDuration;
-            mTimersList.add(timer);
+            sTimersList.add(timer);
             Log.d(TAG, "Timer #" + i + " added to list.");
         }
         Log.d(TAG, "TimersList created.");

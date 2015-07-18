@@ -13,32 +13,29 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.util.List;
-
 import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
+import static pl.appnode.timeboxer.TimersBroadcastService.sTimersList;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersViewHolder>{
 
     private static final String TAG = "TimersAdapter";
-    private List<TimerItem> mAdapterTimersList;
     private Context mContext;
 
-    public TimersAdapter(List<TimerItem> timersList, Context context) {
-        this.mAdapterTimersList = timersList;
+    public TimersAdapter(Context context) {
         mContext = context;
     }
 
     @Override
     public int getItemCount() {
-        return mAdapterTimersList.size();
+        return sTimersList.size();
     }
 
     @Override
     public void onBindViewHolder(final TimersViewHolder timersViewHolder, final int position) {
-        final TimerItem timer = mAdapterTimersList.get(position);
+        final TimerItem timer = sTimersList.get(position);
         timersViewHolder.vTitle.setText(timer.mName);
         timersViewHolder.vTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +77,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
     }
 
     private void showTimerSettings(int position) {
-        TimerItem timer = mAdapterTimersList.get(position);
+        TimerItem timer = sTimersList.get(position);
         Intent settingsIntent = new Intent(mContext, TimerSettingsActivity.class);
         settingsIntent.putExtra("AlarmId", position);
         settingsIntent.putExtra("AlarmName", timer.mName);

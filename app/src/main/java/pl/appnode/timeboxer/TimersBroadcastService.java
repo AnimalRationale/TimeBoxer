@@ -17,11 +17,20 @@ import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION_MODIFIER;
 import static pl.appnode.timeboxer.Constants.MINUTE_IN_MILLIS;
+import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_NAME;
+import static pl.appnode.timeboxer.Constants.PREFS_DURATION;
+import static pl.appnode.timeboxer.Constants.PREFS_FINISHTIME;
+import static pl.appnode.timeboxer.Constants.PREFS_FULLSCREEN_OFF;
+import static pl.appnode.timeboxer.Constants.PREFS_RINGTONE;
+import static pl.appnode.timeboxer.Constants.PREFS_RINGTONE_VOL;
+import static pl.appnode.timeboxer.Constants.PREFS_STATE;
+import static pl.appnode.timeboxer.Constants.PREFS_TIME_UNIT;
 import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.Constants.MINUTE;
 import static pl.appnode.timeboxer.Constants.SECOND_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
+import static pl.appnode.timeboxer.Constants.TIMER_PREFIX;
 
 
 public class TimersBroadcastService extends Service {
@@ -45,15 +54,14 @@ public class TimersBroadcastService extends Service {
 
     private void createTimersList() {
         SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
-        String alarmPrefix;
         int timeFactor = SECOND_IN_MILLIS;
         for (int i = 1; i <= TIMERS_COUNT; i++) {
             TimerItem timer = new TimerItem();
-            alarmPrefix = "Timer_" + i;
-            timer.mName = timersPrefs.getString(alarmPrefix, "Timer " + i);
-            timer.mDuration = timersPrefs.getInt(alarmPrefix + "_Duration", DEFAULT_TIMER_DURATION
+            String timerPrefix = TIMER_PREFIX + i;
+            timer.mName = timersPrefs.getString(timerPrefix, DEFAULT_TIMER_NAME + i);
+            timer.mDuration = timersPrefs.getInt(timerPrefix + PREFS_DURATION, DEFAULT_TIMER_DURATION
                     + (i * DEFAULT_TIMER_DURATION_MODIFIER));
-            timer.mTimeUnit = timersPrefs.getInt(alarmPrefix + "_TimeUnit", SECOND);
+            timer.mTimeUnit = timersPrefs.getInt(timerPrefix + PREFS_TIME_UNIT, SECOND);
             switch (timer.mTimeUnit) {
                 case SECOND:  timer.mTimeUnitSymbol = getResources().getString(R.string.time_unit_seconds);
                     timeFactor = SECOND_IN_MILLIS;
@@ -62,11 +70,11 @@ public class TimersBroadcastService extends Service {
                     timeFactor = MINUTE_IN_MILLIS;
                     break;
             }
-            timer.mStatus = timersPrefs.getInt(alarmPrefix + "_State", 0);
-            timer.mRingtoneUri = timersPrefs.getString(alarmPrefix + "_Ringtone", setRingtone());
-            timer.mRingtoneVolume = timersPrefs.getInt(alarmPrefix + "_RingtoneVol", setMaxVolume());
-            timer.mFullscreenSwitchOff = timersPrefs.getBoolean(alarmPrefix + "_FullScreenOff", true);
-            timer.mFinishTime = timersPrefs.getLong(alarmPrefix + "_FinishTime", 0);
+            timer.mStatus = timersPrefs.getInt(timerPrefix + PREFS_STATE, 0);
+            timer.mRingtoneUri = timersPrefs.getString(timerPrefix + PREFS_RINGTONE, setRingtone());
+            timer.mRingtoneVolume = timersPrefs.getInt(timerPrefix + PREFS_RINGTONE_VOL, setMaxVolume());
+            timer.mFullscreenSwitchOff = timersPrefs.getBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, true);
+            timer.mFinishTime = timersPrefs.getLong(timerPrefix + PREFS_FINISHTIME, 0);
             if (timer.mStatus == RUNNING & timer.mFinishTime > SystemClock.elapsedRealtime()) {
                 int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime()) + timeFactor) / timeFactor);
                 if (continuation < 100) {
@@ -85,21 +93,21 @@ public class TimersBroadcastService extends Service {
         SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         SharedPreferences.Editor editor = timersPrefs.edit();
         for (int i = 0; i < TIMERS_COUNT; i++) {
-            String alarmPrefix = "Alarm_" + (i + 1);
+            String timerPrefix = TIMER_PREFIX + (i + 1);
             TimerItem timer = sTimersList.get(i);
-            editor.putString(alarmPrefix, timer.mName);
-            editor.putInt(alarmPrefix + "_Duration", timer.mDuration);
-            editor.putInt(alarmPrefix + "_TimeUnit", timer.mTimeUnit);
-            editor.putInt(alarmPrefix + "_State", timer.mStatus);
+            editor.putString(timerPrefix, timer.mName);
+            editor.putInt(timerPrefix + "_Duration", timer.mDuration);
+            editor.putInt(timerPrefix + "_TimeUnit", timer.mTimeUnit);
+            editor.putInt(timerPrefix + "_State", timer.mStatus);
             if (timer.mStatus == RUNNING) {
-                editor.putLong(alarmPrefix + "_FinishTime", timer.mFinishTime);
-            } else editor.putLong(alarmPrefix + "_FinishTime", 0);
-            editor.putString(alarmPrefix + "_Ringtone", timer.mRingtoneUri);
-            editor.putInt(alarmPrefix + "_RingtoneVol", timer.mRingtoneVolume);
-            editor.putBoolean(alarmPrefix + "_FullScreenOff", timer.mFullscreenSwitchOff);
-            Log.d(TAG, "Create SharedPrefs: " + alarmPrefix + ": " + timer.mDuration
+                editor.putLong(timerPrefix + "_FinishTime", timer.mFinishTime);
+            } else editor.putLong(timerPrefix + "_FinishTime", 0);
+            editor.putString(timerPrefix + "_Ringtone", timer.mRingtoneUri);
+            editor.putInt(timerPrefix + "_RingtoneVol", timer.mRingtoneVolume);
+            editor.putBoolean(timerPrefix + "_FullScreenOff", timer.mFullscreenSwitchOff);
+            Log.d(TAG, "Create SharedPrefs: " + timerPrefix + ": " + timer.mDuration
                     + ": TimeUnit: " + timer.mTimeUnitSymbol
-                    + " :: isOn: " + timer.mStatus + " Vol: " + timer.mRingtoneVolume + " FSOFF: " + timer.mFullscreenSwitchOff);
+                    + " :: Status: " + timer.mStatus + " Vol: " + timer.mRingtoneVolume + " FSOFF: " + timer.mFullscreenSwitchOff);
         }
         editor.apply();
         Log.d(TAG, "SharedPrefs saved.");

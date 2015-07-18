@@ -6,6 +6,16 @@ public final class Constants {
     private Constants() {} /** Private constructor of final class to prevent instantiating. */
 
     public static final String ALARMS_PREFS_FILE = "TimersPrefsFile";
+    public static final String TIMER_PREFIX = "Timer_";
+    public static final String DEFAULT_TIMER_NAME = "Timer ";
+    public static final String PREFS_DURATION = "_Duration";
+    public static final String PREFS_TIME_UNIT = "_TimeUnit";
+    public static final String PREFS_STATE = "_State";
+    public static final String PREFS_RINGTONE = "_Ringtone";
+    public static final String PREFS_RINGTONE_VOL = "_RingtoneVol";
+    public static final String PREFS_FULLSCREEN_OFF = "_FullScreenOff";
+    public static final String PREFS_FINISHTIME = "_FinishTime";
+
     public static final int DEFAULT_TIMER_DURATION = 12;
     public static final int DEFAULT_TIMER_DURATION_MODIFIER = 4;
     public static final int MAX_TIMER_DURATION = 100;

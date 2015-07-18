@@ -19,12 +19,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import static pl.appnode.timeboxer.Constants.MINUTE;
 import static pl.appnode.timeboxer.Constants.RINGTONE_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.SECOND;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
@@ -59,11 +61,40 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_dialog_timer_settings);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
-        layoutParams.dimAmount=0.8f;
+        layoutParams.dimAmount = TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY;
         getWindow().setAttributes(layoutParams);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         this.setFinishOnTouchOutside(false);
-        colorFixForMaterialDark();
+        colorFixForMaterialDarkTheme();
+        getSettingsIntentData(getIntent());
+        setUpDialogElements();
+        RadioButton rbMinutes = (RadioButton) findViewById(R.id.radioMinutes);
+        SeekBar volumeSeekBar = (SeekBar) findViewById(R.id.volumeSeekBar);
+        Button buttonOk = (Button) findViewById(R.id.okTimerSettings);
+        buttonOk.setOnClickListener(this);
+        Button buttonCancel = (Button) findViewById(R.id.cancelTimerSettings);
+        buttonCancel.setOnClickListener(this);
+        volumeSeekBar.setMax(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM));
+        volumeSeekBar.setProgress(mTimerRingtoneVolume);
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mTimerRingtoneVolume = progress;
+                setVolume();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        if (mTimerTimeUnit == SECOND) {
+            mRbSeconds.toggle();
+        } else rbMinutes.toggle();
+        Log.d(TAG, "AlarmSettingsActivity started.");
     }
 
     public void onResume() {
@@ -140,6 +171,28 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         }
     }
 
+    private void setUpDialogElements() {
+        mAudioManager = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
+        mOriginalVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        mTitle = (TextView) findViewById(R.id.timerEditTitle);
+        mEditTimerName = (EditText) findViewById(R.id.timerNameText);
+        mFullscreenOffSwitch = (Switch) findViewById(R.id.switchFullscreenOff);
+        mRbSeconds = (RadioButton) findViewById(R.id.radioSeconds);
+        mRingtoneTextButton = (Button) findViewById(R.id.changeRingtone);
+        mRingtoneTextButton.setOnClickListener(this);
+        mPlayStopButton = (ImageButton) findViewById(R.id.playTimerSettings);
+        mPlayStopButton.setOnClickListener(this);
+        mCurrentRingtoneUri = setNotNullRingtone(mTimerRingtoneUri);
+        mRingtone = RingtoneManager.getRingtone(this.getApplicationContext(), mCurrentRingtoneUri);
+        mRingtoneName =  mRingtone.getTitle(this.getApplicationContext());
+        mRingtoneTextButton.setText(mRingtoneName);
+        mRingtone.setStreamType(AudioManager.STREAM_ALARM);
+        mTitle.setText(R.string.settings_timer_title);
+        mTitle.append("" + (mTimerId + 1));
+        mEditTimerName.setText(mTimerName);
+        mFullscreenOffSwitch.setChecked(mTimerFullscreenOff);
+    }
+
     private void resultOk() {
         Intent resultIntent = getIntent();
         resultIntent.putExtra("AlarmId", mTimerId);
@@ -179,7 +232,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         startActivityForResult(ringtoneIntent, RINGTONE_INTENT_REQUEST);
     }
 
-    private void colorFixForMaterialDark() {
+    private void colorFixForMaterialDarkTheme() {
         if (isDarkTheme(this) & Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ImageView[] imageViews = new ImageView[2];
             imageViews[0] = (ImageView) findViewById(R.id.volumeIconMute);

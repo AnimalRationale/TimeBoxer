@@ -81,6 +81,30 @@ public class TimersBroadcastService extends Service {
         Log.d(TAG, "TimersList created.");
     }
 
+    protected void saveSharedPrefs() {
+        SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = timersPrefs.edit();
+        for (int i = 0; i < TIMERS_COUNT; i++) {
+            String alarmPrefix = "Alarm_" + (i + 1);
+            TimerItem timer = sTimersList.get(i);
+            editor.putString(alarmPrefix, timer.mName);
+            editor.putInt(alarmPrefix + "_Duration", timer.mDuration);
+            editor.putInt(alarmPrefix + "_TimeUnit", timer.mTimeUnit);
+            editor.putInt(alarmPrefix + "_State", timer.mStatus);
+            if (timer.mStatus == RUNNING) {
+                editor.putLong(alarmPrefix + "_FinishTime", timer.mFinishTime);
+            } else editor.putLong(alarmPrefix + "_FinishTime", 0);
+            editor.putString(alarmPrefix + "_Ringtone", timer.mRingtoneUri);
+            editor.putInt(alarmPrefix + "_RingtoneVol", timer.mRingtoneVolume);
+            editor.putBoolean(alarmPrefix + "_FullScreenOff", timer.mFullscreenSwitchOff);
+            Log.d(TAG, "Create SharedPrefs: " + alarmPrefix + ": " + timer.mDuration
+                    + ": TimeUnit: " + timer.mTimeUnitSymbol
+                    + " :: isOn: " + timer.mStatus + " Vol: " + timer.mRingtoneVolume + " FSOFF: " + timer.mFullscreenSwitchOff);
+        }
+        editor.apply();
+        Log.d(TAG, "SharedPrefs saved.");
+    }
+
     private static String setRingtone() {
         Uri ringtoneUri;
         ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);

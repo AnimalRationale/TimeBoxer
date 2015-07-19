@@ -96,15 +96,15 @@ public class TimersBroadcastService extends Service {
             String timerPrefix = TIMER_PREFIX + (i + 1);
             TimerItem timer = sTimersList.get(i);
             editor.putString(timerPrefix, timer.mName);
-            editor.putInt(timerPrefix + "_Duration", timer.mDuration);
-            editor.putInt(timerPrefix + "_TimeUnit", timer.mTimeUnit);
-            editor.putInt(timerPrefix + "_State", timer.mStatus);
+            editor.putInt(timerPrefix + PREFS_DURATION, timer.mDuration);
+            editor.putInt(timerPrefix + PREFS_TIME_UNIT, timer.mTimeUnit);
+            editor.putInt(timerPrefix + PREFS_STATE, timer.mStatus);
             if (timer.mStatus == RUNNING) {
-                editor.putLong(timerPrefix + "_FinishTime", timer.mFinishTime);
-            } else editor.putLong(timerPrefix + "_FinishTime", 0);
-            editor.putString(timerPrefix + "_Ringtone", timer.mRingtoneUri);
-            editor.putInt(timerPrefix + "_RingtoneVol", timer.mRingtoneVolume);
-            editor.putBoolean(timerPrefix + "_FullScreenOff", timer.mFullscreenSwitchOff);
+                editor.putLong(timerPrefix + PREFS_FINISHTIME, timer.mFinishTime);
+            } else editor.putLong(timerPrefix + PREFS_FINISHTIME, 0);
+            editor.putString(timerPrefix + PREFS_RINGTONE, timer.mRingtoneUri);
+            editor.putInt(timerPrefix + PREFS_RINGTONE_VOL, timer.mRingtoneVolume);
+            editor.putBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, timer.mFullscreenSwitchOff);
             Log.d(TAG, "Create SharedPrefs: " + timerPrefix + ": " + timer.mDuration
                     + ": TimeUnit: " + timer.mTimeUnitSymbol
                     + " :: Status: " + timer.mStatus + " Vol: " + timer.mRingtoneVolume + " FSOFF: " + timer.mFullscreenSwitchOff);

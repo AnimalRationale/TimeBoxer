@@ -27,6 +27,12 @@ import static pl.appnode.timeboxer.Constants.MINUTE;
 import static pl.appnode.timeboxer.Constants.RINGTONE_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_ID;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_NAME;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
@@ -158,13 +164,13 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
 
     private void getSettingsIntentData(Intent settingsIntent) {
         if (settingsIntent.getExtras() != null) {
-            mTimerId = (int) settingsIntent.getExtras().get("AlarmId");
-            mTimerName = (String) settingsIntent.getExtras().get("AlarmName");
-            mTimerTimeUnit = (int) settingsIntent.getExtras().get("AlarmUnit");
-            mTimerFullscreenOff = (boolean) settingsIntent.getExtras().get("AlarmFullscreenOff");
-            mTimerRingtoneUri = (String) settingsIntent.getExtras().get("AlarmRingtoneUri");
-            if (settingsIntent.getExtras().get("AlarmRingtoneVol") != null) {
-                mTimerRingtoneVolume = (int) settingsIntent.getExtras().get("AlarmRingtoneVol");
+            mTimerId = (int) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_ID);
+            mTimerName = (String) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_NAME);
+            mTimerTimeUnit = (int) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_UNIT);
+            mTimerFullscreenOff = (boolean) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF);
+            mTimerRingtoneUri = (String) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI);
+            if (settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL) != null) {
+                mTimerRingtoneVolume = (int) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL);
             } else {
                 mTimerRingtoneVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
             }
@@ -195,18 +201,18 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
 
     private void resultOk() {
         Intent resultIntent = getIntent();
-        resultIntent.putExtra("AlarmId", mTimerId);
-        resultIntent.putExtra("AlarmName", mEditTimerName.getText().toString());
+        resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_ID, mTimerId);
+        resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_NAME, mEditTimerName.getText().toString());
         mTimerFullscreenOff = mFullscreenOffSwitch.isChecked();
-        resultIntent.putExtra("AlarmFullscreenOff", mTimerFullscreenOff);
+        resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF, mTimerFullscreenOff);
         if (mRbSeconds.isChecked()) {
             mTimerTimeUnit = SECOND;
         } else {
             mTimerTimeUnit = MINUTE;
         }
-        resultIntent.putExtra("AlarmUnit", mTimerTimeUnit);
-        resultIntent.putExtra("AlarmRingtoneUri", mCurrentRingtoneUri.toString());
-        resultIntent.putExtra("AlarmRingtoneVol", mTimerRingtoneVolume);
+        resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_UNIT, mTimerTimeUnit);
+        resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI, mCurrentRingtoneUri.toString());
+        resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL, mTimerRingtoneVolume);
         Log.d(TAG, "INTENT: ID=" + mTimerId + " Name:"
                 + mEditTimerName.getText().toString() + " Unit:" + mTimerTimeUnit
                 + " Ringtone:" + mCurrentRingtoneUri.toString() + " Volume: " + mTimerRingtoneVolume);

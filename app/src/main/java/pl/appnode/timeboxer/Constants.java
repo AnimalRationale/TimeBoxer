@@ -16,6 +16,13 @@ public final class Constants {
     public static final String PREFS_FULLSCREEN_OFF = "_FullScreenOff";
     public static final String PREFS_FINISHTIME = "_FinishTime";
 
+    public static final String TIMER_SETTINGS_INTENT_TIMER_ID = "TimerId";
+    public static final String TIMER_SETTINGS_INTENT_TIMER_NAME = "TimerName";
+    public static final String TIMER_SETTINGS_INTENT_TIMER_UNIT = "TimerUnit";
+    public static final String TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI = "TimerRingtoneUri";
+    public static final String TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL = "TimerRingtoneVol";
+    public static final String TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF = "TimerFullscreenOff";
+
     public static final int DEFAULT_TIMER_DURATION = 12;
     public static final int DEFAULT_TIMER_DURATION_MODIFIER = 4;
     public static final int MAX_TIMER_DURATION = 100;

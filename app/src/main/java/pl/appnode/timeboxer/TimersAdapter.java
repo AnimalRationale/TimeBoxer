@@ -16,6 +16,12 @@ import android.widget.TextView;
 import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_ID;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_NAME;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL;
+import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.TimersBroadcastService.sTimersList;
 
@@ -79,12 +85,12 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
     private void showTimerSettings(int position) {
         TimerItem timer = sTimersList.get(position);
         Intent settingsIntent = new Intent(mContext, TimerSettingsActivity.class);
-        settingsIntent.putExtra("AlarmId", position);
-        settingsIntent.putExtra("AlarmName", timer.mName);
-        settingsIntent.putExtra("AlarmUnit", timer.mTimeUnit);
-        settingsIntent.putExtra("AlarmRingtoneUri", timer.mRingtoneUri);
-        settingsIntent.putExtra("AlarmRingtoneVol", timer.mRingtoneVolume);
-        settingsIntent.putExtra("AlarmFullscreenOff", timer.mFullscreenSwitchOff);
+        settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_ID, position);
+        settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_NAME, timer.mName);
+        settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_UNIT, timer.mTimeUnit);
+        settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI, timer.mRingtoneUri);
+        settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL, timer.mRingtoneVolume);
+        settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF, timer.mFullscreenSwitchOff);
         ((MainActivity)mContext).startActivityForResult(settingsIntent, SETTINGS_INTENT_REQUEST);
     }
 }

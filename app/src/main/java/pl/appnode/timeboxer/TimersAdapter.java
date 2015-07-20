@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.TimersBroadcastService.sTimersList;
 
-public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersViewHolder>{
+public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewHolder>{
 
     private static final String TAG = "TimersAdapter";
     private Context mContext;
@@ -40,24 +39,44 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
     }
 
     @Override
-    public void onBindViewHolder(final TimersViewHolder timersViewHolder, final int position) {
+    public void onBindViewHolder(final TimerViewHolder timersViewHolder, final int position) {
         final TimerItem timer = sTimersList.get(position);
         timersViewHolder.vTitle.setText(timer.mName);
         timersViewHolder.vTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (timer.mStatus != RUNNING) {
-                    showTimerSettings(position);
+                    showTimerSettingsActivity(position);
                 }
             }
         });
         timersViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
         timersViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
         timersViewHolder.vMinutesBar.setProgress(timer.mDuration);
+        timersViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (progress == 0) {
+                    progress = 1;
+                }
+                timer.mDuration = progress;
+                timer.mDurationCounter = progress;
+                timersViewHolder.vDuration.setText(progress + timer.mTimeUnitSymbol);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                setDuration(timer);
+            }
+        });
     }
 
     @Override
-    public TimersViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public TimerViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_layout, viewGroup, false);
@@ -65,16 +84,16 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
         if (isDarkTheme(mContext)) {
             card.setCardBackgroundColor(Color.BLACK);
         } else card.setCardBackgroundColor(Color.WHITE);
-        return new TimersViewHolder(itemView);
+        return new TimerViewHolder(itemView);
     }
 
-    public static class TimersViewHolder extends RecyclerView.ViewHolder {
+    public static class TimerViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView vTitle;
         protected Button vDuration;
         protected SeekBar vMinutesBar;
 
-        public TimersViewHolder(View v) {
+        public TimerViewHolder(View v) {
             super(v);
             vTitle = (TextView) v.findViewById(R.id.title);
             vDuration = (Button) v.findViewById(R.id.button_round_01);
@@ -82,7 +101,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
         }
     }
 
-    private void showTimerSettings(int position) {
+    private void showTimerSettingsActivity(int position) {
         TimerItem timer = sTimersList.get(position);
         Intent settingsIntent = new Intent(mContext, TimerSettingsActivity.class);
         settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_ID, position);
@@ -92,5 +111,10 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimersView
         settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL, timer.mRingtoneVolume);
         settingsIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF, timer.mFullscreenSwitchOff);
         ((MainActivity)mContext).startActivityForResult(settingsIntent, SETTINGS_INTENT_REQUEST);
+    }
+
+    public void setDuration(final TimerItem timer) {
+        final int position = sTimersList.indexOf(timer);
+        notifyItemChanged(position);
     }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION_MODIFIER;
+import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MINUTE_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_NAME;
 import static pl.appnode.timeboxer.Constants.PREFS_DURATION;
@@ -128,6 +129,25 @@ public class TimersBroadcastService extends Service {
     private static int setMaxVolume() {
         AudioManager audioManager = (AudioManager) AppContextHelper.getContext().getSystemService(AUDIO_SERVICE);
         return audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+    }
+
+    public static void timerAction (int position) {
+        TimerItem timer = sTimersList.get(position);
+        if (timer.mStatus == RUNNING) {
+            timer.mStatus = IDLE;
+            stopTimer(position);
+        } else if (timer.mStatus == IDLE) {
+            timer.mStatus = RUNNING;
+            startTimer(position);
+        }
+    }
+
+    private static void stopTimer(int position) {
+        MainActivity.mTimersAdapter.notifyItemChanged(position);
+    }
+
+    private static void startTimer(int position) {
+        MainActivity.mTimersAdapter.notifyItemChanged(position);
     }
     
     @Override

@@ -3,8 +3,10 @@ package pl.appnode.timeboxer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.SystemClock;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import static pl.appnode.timeboxer.Constants.BUTTON_PRESS_DELAY;
+import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
@@ -21,6 +25,7 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_NAME;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
+
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.TimersBroadcastService.sTimersList;
 
@@ -28,6 +33,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
 
     private static final String TAG = "TimersAdapter";
     private Context mContext;
+    private long mLastClickTime = 0;
 
     public TimersAdapter(Context context) {
         mContext = context;
@@ -39,10 +45,10 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     }
 
     @Override
-    public void onBindViewHolder(final TimerViewHolder timersViewHolder, final int position) {
+    public void onBindViewHolder(final TimerViewHolder timerViewHolder, final int position) {
         final TimerItem timer = sTimersList.get(position);
-        timersViewHolder.vTitle.setText(timer.mName);
-        timersViewHolder.vTitle.setOnClickListener(new View.OnClickListener() {
+        timerViewHolder.vTitle.setText(timer.mName);
+        timerViewHolder.vTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (timer.mStatus != RUNNING) {
@@ -50,10 +56,21 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
             }
         });
-        timersViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
-        timersViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
-        timersViewHolder.vMinutesBar.setProgress(timer.mDuration);
-        timersViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
+        timerViewHolder.vDuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < BUTTON_PRESS_DELAY) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Log.d(TAG, "Alarm TAPPED: timer.mStatus = " + timer.mStatus);
+                TimersBroadcastService.timerAction(position);
+            }
+        });
+        timerViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
+        timerViewHolder.vMinutesBar.setProgress(timer.mDuration);
+        timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (progress == 0) {
@@ -61,7 +78,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
                 timer.mDuration = progress;
                 timer.mDurationCounter = progress;
-                timersViewHolder.vDuration.setText(progress + timer.mTimeUnitSymbol);
+                timerViewHolder.vDuration.setText(progress + timer.mTimeUnitSymbol);
             }
 
             @Override

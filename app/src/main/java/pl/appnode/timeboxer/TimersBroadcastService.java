@@ -89,8 +89,8 @@ public class TimersBroadcastService extends Service {
         Log.d(TAG, "TimersList created.");
     }
 
-    protected void saveSharedPrefs() {
-        SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
+    public static void saveSharedPrefs() {
+        SharedPreferences timersPrefs = AppContextHelper.getContext().getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         SharedPreferences.Editor editor = timersPrefs.edit();
         for (int i = 0; i < TIMERS_COUNT; i++) {
             String timerPrefix = TIMER_PREFIX + (i + 1);

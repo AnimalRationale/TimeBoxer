@@ -143,11 +143,17 @@ public class TimersBroadcastService extends Service {
     }
 
     private static void stopTimer(int position) {
-        MainActivity.mTimersAdapter.notifyItemChanged(position);
+        if (MainActivity.mTimersAdapter != null) {
+            MainActivity.mTimersAdapter.notifyItemChanged(position);
+            Log.d(TAG, "Timer stop: #" + position);
+        }
     }
 
     private static void startTimer(int position) {
-        MainActivity.mTimersAdapter.notifyItemChanged(position);
+        if (MainActivity.mTimersAdapter != null) {
+            MainActivity.mTimersAdapter.notifyItemChanged(position);
+            Log.d(TAG, "Timer start: #" + position);
+        }
     }
     
     @Override

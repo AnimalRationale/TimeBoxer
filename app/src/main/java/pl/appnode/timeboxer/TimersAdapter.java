@@ -56,6 +56,18 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
             }
         });
+        if (timer.mStatus == RUNNING) {
+            timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
+            timerViewHolder.vMinutesBar.setVisibility(View.GONE);
+            Log.d(TAG, "Timer running view (1): alarm = " + timer.mName + " // duration = " +
+                    timer.mDurationCounter + "/" + timer.mDuration);
+            timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
+        } else if (timer.mStatus == IDLE) {
+            timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
+            timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
+            Log.d(TAG, "Timer idle view (2): alarm = " + timer.mName + " // duration = " + timer.mDuration);
+            timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
+        }
         timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
         timerViewHolder.vDuration.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +76,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Log.d(TAG, "Alarm TAPPED: timer.mStatus = " + timer.mStatus);
+                Log.d(TAG, "Alarm #" + position + " tapped *** timer.mStatus = " + timer.mStatus);
                 TimersBroadcastService.timerAction(position);
             }
         });

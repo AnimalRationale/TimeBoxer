@@ -2,7 +2,6 @@ package pl.appnode.timeboxer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,18 +12,7 @@ import android.view.ViewConfiguration;
 
 import java.lang.reflect.Field;
 
-import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
-import static pl.appnode.timeboxer.Constants.PREFS_DURATION;
-import static pl.appnode.timeboxer.Constants.PREFS_FINISHTIME;
-import static pl.appnode.timeboxer.Constants.PREFS_FULLSCREEN_OFF;
-import static pl.appnode.timeboxer.Constants.PREFS_RINGTONE;
-import static pl.appnode.timeboxer.Constants.PREFS_RINGTONE_VOL;
-import static pl.appnode.timeboxer.Constants.PREFS_STATE;
-import static pl.appnode.timeboxer.Constants.PREFS_TIME_UNIT;
-import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
-import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
-import static pl.appnode.timeboxer.Constants.TIMER_PREFIX;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_NAME;
@@ -48,7 +36,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!sIsTimersBroadcastService) {
-            Intent serviceIntent = new Intent(AppContextHelper.getContext(), TimersBroadcastService.class);
+            Intent serviceIntent = new Intent(AppContextHelper.getContext(),
+                    TimersBroadcastService.class);
             AppContextHelper.getContext().startService(serviceIntent);
             Log.d(TAG, "Starting service, service = " + sIsTimersBroadcastService);
         }
@@ -118,18 +107,22 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
-        if (requestCode == SETTINGS_INTENT_REQUEST && resultCode == RESULT_OK && resultIntent.getExtras() != null) {
+        if (requestCode == SETTINGS_INTENT_REQUEST && resultCode == RESULT_OK
+                && resultIntent.getExtras() != null) {
             Log.d(TAG, "Proper ResultIntent.");
             int position = resultIntent.getIntExtra(TIMER_SETTINGS_INTENT_TIMER_ID, 0);
             TimerItem timer = TimersBroadcastService.sTimersList.get(position);
             timer.mName = (String) resultIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_NAME);
-            timer.mFullscreenSwitchOff = (boolean) resultIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF);
+            timer.mFullscreenSwitchOff = (boolean) resultIntent.getExtras()
+                    .get(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF);
             timer.mTimeUnit = (int) resultIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_UNIT);
             if (timer.mTimeUnit == SECOND) {
                 timer.mTimeUnitSymbol = getResources().getString(R.string.time_unit_seconds);
             } else timer.mTimeUnitSymbol = getResources().getString(R.string.time_unit_minutes);
-            timer.mRingtoneUri = (String) resultIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI);
-            timer.mRingtoneVolume = (int) resultIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL);
+            timer.mRingtoneUri = (String) resultIntent.getExtras()
+                    .get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI);
+            timer.mRingtoneVolume = (int) resultIntent.getExtras()
+                    .get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL);
             mTimersAdapter.notifyItemChanged(position);
             TimersBroadcastService.saveSharedPrefs();
             // widgetUpdate();

@@ -77,7 +77,8 @@ public class TimersBroadcastService extends Service {
             timer.mFullscreenSwitchOff = timersPrefs.getBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, true);
             timer.mFinishTime = timersPrefs.getLong(timerPrefix + PREFS_FINISHTIME, 0);
             if (timer.mStatus == RUNNING & timer.mFinishTime > SystemClock.elapsedRealtime()) {
-                int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime()) + timeFactor) / timeFactor);
+                int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime())
+                        + timeFactor) / timeFactor);
                 if (continuation < 100) {
                     timer.mDurationCounter = continuation;
                     // TODO start timer for continuation
@@ -91,7 +92,8 @@ public class TimersBroadcastService extends Service {
     }
 
     public static void saveSharedPrefs() {
-        SharedPreferences timersPrefs = AppContextHelper.getContext().getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
+        SharedPreferences timersPrefs = AppContextHelper.getContext()
+                .getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         SharedPreferences.Editor editor = timersPrefs.edit();
         for (int i = 0; i < TIMERS_COUNT; i++) {
             String timerPrefix = TIMER_PREFIX + (i + 1);
@@ -108,7 +110,8 @@ public class TimersBroadcastService extends Service {
             editor.putBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, timer.mFullscreenSwitchOff);
             Log.d(TAG, "Create SharedPrefs: " + timerPrefix + ": " + timer.mDuration
                     + ": TimeUnit: " + timer.mTimeUnitSymbol
-                    + " :: Status: " + timer.mStatus + " Vol: " + timer.mRingtoneVolume + " FSOFF: " + timer.mFullscreenSwitchOff);
+                    + " :: Status: " + timer.mStatus + " Vol: " + timer.mRingtoneVolume
+                    + " FSOFF: " + timer.mFullscreenSwitchOff);
         }
         editor.apply();
         Log.d(TAG, "SharedPrefs saved.");
@@ -127,7 +130,8 @@ public class TimersBroadcastService extends Service {
     }
 
     private static int setMaxVolume() {
-        AudioManager audioManager = (AudioManager) AppContextHelper.getContext().getSystemService(AUDIO_SERVICE);
+        AudioManager audioManager = (AudioManager) AppContextHelper
+                .getContext().getSystemService(AUDIO_SERVICE);
         return audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
     }
 

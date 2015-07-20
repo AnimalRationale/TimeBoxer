@@ -111,8 +111,10 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
         Log.d(TAG, "onActivityResult fo Ringtone Picker.");
-        if (requestCode == RINGTONE_INTENT_REQUEST && resultCode == RESULT_OK && resultIntent.getExtras() != null) {
-            mCurrentRingtoneUri = resultIntent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+        if (requestCode == RINGTONE_INTENT_REQUEST && resultCode == RESULT_OK
+                && resultIntent.getExtras() != null) {
+            mCurrentRingtoneUri = resultIntent.getParcelableExtra(RingtoneManager
+                    .EXTRA_RINGTONE_PICKED_URI);
             mRingtone = RingtoneManager.getRingtone(this.getApplicationContext(), mCurrentRingtoneUri);
             mRingtoneName =  mRingtone.getTitle(this.getApplicationContext());
             mRingtoneTextButton.setText(mRingtoneName);
@@ -139,7 +141,8 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         if (mTimerRingtoneVolume <= 0) {
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
         } else if (mTimerRingtoneVolume >= mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)) {
-            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM,
+                    mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
         } else {
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mTimerRingtoneVolume, 0);}
         Log.d(TAG, "Set ringtone volume: " + mTimerRingtoneVolume);
@@ -167,10 +170,13 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
             mTimerId = (int) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_ID);
             mTimerName = (String) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_NAME);
             mTimerTimeUnit = (int) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_UNIT);
-            mTimerFullscreenOff = (boolean) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF);
-            mTimerRingtoneUri = (String) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI);
+            mTimerFullscreenOff = (boolean) settingsIntent.getExtras()
+                    .get(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF);
+            mTimerRingtoneUri = (String) settingsIntent.getExtras()
+                    .get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI);
             if (settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL) != null) {
-                mTimerRingtoneVolume = (int) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL);
+                mTimerRingtoneVolume = (int) settingsIntent.getExtras()
+                        .get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL);
             } else {
                 mTimerRingtoneVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
             }

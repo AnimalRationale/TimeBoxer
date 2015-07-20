@@ -30,6 +30,7 @@ import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.Constants.MINUTE;
 import static pl.appnode.timeboxer.Constants.SECOND_IN_MILLIS;
+import static pl.appnode.timeboxer.Constants.TIME_DEVIATION_FOR_LAST_TICK;
 import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 import static pl.appnode.timeboxer.Constants.TIMER_PREFIX;
 
@@ -38,6 +39,7 @@ public class TimersBroadcastService extends Service {
 
     private static final String TAG = "TimersBroadcastService";
     protected static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
+    private static CustomCountDownTimer[] mTimers = new CustomCountDownTimer[4];
 
     @Override
     public void onCreate() {
@@ -138,26 +140,42 @@ public class TimersBroadcastService extends Service {
     public static void timerAction (int position) {
         TimerItem timer = sTimersList.get(position);
         if (timer.mStatus == RUNNING) {
-            timer.mStatus = IDLE;
             stopTimer(position);
         } else if (timer.mStatus == IDLE) {
-            timer.mStatus = RUNNING;
             startTimer(position);
         }
     }
 
+    private static void startTimer(int position) {
+        TimerItem timer = sTimersList.get(position);
+        timer.mStatus = RUNNING;
+        if (MainActivity.mTimersAdapter != null) {
+            MainActivity.mTimersAdapter.notifyItemChanged(position);
+            Log.d(TAG, "Timer start: #" + position);
+        }
+        int timeUnitFactor;
+        if (timer.mTimeUnit == SECOND) { timeUnitFactor = SECOND_IN_MILLIS;} else {timeUnitFactor = (MINUTE_IN_MILLIS);}
+        mTimers[position] = new CustomCountDownTimer(timer.mDuration * timeUnitFactor,
+                timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK), position, timeUnitFactor);
+        Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDuration * timeUnitFactor + ", " + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
+        mTimers[position].start();
+    }
+
     private static void stopTimer(int position) {
+        TimerItem timer = sTimersList.get(position);
+        timer.mStatus = IDLE;
+        mTimers[position].cancel();
+        timer.mDurationCounter = timer.mDuration;
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
             Log.d(TAG, "Timer stop: #" + position);
         }
     }
 
-    private static void startTimer(int position) {
-        if (MainActivity.mTimersAdapter != null) {
-            MainActivity.mTimersAdapter.notifyItemChanged(position);
-            Log.d(TAG, "Timer start: #" + position);
-        }
+    protected static void updateTime(int position, int timeToFinish) {
+        TimerItem timer = sTimersList.get(position);
+        timer.mDurationCounter = timeToFinish;
+        MainActivity.mTimersAdapter.notifyItemChanged(position);
     }
     
     @Override

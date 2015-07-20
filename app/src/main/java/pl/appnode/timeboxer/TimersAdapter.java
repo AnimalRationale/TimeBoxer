@@ -68,7 +68,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             Log.d(TAG, "Timer idle view (2): alarm = " + timer.mName + " // duration = " + timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
         }
-        timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
         timerViewHolder.vDuration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

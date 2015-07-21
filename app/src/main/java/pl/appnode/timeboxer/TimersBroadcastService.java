@@ -27,6 +27,7 @@ import static pl.appnode.timeboxer.Constants.PREFS_RINGTONE;
 import static pl.appnode.timeboxer.Constants.PREFS_RINGTONE_VOL;
 import static pl.appnode.timeboxer.Constants.PREFS_STATE;
 import static pl.appnode.timeboxer.Constants.PREFS_TIME_UNIT;
+import static pl.appnode.timeboxer.Constants.RESTORE;
 import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.Constants.MINUTE;
@@ -84,12 +85,14 @@ public class TimersBroadcastService extends Service {
             timer.mRingtoneVolume = timersPrefs.getInt(timerPrefix + PREFS_RINGTONE_VOL, setMaxVolume());
             timer.mFullscreenSwitchOff = timersPrefs.getBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, true);
             timer.mFinishTime = timersPrefs.getLong(timerPrefix + PREFS_FINISHTIME, 0);
-            if (timer.mStatus == RUNNING && timer.mFinishTime > SystemClock.elapsedRealtime()) {
+            Log.d(TAG, "Alarm #" + i + " status: " + timer.mStatus + " / finishTime: " + timer.mFinishTime);
+            if (timer.mStatus == RUNNING && timer.mFinishTime != 0) {
                 int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime())
                         + timeFactor) / timeFactor);
+                Log.d(TAG, "Alarm #" + i + " status RUNNING, continuation: " + continuation + " / finishTime: " + timer.mFinishTime);
                 if (continuation < 100) {
                     timer.mDurationCounter = continuation;
-                    // TODO start timer for continuation
+                    timer.mStatus = RESTORE;
                     Log.d(TAG, "Alarm #" + i + " restored with duration: " + continuation);
                 }
             } else {
@@ -98,6 +101,10 @@ public class TimersBroadcastService extends Service {
             }
             sTimersList.add(timer);
             Log.d(TAG, "Timer #" + i + " added to list.");
+            if (timer.mStatus == RESTORE ) {
+                startTimer( i - 1 );
+                Log.d(TAG, "Timer #" + i + " restored.");
+            }
         }
         Log.d(TAG, "TimersList created.");
     }
@@ -138,6 +145,8 @@ public class TimersBroadcastService extends Service {
         if (timer.mStatus == RUNNING) {
             editor.putLong(timerPrefix + PREFS_FINISHTIME, timer.mFinishTime);
         } else editor.putLong(timerPrefix + PREFS_FINISHTIME, 0);
+        Log.d(TAG, "Saved timer #" + position + " status: " + timer.mStatus + " / finishTime: " + timer.mFinishTime);
+        editor.apply();
     }
 
     private static String setRingtone() {
@@ -192,6 +201,7 @@ public class TimersBroadcastService extends Service {
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;
         mTimers[position].cancel();
+        mTimers[position] = null;
         timer.mDurationCounter = timer.mDuration;
         saveTimerStatus(position);
         if (MainActivity.mTimersAdapter != null) {
@@ -203,7 +213,9 @@ public class TimersBroadcastService extends Service {
     protected static void updateTime(int position, int timeToFinish) {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = timeToFinish;
-        MainActivity.mTimersAdapter.notifyItemChanged(position);
+        if (MainActivity.mTimersAdapter != null) {
+            MainActivity.mTimersAdapter.notifyItemChanged(position);
+        }
     }
 
     protected static void finishTimer(int position) {
@@ -212,6 +224,7 @@ public class TimersBroadcastService extends Service {
         timer.mStatus = FINISHED;
         timer.mFinishTime = 0;
         saveTimerStatus(position);
+        mTimers[position] = null;
         MainActivity.mTimersAdapter.notifyItemChanged(position);
         Log.d(TAG, "Timer finished: #" + position);
     }

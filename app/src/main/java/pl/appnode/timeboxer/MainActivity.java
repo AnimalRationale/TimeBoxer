@@ -13,6 +13,7 @@ import android.view.ViewConfiguration;
 
 import java.lang.reflect.Field;
 
+import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_ID;
@@ -20,7 +21,6 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_NAME;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
-import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.orientationSetup;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
@@ -47,8 +47,10 @@ public class MainActivity extends Activity {
         showActionOverflowMenu();
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setIcon(R.mipmap.ic_launcher);
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setIcon(R.mipmap.ic_launcher);
+        }
         RecyclerView recyclerTimersList = (RecyclerView) findViewById(R.id.timersList);
         recyclerTimersList.setItemAnimator(null);
         recyclerTimersList.setHasFixedSize(true);

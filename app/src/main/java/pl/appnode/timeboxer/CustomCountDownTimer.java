@@ -13,41 +13,43 @@ public class CustomCountDownTimer extends CountDownTimer {
     private int mTimerId;
     private NotificationManager mNM ;
     private NotificationCompat.Builder mNotify;
-    Context context = AppContextHelper.getContext();
+    Context mContext = AppContextHelper.getContext();
+    TimerItem mTimer;
 
     public CustomCountDownTimer (long millisInFuture, long countDownInterval, int position, int timeUnitFactor) {
         super(millisInFuture, countDownInterval);
         mTimerId = position;
+        mTimer = TimersBroadcastService.sTimersList.get(mTimerId);
         mTimeUnitFactor = timeUnitFactor;
         notificationStart();
     }
 
     @Override
     public void onTick(long millisUntilFinished) {
-        notificationUpdate();
         TimersBroadcastService.updateTime(mTimerId, (int) millisUntilFinished / mTimeUnitFactor);
+        notificationUpdate();
     }
 
     @Override
     public void onFinish() {
+        notificationFinish();
         TimersBroadcastService.finishTimer(mTimerId);
     }
 
     private void notificationStart () {
-        TimerItem timer = TimersBroadcastService.sTimersList.get(mTimerId);
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = new Intent(mContext, MainActivity.class);
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
-        mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotify = new NotificationCompat.Builder(context)
-                .setContentTitle(timer.mDuration
-                        + context.getResources().getString(R.string.notification_title))
-                .setContentText(timer.mName
-                        + context.getResources().getString(R.string.notification_text02)
-                        + timer.mDuration + timer.mTimeUnit
-                        + context.getResources().getString(R.string.notification_text03))
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(mContext, 0, resultIntent, 0);
+        mNM = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotify = new NotificationCompat.Builder(mContext)
+                .setContentTitle(mTimer.mDuration
+                        + mContext.getResources().getString(R.string.notification_title))
+                .setContentText(mTimer.mName
+                        + mContext.getResources().getString(R.string.notification_text02)
+                        + mTimer.mDuration + mTimer.mTimeUnitSymbol
+                        + mContext.getResources().getString(R.string.notification_text03))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -56,9 +58,18 @@ public class CustomCountDownTimer extends CountDownTimer {
     }
 
     private void notificationUpdate() {
-        TimerItem timer = TimersBroadcastService.sTimersList.get(mTimerId);
-        mNotify.setContentTitle(timer.mDurationCounter + timer.mTimeUnit
-                + context.getResources().getString(R.string.notification_title));
+        mNotify.setContentTitle(mTimer.mDurationCounter + mTimer.mTimeUnitSymbol
+                + mContext.getResources().getString(R.string.notification_title));
+        mNM.notify(mTimerId, mNotify.build());
+    }
+
+    private void notificationFinish() {
+        mNotify.setContentTitle(mTimer.mName
+                + mContext.getResources().getString(R.string.notification_text02)
+                + mTimer.mDuration + mTimer.mTimeUnitSymbol
+                + mContext.getResources().getString(R.string.notification_text03_finished))
+                .setContentText(mContext.getResources().getString(R.string.notification_text_finished))
+                .setSmallIcon(R.mipmap.ic_launcher);
         mNM.notify(mTimerId, mNotify.build());
     }
 }

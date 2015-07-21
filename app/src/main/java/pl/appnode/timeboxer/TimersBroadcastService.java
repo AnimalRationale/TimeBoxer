@@ -200,8 +200,10 @@ public class TimersBroadcastService extends Service {
         TimerItem timer = sTimersList.get(position);
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;
-        mTimers[position].cancel();
-        mTimers[position] = null;
+        if (mTimers[position] != null) {
+            mTimers[position].cancel();
+            mTimers[position] = null;
+        }
         timer.mDurationCounter = timer.mDuration;
         saveTimerStatus(position);
         if (MainActivity.mTimersAdapter != null) {

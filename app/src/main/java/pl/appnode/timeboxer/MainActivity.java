@@ -1,5 +1,6 @@
 package pl.appnode.timeboxer;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +46,9 @@ public class MainActivity extends Activity {
         sThemeChangeFlag = isDarkTheme(this);
         showActionOverflowMenu();
         setContentView(R.layout.activity_main);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher);
         RecyclerView recyclerTimersList = (RecyclerView) findViewById(R.id.timersList);
         recyclerTimersList.setItemAnimator(null);
         recyclerTimersList.setHasFixedSize(true);
@@ -66,7 +70,6 @@ public class MainActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        TimersBroadcastService.saveSharedPrefs();
     }
 
     @Override

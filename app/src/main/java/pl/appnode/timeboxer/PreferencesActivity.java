@@ -1,5 +1,6 @@
 package pl.appnode.timeboxer;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v4.app.NavUtils;
@@ -14,6 +15,9 @@ public class PreferencesActivity extends PreferenceActivity {
         themeSetup(this);
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher);
         addPreferencesFromResource(R.xml.preferences);
     }
 

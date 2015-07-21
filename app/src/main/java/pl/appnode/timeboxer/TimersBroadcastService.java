@@ -51,15 +51,14 @@ public class TimersBroadcastService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startMode = START_STICKY;
         createTimersList();
-        Log.d(TAG, "Starting broadcast service.");
         MainActivity.sIsTimersBroadcastService = true;
+        Log.d(TAG, "Starting broadcast service.");
         return startMode;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        saveSharedPrefs();
     }
 
     private void createTimersList() {
@@ -85,7 +84,7 @@ public class TimersBroadcastService extends Service {
             timer.mRingtoneVolume = timersPrefs.getInt(timerPrefix + PREFS_RINGTONE_VOL, setMaxVolume());
             timer.mFullscreenSwitchOff = timersPrefs.getBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, true);
             timer.mFinishTime = timersPrefs.getLong(timerPrefix + PREFS_FINISHTIME, 0);
-            if (timer.mStatus == RUNNING & timer.mFinishTime > SystemClock.elapsedRealtime()) {
+            if (timer.mStatus == RUNNING && timer.mFinishTime > SystemClock.elapsedRealtime()) {
                 int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime())
                         + timeFactor) / timeFactor);
                 if (continuation < 100) {
@@ -93,7 +92,10 @@ public class TimersBroadcastService extends Service {
                     // TODO start timer for continuation
                     Log.d(TAG, "Alarm #" + i + " restored with duration: " + continuation);
                 }
-            } else timer.mDurationCounter = timer.mDuration;
+            } else {
+                timer.mDurationCounter = timer.mDuration;
+                timer.mStatus = IDLE;
+            }
             sTimersList.add(timer);
             Log.d(TAG, "Timer #" + i + " added to list.");
         }
@@ -124,6 +126,18 @@ public class TimersBroadcastService extends Service {
         }
         editor.apply();
         Log.d(TAG, "SharedPrefs saved.");
+    }
+
+    private static void saveTimerStatus(int position) {
+        SharedPreferences timersPrefs = AppContextHelper.getContext()
+                .getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = timersPrefs.edit();
+        String timerPrefix = TIMER_PREFIX + (position + 1);
+        TimerItem timer = sTimersList.get(position);
+        editor.putInt(timerPrefix + PREFS_STATE, timer.mStatus);
+        if (timer.mStatus == RUNNING) {
+            editor.putLong(timerPrefix + PREFS_FINISHTIME, timer.mFinishTime);
+        } else editor.putLong(timerPrefix + PREFS_FINISHTIME, 0);
     }
 
     private static String setRingtone() {
@@ -164,18 +178,22 @@ public class TimersBroadcastService extends Service {
         if (timer.mTimeUnit == SECOND) {
             timeUnitFactor = SECOND_IN_MILLIS;
         } else {timeUnitFactor = (MINUTE_IN_MILLIS);}
+        timer.mFinishTime = SystemClock.elapsedRealtime() + (timer.mDurationCounter * timeUnitFactor);
         mTimers[position] = new CustomCountDownTimer(timer.mDuration * timeUnitFactor,
                 timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK), position, timeUnitFactor);
         Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDuration * timeUnitFactor + ", "
                 + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
         mTimers[position].start();
+        saveTimerStatus(position);
     }
 
     private static void stopTimer(int position) {
         TimerItem timer = sTimersList.get(position);
         timer.mStatus = IDLE;
+        timer.mFinishTime = 0;
         mTimers[position].cancel();
         timer.mDurationCounter = timer.mDuration;
+        saveTimerStatus(position);
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
             Log.d(TAG, "Timer stop: #" + position);
@@ -192,6 +210,8 @@ public class TimersBroadcastService extends Service {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = 0;
         timer.mStatus = FINISHED;
+        timer.mFinishTime = 0;
+        saveTimerStatus(position);
         MainActivity.mTimersAdapter.notifyItemChanged(position);
         Log.d(TAG, "Timer finished: #" + position);
     }

@@ -188,9 +188,9 @@ public class TimersBroadcastService extends Service {
             timeUnitFactor = SECOND_IN_MILLIS;
         } else {timeUnitFactor = (MINUTE_IN_MILLIS);}
         timer.mFinishTime = SystemClock.elapsedRealtime() + (timer.mDurationCounter * timeUnitFactor);
-        mTimers[position] = new CustomCountDownTimer(timer.mDuration * timeUnitFactor,
+        mTimers[position] = new CustomCountDownTimer(timer.mDurationCounter * timeUnitFactor,
                 timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK), position, timeUnitFactor);
-        Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDuration * timeUnitFactor + ", "
+        Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDurationCounter * timeUnitFactor + ", "
                 + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
         mTimers[position].start();
         saveTimerStatus(position);

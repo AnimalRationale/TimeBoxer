@@ -56,6 +56,12 @@ public class TimersBroadcastService extends Service {
         return startMode;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        saveSharedPrefs();
+    }
+
     private void createTimersList() {
         SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         int timeFactor = SECOND_IN_MILLIS;

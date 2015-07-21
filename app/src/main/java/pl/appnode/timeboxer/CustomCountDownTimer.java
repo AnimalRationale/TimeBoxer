@@ -20,5 +20,6 @@ public class CustomCountDownTimer extends CountDownTimer {
 
     @Override
     public void onFinish() {
+        TimersBroadcastService.finishTimer(mTimerId);
     }
 }

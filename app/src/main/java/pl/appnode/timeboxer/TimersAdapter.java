@@ -15,6 +15,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import static pl.appnode.timeboxer.Constants.BUTTON_PRESS_DELAY;
+import static pl.appnode.timeboxer.Constants.FINISHED;
 import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.RUNNING;
@@ -67,6 +68,12 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
             Log.d(TAG, "Timer idle view (2): alarm = " + timer.mName + " // duration = " + timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
+        } else if (timer.mStatus == FINISHED) {
+            timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
+            timerViewHolder.vMinutesBar.setVisibility(View.GONE);
+            Log.d(TAG, "Timer finished view (3): alarm = " + timer.mName + " // duration = " +
+                    timer.mDurationCounter + "/" + timer.mDuration);
+            timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
         }
         timerViewHolder.vDuration.setOnClickListener(new View.OnClickListener() {
             @Override

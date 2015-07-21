@@ -16,6 +16,7 @@ import java.util.List;
 import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION_MODIFIER;
+import static pl.appnode.timeboxer.Constants.FINISHED;
 import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MINUTE_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_NAME;
@@ -139,7 +140,7 @@ public class TimersBroadcastService extends Service {
 
     public static void timerAction (int position) {
         TimerItem timer = sTimersList.get(position);
-        if (timer.mStatus == RUNNING) {
+        if (timer.mStatus == RUNNING || timer.mStatus == FINISHED) {
             stopTimer(position);
         } else if (timer.mStatus == IDLE) {
             startTimer(position);
@@ -154,10 +155,13 @@ public class TimersBroadcastService extends Service {
             Log.d(TAG, "Timer start: #" + position);
         }
         int timeUnitFactor;
-        if (timer.mTimeUnit == SECOND) { timeUnitFactor = SECOND_IN_MILLIS;} else {timeUnitFactor = (MINUTE_IN_MILLIS);}
+        if (timer.mTimeUnit == SECOND) {
+            timeUnitFactor = SECOND_IN_MILLIS;
+        } else {timeUnitFactor = (MINUTE_IN_MILLIS);}
         mTimers[position] = new CustomCountDownTimer(timer.mDuration * timeUnitFactor,
                 timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK), position, timeUnitFactor);
-        Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDuration * timeUnitFactor + ", " + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
+        Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDuration * timeUnitFactor + ", "
+                + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
         mTimers[position].start();
     }
 
@@ -176,6 +180,14 @@ public class TimersBroadcastService extends Service {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = timeToFinish;
         MainActivity.mTimersAdapter.notifyItemChanged(position);
+    }
+
+    protected static void finishTimer(int position) {
+        TimerItem timer = sTimersList.get(position);
+        timer.mDurationCounter = 0;
+        timer.mStatus = FINISHED;
+        MainActivity.mTimersAdapter.notifyItemChanged(position);
+        Log.d(TAG, "Timer finished: #" + position);
     }
     
     @Override

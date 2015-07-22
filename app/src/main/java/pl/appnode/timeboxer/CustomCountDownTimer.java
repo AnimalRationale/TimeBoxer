@@ -63,7 +63,7 @@ public class CustomCountDownTimer extends CountDownTimer {
                         + mContext.getResources().getString(R.string.notification_text02)
                         + mTimer.mDuration + mTimer.mTimeUnitSymbol
                         + mContext.getResources().getString(R.string.notification_text03))
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_alarm_add_grey600_24dp)
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(resultPendingIntent);

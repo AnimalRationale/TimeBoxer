@@ -4,23 +4,34 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 public class CustomCountDownTimer extends CountDownTimer {
 
+    private static final String TAG = "CustomCountDownTimer";
     private int mTimeUnitFactor;
     private int mTimerId;
     private NotificationManager mNM ;
     private NotificationCompat.Builder mNotify;
     Context mContext = AppContextHelper.getContext();
     TimerItem mTimer;
+    private Ringtone mRingtone;
+    private int mRingtoneVolume;
+    private int mOriginalVolume;
+    private AudioManager mAudioManager;
 
     public CustomCountDownTimer (long millisInFuture, long countDownInterval, int position, int timeUnitFactor) {
         super(millisInFuture, countDownInterval);
         mTimerId = position;
         mTimer = TimersBroadcastService.sTimersList.get(mTimerId);
         mTimeUnitFactor = timeUnitFactor;
+        setUpRingtone();
         notificationStart();
     }
 
@@ -33,6 +44,8 @@ public class CustomCountDownTimer extends CountDownTimer {
     @Override
     public void onFinish() {
         notificationFinish();
+        setVolume();
+        mRingtone.play();
         TimersBroadcastService.finishTimer(mTimerId);
     }
 
@@ -71,5 +84,54 @@ public class CustomCountDownTimer extends CountDownTimer {
                 .setContentText(mContext.getResources().getString(R.string.notification_text_finished))
                 .setSmallIcon(R.mipmap.ic_launcher);
         mNM.notify(mTimerId, mNotify.build());
+    }
+
+    private void setUpRingtone() {
+        Uri alert = setNotNullRingtone(mTimer.mRingtoneUri);
+        mRingtoneVolume = mTimer.mRingtoneVolume;
+        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        mRingtone = RingtoneManager.getRingtone(mContext.getApplicationContext(), alert);
+        mRingtone.setStreamType(AudioManager.STREAM_ALARM);
+    }
+
+    private Uri setNotNullRingtone(String ringtone) {
+        Uri ringtoneUri;
+        if (ringtone == null) {
+            ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            if (ringtoneUri == null) {
+                ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                if (ringtoneUri == null) {
+                    ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+                }
+            }
+            return ringtoneUri;
+        }
+        try {
+            Uri.parse(ringtone);
+        } catch (Throwable thex) {
+            Log.d(TAG, "Parsing URI exception.");
+        }
+        return Uri.parse(ringtone);
+    }
+
+    public void setVolume() {
+        mOriginalVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        if (mRingtoneVolume <= 0) {
+            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
+        } else if (mRingtoneVolume >= mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)) {
+            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
+        } else {
+            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mRingtoneVolume, 0);}
+        Log.d(TAG, "Original vol: " + mOriginalVolume + " Set: " + mRingtoneVolume);
+    }
+
+    public void restoreVolume() {
+        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mOriginalVolume, 0);
+        Log.d(TAG, "Used vol: " + mRingtoneVolume + " Restored: " + mOriginalVolume);
+    }
+
+    public void stopRingtone () {
+        mRingtone.stop();
+        restoreVolume();
     }
 }

@@ -216,6 +216,7 @@ public class TimersBroadcastService extends Service {
         timer.mDurationCounter = timer.mDuration;
         saveTimerStatus(position);
         if (mTimers[position] != null) {
+            mTimers[position].stopRingtone();
             mTimers[position].cancel();
             mTimers[position] = null;
         }
@@ -242,10 +243,6 @@ public class TimersBroadcastService extends Service {
         timer.mStatus = FINISHED;
         timer.mFinishTime = 0;
         saveTimerStatus(position);
-        if (mTimers[position] != null) {
-            mTimers[position].cancel();
-            mTimers[position] = null;
-        }
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         }

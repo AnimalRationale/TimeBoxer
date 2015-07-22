@@ -151,5 +151,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     public void setDuration(final TimerItem timer) {
         final int position = sTimersList.indexOf(timer);
         notifyItemChanged(position);
+        TimersBroadcastService.saveTimerDuration(position);
     }
 }

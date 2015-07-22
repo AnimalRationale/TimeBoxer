@@ -137,6 +137,17 @@ public class TimersBroadcastService extends Service {
         Log.d(TAG, "SharedPrefs saved.");
     }
 
+    public static void saveTimerDuration(int position) {
+        SharedPreferences timersPrefs = AppContextHelper.getContext()
+                .getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = timersPrefs.edit();
+        String timerPrefix = TIMER_PREFIX + (position + 1);
+        TimerItem timer = sTimersList.get(position);
+        editor.putInt(timerPrefix + PREFS_DURATION, timer.mDuration);
+        editor.apply();
+        Log.d(TAG, "Saved timer #" + position + " duration: " + timer.mDuration);
+    }
+
     private static void saveTimerStatus(int position) {
         SharedPreferences timersPrefs = AppContextHelper.getContext()
                 .getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
@@ -202,6 +213,8 @@ public class TimersBroadcastService extends Service {
         TimerItem timer = sTimersList.get(position);
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;
+        timer.mDurationCounter = timer.mDuration;
+        saveTimerStatus(position);
         if (mTimers[position] != null) {
             mTimers[position].cancel();
             mTimers[position] = null;
@@ -209,8 +222,6 @@ public class TimersBroadcastService extends Service {
         NotificationManager notificationManager =
                 (NotificationManager) AppContextHelper.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(position);
-        timer.mDurationCounter = timer.mDuration;
-        saveTimerStatus(position);
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
             Log.d(TAG, "Timer stop: #" + position);
@@ -231,8 +242,13 @@ public class TimersBroadcastService extends Service {
         timer.mStatus = FINISHED;
         timer.mFinishTime = 0;
         saveTimerStatus(position);
-        mTimers[position] = null;
-        MainActivity.mTimersAdapter.notifyItemChanged(position);
+        if (mTimers[position] != null) {
+            mTimers[position].cancel();
+            mTimers[position] = null;
+        }
+        if (MainActivity.mTimersAdapter != null) {
+            MainActivity.mTimersAdapter.notifyItemChanged(position);
+        }
         Log.d(TAG, "Timer finished: #" + position);
     }
     

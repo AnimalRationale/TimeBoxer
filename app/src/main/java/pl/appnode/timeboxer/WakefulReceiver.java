@@ -31,7 +31,7 @@ public class WakefulReceiver extends BroadcastReceiver {
                 sWakeLock.release();
                 Log.d(TAG, "Wake lock released.");
             } catch (Throwable thex) {
-                Log.d(TAG, "Wake lock catch.");
+                Log.d(TAG, "Wake lock exception catch.");
                 // wakeLock should be already released
             }
         } else {

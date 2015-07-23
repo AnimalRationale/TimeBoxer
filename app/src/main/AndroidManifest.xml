@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.appnode.timeboxer" >
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name=".AppContextHelper"
         android:allowBackup="true"

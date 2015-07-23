@@ -48,14 +48,15 @@ public class TimersService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        createTimersList();
+        MainActivity.sIsTimersBroadcastService = true;
+        Log.d(TAG, "Creating timers service.");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startMode = START_STICKY;
-        createTimersList();
-        MainActivity.sIsTimersBroadcastService = true;
-        Log.d(TAG, "Starting broadcast service.");
+        Log.d(TAG, "Starting timers service.");
         return startMode;
     }
 
@@ -215,6 +216,7 @@ public class TimersService extends Service {
         timer.mFinishTime = 0;
         timer.mDurationCounter = timer.mDuration;
         saveTimerStatus(position);
+        WakefulReceiver.releaseLock();
         if (mTimers[position] != null) {
             mTimers[position].stopRingtone();
             mTimers[position].cancel();

@@ -1,5 +1,6 @@
 package pl.appnode.timeboxer;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,6 +12,8 @@ import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import static pl.appnode.timeboxer.Constants.WAKE_UP_MARGIN;
 
 public class CustomCountDownTimer extends CountDownTimer {
 
@@ -33,6 +36,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         mTimeUnitFactor = timeUnitFactor;
         setUpRingtone();
         notificationStart();
+        setAlarmManagerWakeUp(millisInFuture);
     }
 
     @Override
@@ -46,6 +50,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         notificationFinish();
         setVolume();
         mRingtone.play();
+        WakefulReceiver.releaseLock();
         TimersService.finishTimer(mTimerId);
     }
 
@@ -133,5 +138,15 @@ public class CustomCountDownTimer extends CountDownTimer {
     public void stopRingtone () {
         mRingtone.stop();
         restoreVolume();
+    }
+
+    private void setAlarmManagerWakeUp (Long timerDuration) {
+        Intent intent = new Intent(mContext, WakefulReceiver.class);
+        PendingIntent alarmWakeIntent = PendingIntent.getBroadcast(
+                mContext.getApplicationContext(), 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                timerDuration - WAKE_UP_MARGIN,
+                alarmWakeIntent);
     }
 }

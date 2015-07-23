@@ -36,7 +36,7 @@
         <service
             android:name=".TimersService"
             android:exported="false" />
-        <receiver android:name=".WakefulReceiver" >
+        <receiver android:name=".AlarmReceiver" >
         </receiver>
     </application>
 

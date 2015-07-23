@@ -66,6 +66,11 @@ public class TimersService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startMode = START_STICKY;
+        int ids[] = AppWidgetManager.getInstance(this).getAppWidgetIds(new ComponentName(this,TimeBoxerWidgetProvider.class));
+        if (ids.length != 0) {
+            setUpWidget(this);
+        }
+
         Log.d(TAG, "Starting timers service.");
         return startMode;
     }

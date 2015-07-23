@@ -212,16 +212,18 @@ public class TimersService extends Service {
 
     private static void stopTimer(int position) {
         TimerItem timer = sTimersList.get(position);
+        if (mTimers[position] != null) {
+            mTimers[position].stopRingtone();
+            if (timer.mStatus != FINISHED) {
+                mTimers[position].cancelAlarmManagerWakeUp();
+            }
+            mTimers[position].cancel();
+            mTimers[position] = null;
+        }
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;
         timer.mDurationCounter = timer.mDuration;
         saveTimerStatus(position);
-        WakefulReceiver.releaseLock();
-        if (mTimers[position] != null) {
-            mTimers[position].stopRingtone();
-            mTimers[position].cancel();
-            mTimers[position] = null;
-        }
         NotificationManager notificationManager =
                 (NotificationManager) AppContextHelper.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(position);

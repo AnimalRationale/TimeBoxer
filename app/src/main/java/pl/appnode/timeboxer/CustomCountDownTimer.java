@@ -119,7 +119,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         return Uri.parse(ringtone);
     }
 
-    public void setVolume() {
+    private void setVolume() {
         mOriginalVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
         if (mRingtoneVolume <= 0) {
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
@@ -130,7 +130,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         Log.d(TAG, "Original vol: " + mOriginalVolume + " Set: " + mRingtoneVolume);
     }
 
-    public void restoreVolume() {
+    private void restoreVolume() {
         mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mOriginalVolume, 0);
         Log.d(TAG, "Used vol: " + mRingtoneVolume + " Restored: " + mOriginalVolume);
     }
@@ -148,5 +148,9 @@ public class CustomCountDownTimer extends CountDownTimer {
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 timerDuration - WAKE_UP_MARGIN,
                 alarmWakeIntent);
+    }
+
+    public void cancelAlarmManagerWakeUp() {
+        WakefulReceiver.releaseLock();
     }
 }

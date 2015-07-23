@@ -46,4 +46,12 @@ public final class Constants {
     public static final int RINGTONE_INTENT_REQUEST = 502;
     public static final float TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY = 0.8f;
     public static final String COUNTDOWN_BROADCAST = "pl.appnode.timeboxer";
+    public static final int[] WIDGET_BUTTONS = {
+            R.id.widget_round_button0,
+            R.id.widget_round_button1,
+            R.id.widget_round_button2,
+            R.id.widget_round_button3,
+            R.id.widget_round_button4,
+    };
+    public static final String[] WIDGET_BUTTON_ACTION = {"A", "0", "1", "2", "3"};
 }

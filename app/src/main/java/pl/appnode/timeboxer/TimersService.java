@@ -1,7 +1,10 @@
 package pl.appnode.timeboxer;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +14,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,19 +41,25 @@ import static pl.appnode.timeboxer.Constants.SECOND_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.TIME_DEVIATION_FOR_LAST_TICK;
 import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 import static pl.appnode.timeboxer.Constants.TIMER_PREFIX;
-
+import static pl.appnode.timeboxer.Constants.WIDGET_BUTTONS;
+import static pl.appnode.timeboxer.Constants.WIDGET_BUTTON_ACTION;
 
 public class TimersService extends Service {
 
     private static final String TAG = "TimersService";
     protected static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
     private static CustomCountDownTimer[] mTimers = new CustomCountDownTimer[4];
+    private int mOrientation;
+    private static RemoteViews sWidgetViews = null;
+    private static ComponentName sWidget = null;
+    private static AppWidgetManager sWidgetManager = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         createTimersList();
         MainActivity.sIsTimersBroadcastService = true;
+        mOrientation = this.getResources().getConfiguration().orientation;
         Log.d(TAG, "Creating timers service.");
     }
 
@@ -251,6 +261,38 @@ public class TimersService extends Service {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         }
         Log.d(TAG, "Timer finished: #" + position);
+    }
+
+    private static void getWidget(Context context) {
+        sWidgetViews = new RemoteViews(context.getPackageName(), R.layout.widget_timeboxer);
+        sWidget = new ComponentName(context, TimeBoxerWidgetProvider.class);
+        sWidgetManager = AppWidgetManager.getInstance(context);
+    }
+
+    private static void setUpWidget(Context context) {
+        getWidget(context);
+        assignWidgetButtons(context);
+        // setUpFromTimersList();
+        sWidgetManager.updateAppWidget(sWidget, sWidgetViews);
+        Log.d(TAG, "Widget updated.");
+    }
+
+    private static void assignWidgetButtons(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[0], pendingIntent);
+        Log.d(TAG, "Reassigning widget app button.");
+        for (int i = 1; i <= TIMERS_COUNT; i++) {
+            sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[i], getPendingSelfIntent(context, WIDGET_BUTTON_ACTION[i]));
+            Log.d(TAG, "Reassigning timer #" + i + " widget button for action: " + WIDGET_BUTTON_ACTION[i]);
+        }
+    }
+
+    private static PendingIntent getPendingSelfIntent(Context context, String action) {
+        Intent intent = new Intent(context, TimeBoxerWidgetProvider.class);
+        intent.setAction(action);
+        Log.d(TAG, "WidgetSetUp Service pendingSelfIntent for action: " + action);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
     
     @Override

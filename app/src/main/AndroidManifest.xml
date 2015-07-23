@@ -34,6 +34,8 @@
         <service
             android:name=".TimersBroadcastService"
             android:exported="false" />
+        <receiver android:name=".WakefulReceiver" >
+        </receiver>
     </application>
 
 </manifest>

@@ -7,9 +7,9 @@ import android.os.PowerManager;
 import android.util.Log;
 
 
-public class AlarmReceiver extends BroadcastReceiver {
+public class WakeUpAlarmReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "AlarmReceiver";
+    private static final String TAG = "WakeUpAlarmReceiver";
     private static final String LOCK_TAG = "pl.appnode.timeboxer";
     private static PowerManager.WakeLock sWakeLock = null;
 

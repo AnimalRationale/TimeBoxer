@@ -50,7 +50,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         notificationFinish();
         setVolume();
         mRingtone.play();
-        AlarmReceiver.releaseLock();
+        WakeUpAlarmReceiver.releaseLock();
         TimersService.finishTimer(mTimerId);
     }
 
@@ -141,7 +141,7 @@ public class CustomCountDownTimer extends CountDownTimer {
     }
 
     private void setAlarmManagerWakeUp (Long timerDuration) {
-        Intent intent = new Intent(mContext, AlarmReceiver.class);
+        Intent intent = new Intent(mContext, WakeUpAlarmReceiver.class);
         PendingIntent alarmWakeIntent = PendingIntent.getBroadcast(
                 mContext.getApplicationContext(), 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -151,6 +151,6 @@ public class CustomCountDownTimer extends CountDownTimer {
     }
 
     public void cancelAlarmManagerWakeUp() {
-        AlarmReceiver.releaseLock();
+        WakeUpAlarmReceiver.releaseLock();
     }
 }

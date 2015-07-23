@@ -36,7 +36,17 @@
         <service
             android:name=".TimersService"
             android:exported="false" />
-        <receiver android:name=".AlarmReceiver" >
+        <receiver android:name=".WakeUpAlarmReceiver" >
+        </receiver>
+        <receiver android:name=".TimeBoxerWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="pl.appnode.timeboxer.WIDGET_BUTTON" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_info" />
         </receiver>
     </application>
 

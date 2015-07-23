@@ -42,7 +42,7 @@ public class WakefulReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent alarmIntent) {
         acquireWakeLock(context);
-        Intent serviceIntent = new Intent(context, TimersBroadcastService.class);
+        Intent serviceIntent = new Intent(context, TimersService.class);
         Log.d(TAG, "Starting service.");
         context.startService(serviceIntent);
         Log.d(TAG, "Service started.");

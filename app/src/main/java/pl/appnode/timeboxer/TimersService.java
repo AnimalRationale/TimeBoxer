@@ -39,9 +39,9 @@ import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 import static pl.appnode.timeboxer.Constants.TIMER_PREFIX;
 
 
-public class TimersBroadcastService extends Service {
+public class TimersService extends Service {
 
-    private static final String TAG = "TimersBroadcastService";
+    private static final String TAG = "TimersService";
     protected static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
     private static CustomCountDownTimer[] mTimers = new CustomCountDownTimer[4];
 

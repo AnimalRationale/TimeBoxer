@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         if (!sIsTimersBroadcastService) {
             Intent serviceIntent = new Intent(AppContextHelper.getContext(),
-                    TimersBroadcastService.class);
+                    TimersService.class);
             AppContextHelper.getContext().startService(serviceIntent);
             Log.d(TAG, "Starting service, service = " + sIsTimersBroadcastService);
         }
@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
                 && resultIntent.getExtras() != null) {
             Log.d(TAG, "Proper ResultIntent.");
             int position = resultIntent.getIntExtra(TIMER_SETTINGS_INTENT_TIMER_ID, 0);
-            TimerItem timer = TimersBroadcastService.sTimersList.get(position);
+            TimerItem timer = TimersService.sTimersList.get(position);
             timer.mName = (String) resultIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_NAME);
             timer.mFullscreenSwitchOff = (boolean) resultIntent.getExtras()
                     .get(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF);
@@ -135,7 +135,7 @@ public class MainActivity extends Activity {
             timer.mRingtoneVolume = (int) resultIntent.getExtras()
                     .get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL);
             mTimersAdapter.notifyItemChanged(position);
-            TimersBroadcastService.saveSharedPrefs();
+            TimersService.saveSharedPrefs();
             // widgetUpdate();
         }
     }

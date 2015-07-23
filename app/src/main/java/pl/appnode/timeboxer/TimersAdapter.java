@@ -28,7 +28,7 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTON
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
-import static pl.appnode.timeboxer.TimersBroadcastService.sTimersList;
+import static pl.appnode.timeboxer.TimersService.sTimersList;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewHolder>{
 
@@ -83,7 +83,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 Log.d(TAG, "Alarm #" + position + " tapped *** timer.mStatus = " + timer.mStatus);
-                TimersBroadcastService.timerAction(position);
+                TimersService.timerAction(position);
             }
         });
         timerViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
@@ -151,6 +151,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     public void setDuration(final TimerItem timer) {
         final int position = sTimersList.indexOf(timer);
         notifyItemChanged(position);
-        TimersBroadcastService.saveTimerDuration(position);
+        TimersService.saveTimerDuration(position);
     }
 }

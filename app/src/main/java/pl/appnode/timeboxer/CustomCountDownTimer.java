@@ -29,7 +29,7 @@ public class CustomCountDownTimer extends CountDownTimer {
     public CustomCountDownTimer (long millisInFuture, long countDownInterval, int position, int timeUnitFactor) {
         super(millisInFuture, countDownInterval);
         mTimerId = position;
-        mTimer = TimersBroadcastService.sTimersList.get(mTimerId);
+        mTimer = TimersService.sTimersList.get(mTimerId);
         mTimeUnitFactor = timeUnitFactor;
         setUpRingtone();
         notificationStart();
@@ -37,7 +37,7 @@ public class CustomCountDownTimer extends CountDownTimer {
 
     @Override
     public void onTick(long millisUntilFinished) {
-        TimersBroadcastService.updateTime(mTimerId, (int) millisUntilFinished / mTimeUnitFactor);
+        TimersService.updateTime(mTimerId, (int) millisUntilFinished / mTimeUnitFactor);
         notificationUpdate();
     }
 
@@ -46,7 +46,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         notificationFinish();
         setVolume();
         mRingtone.play();
-        TimersBroadcastService.finishTimer(mTimerId);
+        TimersService.finishTimer(mTimerId);
     }
 
     private void notificationStart () {

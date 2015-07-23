@@ -32,7 +32,7 @@
             android:theme="@android:style/android:Theme.Holo.Light.Dialog" >
         </activity>
         <service
-            android:name=".TimersBroadcastService"
+            android:name=".TimersService"
             android:exported="false" />
         <receiver android:name=".WakefulReceiver" >
         </receiver>

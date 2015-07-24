@@ -136,7 +136,7 @@ public class MainActivity extends Activity {
                     .get(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL);
             mTimersAdapter.notifyItemChanged(position);
             TimersService.saveSharedPrefs();
-            // widgetUpdate();
+            TimersService.updateWidget();
         }
     }
 }

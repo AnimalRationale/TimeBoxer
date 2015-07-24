@@ -280,7 +280,7 @@ public class TimersService extends Service {
         sWidgetManager = AppWidgetManager.getInstance(context);
     }
 
-    private static void updateWidget() {
+    protected static void updateWidget() {
         int ids[] = AppWidgetManager.getInstance(mContext)
                 .getAppWidgetIds(new ComponentName(mContext, TimeBoxerWidgetProvider.class));
         if (ids.length != 0) {

@@ -8,8 +8,8 @@ android {
         applicationId "pl.appnode.timeboxer"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 15
-        versionName "0.7.0"
+        versionCode 16
+        versionName "0.8.0"
     }
     buildTypes {
         release {

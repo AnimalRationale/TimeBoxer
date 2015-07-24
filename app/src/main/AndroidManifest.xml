@@ -35,7 +35,9 @@
         </activity>
         <service
             android:name=".TimersService"
-            android:exported="false" />
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation"
+            android:icon="@mipmap/ic_launcher" />
         <receiver android:name=".WakeUpAlarmReceiver" >
         </receiver>
         <receiver android:name=".TimeBoxerWidgetProvider" >

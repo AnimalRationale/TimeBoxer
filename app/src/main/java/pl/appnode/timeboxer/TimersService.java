@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -327,6 +328,17 @@ public class TimersService extends Service {
         intent.setAction(action);
         Log.d(TAG, "WidgetSetUp Service pendingSelfIntent for action: " + action);
         return PendingIntent.getBroadcast(context, 0, intent, 0);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.d(TAG, "Configuration change.");
+        if(newConfig.orientation != mOrientation)
+        {
+            mOrientation = newConfig.orientation;
+            Log.d(TAG, "Orientation change.");
+            setUpWidget();
+        }
     }
     
     @Override

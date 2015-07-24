@@ -55,6 +55,7 @@ public class TimersService extends Service {
     private static RemoteViews sWidgetViews = null;
     private static ComponentName sWidget = null;
     private static AppWidgetManager sWidgetManager = null;
+    protected static boolean isMainActivityVisible = false;
 
     @Override
     public void onCreate() {
@@ -255,10 +256,11 @@ public class TimersService extends Service {
     protected static void updateTime(int position, int timeToFinish) {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = timeToFinish;
-        if (MainActivity.mTimersAdapter != null) {
+        if (isMainActivityVisible) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
+        } else {
+            updateWidget();
         }
-        updateWidget();
     }
 
     protected static void finishTimer(int position) {
@@ -267,7 +269,7 @@ public class TimersService extends Service {
         timer.mStatus = FINISHED;
         timer.mFinishTime = 0;
         saveTimerStatus(position);
-        if (MainActivity.mTimersAdapter != null) {
+        if (isMainActivityVisible) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         }
         updateWidget();

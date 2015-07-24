@@ -49,6 +49,7 @@ public class TimersService extends Service {
     private static final String TAG = "TimersService";
     protected static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
     private static CustomCountDownTimer[] mTimers = new CustomCountDownTimer[4];
+    private static Context mContext;
     private int mOrientation;
     private static RemoteViews sWidgetViews = null;
     private static ComponentName sWidget = null;
@@ -60,15 +61,16 @@ public class TimersService extends Service {
         createTimersList();
         MainActivity.sIsTimersBroadcastService = true;
         mOrientation = this.getResources().getConfiguration().orientation;
+        mContext = AppContextHelper.getContext();
         Log.d(TAG, "Creating timers service.");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startMode = START_STICKY;
-        int ids[] = AppWidgetManager.getInstance(this).getAppWidgetIds(new ComponentName(this,TimeBoxerWidgetProvider.class));
+        int ids[] = AppWidgetManager.getInstance(mContext).getAppWidgetIds(new ComponentName(mContext,TimeBoxerWidgetProvider.class));
         if (ids.length != 0) {
-            setUpWidget(this);
+            setUpWidget();
         }
 
         Log.d(TAG, "Starting timers service.");
@@ -246,6 +248,7 @@ public class TimersService extends Service {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
             Log.d(TAG, "Timer stop: #" + position);
         }
+        updateWidget();
     }
 
     protected static void updateTime(int position, int timeToFinish) {
@@ -254,6 +257,7 @@ public class TimersService extends Service {
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         }
+        updateWidget();
     }
 
     protected static void finishTimer(int position) {
@@ -274,12 +278,36 @@ public class TimersService extends Service {
         sWidgetManager = AppWidgetManager.getInstance(context);
     }
 
-    private static void setUpWidget(Context context) {
-        getWidget(context);
-        assignWidgetButtons(context);
-        // setUpFromTimersList();
+    private static void updateWidget() {
+        int ids[] = AppWidgetManager.getInstance(mContext)
+                .getAppWidgetIds(new ComponentName(mContext, TimeBoxerWidgetProvider.class));
+        if (ids.length != 0) {
+            setUpWidget();
+        }
+    }
+
+    private static void setUpWidget() {
+        getWidget(mContext);
+        assignWidgetButtons(mContext);
+        setUpWidgetFromTimersList();
         sWidgetManager.updateAppWidget(sWidget, sWidgetViews);
         Log.d(TAG, "Widget updated.");
+    }
+
+    private static void setUpWidgetFromTimersList() {
+        for (int i = 0; i < TIMERS_COUNT; i++) {
+            TimerItem timer = sTimersList.get(i);
+            if (timer.mStatus == RUNNING) {
+                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource", R.drawable.round_button_orange);
+                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1], timer.mDurationCounter + timer.mTimeUnitSymbol);
+            } else if (timer.mStatus == IDLE) {
+                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource", R.drawable.round_button_green);
+                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1], timer.mDuration + timer.mTimeUnitSymbol);
+            } else if (timer.mStatus == FINISHED) {
+                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource", R.drawable.round_button_red);
+                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1], timer.mDurationCounter + timer.mTimeUnitSymbol);
+            }
+        }
     }
 
     private static void assignWidgetButtons(Context context) {

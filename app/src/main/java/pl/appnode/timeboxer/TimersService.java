@@ -269,6 +269,7 @@ public class TimersService extends Service {
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         }
+        updateWidget();
         Log.d(TAG, "Timer finished: #" + position);
     }
 

@@ -68,6 +68,7 @@ public class MainActivity extends Activity {
         orientationSetup(this);
         super.onResume();
         checkThemeChange();
+        mTimersAdapter.notifyDataSetChanged();
     }
 
     @Override

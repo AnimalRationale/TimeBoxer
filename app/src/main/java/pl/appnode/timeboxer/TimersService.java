@@ -4,9 +4,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.AudioManager;
@@ -58,6 +60,14 @@ public class TimersService extends Service {
     private static AppWidgetManager sWidgetManager = null;
     protected static boolean isMainActivityVisible = false;
 
+    private BroadcastReceiver mScreenOnBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateWidget();
+            Log.d(TAG, "Receiver for SCREEN_ON.");
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -65,6 +75,7 @@ public class TimersService extends Service {
         MainActivity.sIsTimersBroadcastService = true;
         mOrientation = this.getResources().getConfiguration().orientation;
         mContext = AppContextHelper.getContext();
+        registerReceiver(mScreenOnBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
         Log.d(TAG, "Creating timers service.");
     }
 

@@ -269,7 +269,7 @@ public class TimersService extends Service {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = timeToFinish;
         PowerManager device = (PowerManager) AppContextHelper.getContext().getSystemService(Context.POWER_SERVICE);
-        if (device.isScreenOn()) { // TODO: Broadcast receiver for ACTION_SCREEN_ON
+        if (device.isScreenOn()) {
             if (isMainActivityVisible) {
                 MainActivity.mTimersAdapter.notifyItemChanged(position);
             } else {

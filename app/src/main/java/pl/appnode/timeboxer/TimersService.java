@@ -52,19 +52,29 @@ public class TimersService extends Service {
 
     private static final String TAG = "TimersService";
     protected static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
-    private static CustomCountDownTimer[] mTimers = new CustomCountDownTimer[4];
-    private static Context mContext;
+    private static CustomCountDownTimer[] sTimers = new CustomCountDownTimer[4];
+    private static Context sContext;
     private int mOrientation;
     private static RemoteViews sWidgetViews = null;
     private static ComponentName sWidget = null;
     private static AppWidgetManager sWidgetManager = null;
-    protected static boolean isMainActivityVisible = false;
+    protected static boolean sIsMainActivityVisible = false;
+    private static boolean sIsScreenInteractive = true;
 
     private BroadcastReceiver mScreenOnBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            sIsScreenInteractive = true;
             updateWidget();
             Log.d(TAG, "Receiver for SCREEN_ON.");
+        }
+    };
+
+    private BroadcastReceiver mScreenOffBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            sIsScreenInteractive = false;
+            Log.d(TAG, "Receiver for SCREEN_OFF.");
         }
     };
 
@@ -74,19 +84,21 @@ public class TimersService extends Service {
         createTimersList();
         MainActivity.sIsTimersBroadcastService = true;
         mOrientation = this.getResources().getConfiguration().orientation;
-        mContext = AppContextHelper.getContext();
+        sContext = AppContextHelper.getContext();
         registerReceiver(mScreenOnBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
+        registerReceiver(mScreenOffBroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
         Log.d(TAG, "Creating timers service.");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startMode = START_STICKY;
-        int ids[] = AppWidgetManager.getInstance(mContext).getAppWidgetIds(new ComponentName(mContext,TimeBoxerWidgetProvider.class));
+        int ids[] = AppWidgetManager.getInstance(sContext).getAppWidgetIds(new ComponentName(sContext,TimeBoxerWidgetProvider.class));
         if (ids.length != 0) {
             setUpWidget();
         }
-
+        PowerManager device = (PowerManager) AppContextHelper.getContext().getSystemService(Context.POWER_SERVICE);
+        sIsScreenInteractive = device.isScreenOn();
         Log.d(TAG, "Starting timers service.");
         return startMode;
     }
@@ -233,23 +245,23 @@ public class TimersService extends Service {
             timeUnitFactor = SECOND_IN_MILLIS;
         } else {timeUnitFactor = (MINUTE_IN_MILLIS);}
         timer.mFinishTime = SystemClock.elapsedRealtime() + (timer.mDurationCounter * timeUnitFactor);
-        mTimers[position] = new CustomCountDownTimer(timer.mDurationCounter * timeUnitFactor,
+        sTimers[position] = new CustomCountDownTimer(timer.mDurationCounter * timeUnitFactor,
                 timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK), position, timeUnitFactor);
         Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDurationCounter * timeUnitFactor + ", "
                 + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
-        mTimers[position].start();
+        sTimers[position].start();
         saveTimerStatus(position);
     }
 
     private static void stopTimer(int position) {
         TimerItem timer = sTimersList.get(position);
-        if (mTimers[position] != null) {
-            mTimers[position].stopRingtone();
+        if (sTimers[position] != null) {
+            sTimers[position].stopRingtone();
             if (timer.mStatus != FINISHED) {
-                mTimers[position].cancelAlarmManagerWakeUp();
+                sTimers[position].cancelAlarmManagerWakeUp();
             }
-            mTimers[position].cancel();
-            mTimers[position] = null;
+            sTimers[position].cancel();
+            sTimers[position] = null;
         }
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;
@@ -268,9 +280,8 @@ public class TimersService extends Service {
     protected static void updateTime(int position, int timeToFinish) {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = timeToFinish;
-        PowerManager device = (PowerManager) AppContextHelper.getContext().getSystemService(Context.POWER_SERVICE);
-        if (device.isScreenOn()) {
-            if (isMainActivityVisible) {
+        if (sIsScreenInteractive) {
+            if (sIsMainActivityVisible) {
                 MainActivity.mTimersAdapter.notifyItemChanged(position);
             } else {
                 updateWidget();
@@ -284,7 +295,7 @@ public class TimersService extends Service {
         timer.mStatus = FINISHED;
         timer.mFinishTime = 0;
         saveTimerStatus(position);
-        if (isMainActivityVisible) {
+        if (sIsMainActivityVisible) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         }
         updateWidget();
@@ -298,16 +309,16 @@ public class TimersService extends Service {
     }
 
     protected static void updateWidget() {
-        int ids[] = AppWidgetManager.getInstance(mContext)
-                .getAppWidgetIds(new ComponentName(mContext, TimeBoxerWidgetProvider.class));
+        int ids[] = AppWidgetManager.getInstance(sContext)
+                .getAppWidgetIds(new ComponentName(sContext, TimeBoxerWidgetProvider.class));
         if (ids.length != 0) {
             setUpWidget();
         }
     }
 
     private static void setUpWidget() {
-        getWidget(mContext);
-        assignWidgetButtons(mContext);
+        getWidget(sContext);
+        assignWidgetButtons(sContext);
         setUpWidgetFromTimersList();
         sWidgetManager.updateAppWidget(sWidget, sWidgetViews);
         Log.d(TAG, "Widget updated.");

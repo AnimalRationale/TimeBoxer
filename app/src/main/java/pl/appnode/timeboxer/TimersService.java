@@ -13,6 +13,7 @@ import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -256,10 +257,13 @@ public class TimersService extends Service {
     protected static void updateTime(int position, int timeToFinish) {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = timeToFinish;
-        if (isMainActivityVisible) {
-            MainActivity.mTimersAdapter.notifyItemChanged(position);
-        } else {
-            updateWidget();
+        PowerManager device = (PowerManager) AppContextHelper.getContext().getSystemService(Context.POWER_SERVICE);
+        if (device.isScreenOn()) { // TODO: Broadcast receiver for ACTION_SCREEN_ON
+            if (isMainActivityVisible) {
+                MainActivity.mTimersAdapter.notifyItemChanged(position);
+            } else {
+                updateWidget();
+            }
         }
     }
 

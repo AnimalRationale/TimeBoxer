@@ -59,7 +59,7 @@ public class TimersService extends Service {
     private static ComponentName sWidget = null;
     private static AppWidgetManager sWidgetManager = null;
     protected static boolean sIsMainActivityVisible = false;
-    private static boolean sIsScreenInteractive = true;
+    protected static boolean sIsScreenInteractive = true;
 
 
     private BroadcastReceiver mScreenStatusBroadcastReceiver = new BroadcastReceiver() {
@@ -281,12 +281,10 @@ public class TimersService extends Service {
     protected static void updateTime(int position, int timeToFinish) {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = timeToFinish;
-        if (sIsScreenInteractive) {
-            if (sIsMainActivityVisible) {
-                MainActivity.mTimersAdapter.notifyItemChanged(position);
-            } else {
-                updateWidget();
-            }
+        if (sIsMainActivityVisible) {
+            MainActivity.mTimersAdapter.notifyItemChanged(position);
+        } else {
+            updateWidget();
         }
     }
 

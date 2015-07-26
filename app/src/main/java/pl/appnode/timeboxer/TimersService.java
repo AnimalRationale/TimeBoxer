@@ -61,20 +61,18 @@ public class TimersService extends Service {
     protected static boolean sIsMainActivityVisible = false;
     private static boolean sIsScreenInteractive = true;
 
-    private BroadcastReceiver mScreenOnBroadcast = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            sIsScreenInteractive = true;
-            updateWidget();
-            Log.d(TAG, "Receiver for SCREEN_ON.");
-        }
-    };
 
-    private BroadcastReceiver mScreenOffBroadcast = new BroadcastReceiver() {
+    private BroadcastReceiver mScreenStatusBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            sIsScreenInteractive = false;
-            Log.d(TAG, "Receiver for SCREEN_OFF.");
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                sIsScreenInteractive = true;
+                updateWidget();
+                Log.d(TAG, "Receiver for SCREEN_ON.");
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                sIsScreenInteractive = false;
+                Log.d(TAG, "Receiver for SCREEN_OFF.");
+            }
         }
     };
 
@@ -85,8 +83,10 @@ public class TimersService extends Service {
         MainActivity.sIsTimersBroadcastService = true;
         mOrientation = this.getResources().getConfiguration().orientation;
         sContext = AppContextHelper.getContext();
-        registerReceiver(mScreenOnBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
-        registerReceiver(mScreenOffBroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+        IntentFilter screenStatusIntentFilter = new IntentFilter();
+        screenStatusIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        screenStatusIntentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenStatusBroadcastReceiver, new IntentFilter(screenStatusIntentFilter));
         Log.d(TAG, "Creating timers service.");
     }
 
@@ -106,6 +106,7 @@ public class TimersService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(mScreenStatusBroadcastReceiver);
     }
 
     private void createTimersList() {

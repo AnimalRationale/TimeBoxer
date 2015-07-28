@@ -278,9 +278,7 @@ public class TimersService extends Service {
         updateWidget();
     }
 
-    protected static void updateTime(int position, int timeToFinish) {
-        TimerItem timer = sTimersList.get(position);
-        timer.mDurationCounter = timeToFinish;
+    protected static void updateTime(int position) {
         if (sIsMainActivityVisible) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         } else {

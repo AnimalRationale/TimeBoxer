@@ -127,7 +127,8 @@ public class CustomCountDownTimer extends CountDownTimer {
         if (mRingtoneVolume <= 0) {
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
         } else if (mRingtoneVolume >= mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)) {
-            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mAudioManager
+                    .getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
         } else {
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mRingtoneVolume, 0);}
         Log.d(TAG, "Original vol: " + mOriginalVolume + " Set: " + mRingtoneVolume);

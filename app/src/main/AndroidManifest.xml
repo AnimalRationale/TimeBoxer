@@ -33,6 +33,17 @@
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/android:Theme.Holo.Light.Dialog" >
         </activity>
+        <activity
+            android:name=".FullscreenSwitchOffActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/activity_fullscreen_off_title"
+            android:parentActivityName=".MainActivity"
+            android:showOnLockScreen="true"
+            android:theme="@style/FullscreenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pl.appnode.timeboxer.MainActivity" />
+        </activity>
         <service
             android:name=".TimersService"
             android:exported="false"

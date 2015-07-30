@@ -60,9 +60,7 @@ public class FullscreenSwitchOffActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if ( (int) getIntent().getExtras().get("Command") != 1) {
-            mCommand = 0;
-        }
+        mCommand = 0;
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -78,7 +76,6 @@ public class FullscreenSwitchOffActivity extends Activity {
         if (getIntent().getExtras() != null) {
             mAlarmId = (int) getIntent().getExtras().get("AlarmID");
             Log.d(TAG, "AlarmID: " + mAlarmId);
-            mCommand = (int) getIntent().getExtras().get("Command");
             alarmText.setText((String) getIntent().getExtras().get("AlarmName"));
         }
 

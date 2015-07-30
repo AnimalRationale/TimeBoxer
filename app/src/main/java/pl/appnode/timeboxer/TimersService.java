@@ -296,6 +296,9 @@ public class TimersService extends Service {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         }
         updateWidget();
+        if (timer.mFullscreenSwitchOff) {
+            showFullscreenSwitchOff(position + 1, timer.mName);
+        }
         Log.d(TAG, "Timer finished: #" + position);
     }
 
@@ -364,6 +367,14 @@ public class TimersService extends Service {
             Log.d(TAG, "Orientation change.");
             setUpWidget();
         }
+    }
+
+    private static void showFullscreenSwitchOff(int timerId, String timerName) {
+        Intent intent = new Intent(sContext, FullscreenSwitchOffActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("AlarmID", timerId);
+        intent.putExtra("AlarmName", timerName);
+        sContext.startActivity(intent);
     }
     
     @Override

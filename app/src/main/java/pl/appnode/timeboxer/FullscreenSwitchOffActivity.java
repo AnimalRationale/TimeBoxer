@@ -4,7 +4,6 @@ import pl.appnode.timeboxer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import static pl.appnode.timeboxer.Constants.OFF_SCREEN_DEACTIVATED;
-import static pl.appnode.timeboxer.Constants.OFF_SCREEN_START_FROM_SERVICE;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -32,7 +30,7 @@ public class FullscreenSwitchOffActivity extends Activity {
      */
 
     private final static String TAG = "ActivityOFF";
-    private int mAlarmId;
+    private int mTimerId;
     private int mCommand = 0;
     private static final boolean AUTO_HIDE = true;
 
@@ -74,8 +72,8 @@ public class FullscreenSwitchOffActivity extends Activity {
         final View contentView = findViewById(R.id.fullscreen_content);
         TextView alarmText = (TextView) contentView;
         if (getIntent().getExtras() != null) {
-            mAlarmId = (int) getIntent().getExtras().get("AlarmID");
-            Log.d(TAG, "AlarmID: " + mAlarmId);
+            mTimerId = (int) getIntent().getExtras().get("AlarmID");
+            Log.d(TAG, "TimerID: " + mTimerId);
             alarmText.setText((String) getIntent().getExtras().get("AlarmName"));
         }
 
@@ -136,7 +134,7 @@ public class FullscreenSwitchOffActivity extends Activity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.alarm_off_button).setOnTouchListener(mDelayHideTouchListener);
+        findViewById(R.id.timer_off_button).setOnTouchListener(mDelayHideTouchListener);
 
     }
 
@@ -153,8 +151,6 @@ public class FullscreenSwitchOffActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mCommand != OFF_SCREEN_START_FROM_SERVICE) {
-        }
     }
 
     /**
@@ -224,10 +220,7 @@ public class FullscreenSwitchOffActivity extends Activity {
     }
 
     private void stopAlarm() {
-        if (TimersService.sTimersList != null) {
-            Log.d(TAG, "TimersList not null. AlarmID: " + mAlarmId );
-        } else {
-            Log.d(TAG, "TimersList null. AlarmID: " + mAlarmId);
-        }
+        Log.d(TAG, "Switching off timer#" + (mTimerId - 1));
+        TimersService.timerAction(mTimerId - 1);
     }
 }

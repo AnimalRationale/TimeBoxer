@@ -61,12 +61,18 @@ public class TimersService extends Service {
     private static boolean sIsMainActivityVisible = false;
     private static boolean sIsScreenInteractive = true;
 
-    public static void setIsMainActivityVisible(boolean sIsMainActivityVisible) {
+    protected static void setIsMainActivityVisible(boolean sIsMainActivityVisible) {
         TimersService.sIsMainActivityVisible = sIsMainActivityVisible;
     }
 
-    public static boolean getIsScreenInteractive() {
+    protected static boolean getIsScreenInteractive() {
         return sIsScreenInteractive;
+    }
+
+    protected static TimerItem getTimer(int position) {
+        if (position > 0 && position < sTimersList.size()) {
+            return sTimersList.get(position);
+        } else return sTimersList.get(0);
     }
 
     private BroadcastReceiver mScreenStatusBroadcastReceiver = new BroadcastReceiver() {

@@ -32,7 +32,7 @@ public class CustomCountDownTimer extends CountDownTimer {
     public CustomCountDownTimer (long millisInFuture, long countDownInterval, int position, int timeUnitFactor) {
         super(millisInFuture, countDownInterval);
         mTimerId = position;
-        mTimer = TimersService.sTimersList.get(mTimerId);
+        mTimer = TimersService.getTimer(mTimerId);
         mTimeUnitFactor = timeUnitFactor;
         setUpRingtone();
         notificationStart();

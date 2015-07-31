@@ -126,7 +126,7 @@ public class MainActivity extends Activity {
                 && resultIntent.getExtras() != null) {
             Log.d(TAG, "Proper ResultIntent.");
             int position = resultIntent.getIntExtra(TIMER_SETTINGS_INTENT_TIMER_ID, 0);
-            TimerItem timer = TimersService.sTimersList.get(position);
+            TimerItem timer = TimersService.getTimer(position);
             timer.mName = (String) resultIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_NAME);
             timer.mFullscreenSwitchOff = (boolean) resultIntent.getExtras()
                     .get(TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF);

@@ -4,6 +4,7 @@ import pl.appnode.timeboxer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,7 +32,6 @@ public class FullscreenSwitchOffActivity extends Activity {
 
     private final static String TAG = "ActivityOFF";
     private int mTimerId;
-    private int mCommand = 0;
     private static final boolean AUTO_HIDE = true;
 
     /**
@@ -58,7 +58,6 @@ public class FullscreenSwitchOffActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mCommand = 0;
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -194,7 +193,6 @@ public class FullscreenSwitchOffActivity extends Activity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                mCommand = OFF_SCREEN_DEACTIVATED;
                 stopTimer();
                 moveTaskToBack(true);
             }

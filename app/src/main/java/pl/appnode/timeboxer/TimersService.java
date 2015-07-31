@@ -58,9 +58,16 @@ public class TimersService extends Service {
     private static RemoteViews sWidgetViews = null;
     private static ComponentName sWidget = null;
     private static AppWidgetManager sWidgetManager = null;
-    protected static boolean sIsMainActivityVisible = false;
-    protected static boolean sIsScreenInteractive = true;
+    private static boolean sIsMainActivityVisible = false;
+    private static boolean sIsScreenInteractive = true;
 
+    public static void setIsMainActivityVisible(boolean sIsMainActivityVisible) {
+        TimersService.sIsMainActivityVisible = sIsMainActivityVisible;
+    }
+
+    public static boolean getIsScreenInteractive() {
+        return sIsScreenInteractive;
+    }
 
     private BroadcastReceiver mScreenStatusBroadcastReceiver = new BroadcastReceiver() {
         @Override

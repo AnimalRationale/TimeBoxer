@@ -42,7 +42,7 @@ public class CustomCountDownTimer extends CountDownTimer {
     @Override
     public void onTick(long millisUntilFinished) {
         mTimer.mDurationCounter = (int) millisUntilFinished / mTimeUnitFactor;
-        if (TimersService.sIsScreenInteractive) {
+        if (TimersService.getIsScreenInteractive()) {
             TimersService.updateTime(mTimerId);
         }
         notificationUpdate();

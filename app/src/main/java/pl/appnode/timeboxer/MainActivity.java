@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onResume() {
-        TimersService.sIsMainActivityVisible = true;
+        TimersService.setIsMainActivityVisible(true);
         orientationSetup(this);
         super.onResume();
         checkThemeChange();
@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        TimersService.sIsMainActivityVisible = false;
+        TimersService.setIsMainActivityVisible(false);
         TimersService.updateWidget();
     }
 

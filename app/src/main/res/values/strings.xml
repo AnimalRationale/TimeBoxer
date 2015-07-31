@@ -39,7 +39,7 @@
     <string name="dialog_about_version_name_error">.</string>
     <string name="dialog_about_version_code_error">.</string>
 
-    <string name="activity_fullscreen_off_title">Timer X finished!</string>
+    <string name="activity_fullscreen_off_title">Timer finished</string>
     <string name="activity_fullscreen_off_button_off_default_text">OFF</string>
-    <string name="activity_fullscreen_off_default_text">Timer 5\nSTOP</string>
+    <string name="activity_fullscreen_off_default_text">Timer X\nSTOP</string>
 </resources>

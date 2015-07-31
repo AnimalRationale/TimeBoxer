@@ -177,7 +177,7 @@ public class FullscreenSwitchOffActivity extends Activity {
             //
             // TODO: If Settings has multiple levels, Up should navigate up
             // that hierarchy.
-            stopAlarm();
+            stopTimer();
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }
@@ -195,7 +195,7 @@ public class FullscreenSwitchOffActivity extends Activity {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
                 mCommand = OFF_SCREEN_DEACTIVATED;
-                stopAlarm();
+                stopTimer();
                 moveTaskToBack(true);
             }
             return true;
@@ -219,7 +219,7 @@ public class FullscreenSwitchOffActivity extends Activity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    private void stopAlarm() {
+    private void stopTimer() {
         Log.d(TAG, "Switching off timer#" + (mTimerId - 1));
         TimersService.timerAction(mTimerId - 1);
     }

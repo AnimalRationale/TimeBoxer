@@ -37,15 +37,12 @@ public final class Constants {
     public static final int TIME_DEVIATION_FOR_LAST_TICK = 200;
     public static final int WAKE_UP_MARGIN = 2000;
     public static final int BUTTON_PRESS_DELAY = 700;
-    public static final int STOP = 0;
-    public static final int START = 1;
-    public static final int UPDATE = 2;
-    public static final int EMPTY = 99;
+
     public static final int TIMERS_COUNT = 4;
     public static final int SETTINGS_INTENT_REQUEST = 501;
     public static final int RINGTONE_INTENT_REQUEST = 502;
     public static final float TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY = 0.8f;
-    public static final String COUNTDOWN_BROADCAST = "pl.appnode.timeboxer";
+
     public static final int[] WIDGET_BUTTONS = {
             R.id.widget_round_button0,
             R.id.widget_round_button1,
@@ -55,6 +52,5 @@ public final class Constants {
     };
     public static final String[] WIDGET_BUTTON_ACTION = {"A", "0", "1", "2", "3"};
 
-    public static final int OFF_SCREEN_START_FROM_SERVICE = 1;
     public static final int OFF_SCREEN_DEACTIVATED = 0;
 }

@@ -143,18 +143,6 @@ public class CustomCountDownTimer extends CountDownTimer {
         restoreVolume();
     }
 
-//    private void setAlarmManagerWakeUp (Long timerDuration) {
-//        Intent alarmIntent = new Intent(mContext, WakeUpAlarmReceiver.class);
-//        alarmIntent.setData(Uri.parse("TimerID:" + mTimerId));
-//        alarmIntent.setAction(String.valueOf(mTimerId));
-//        PendingIntent alarmWakeIntent = PendingIntent.getBroadcast(
-//                mContext.getApplicationContext(), 0, alarmIntent, 0);
-//        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                timerDuration - WAKE_UP_MARGIN,
-//                alarmWakeIntent);
-//    }
-
     public void cancelAlarmManagerWakeUp() {
         WakeUpAlarmReceiver.releaseLock();
     }

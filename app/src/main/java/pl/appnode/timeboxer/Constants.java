@@ -52,5 +52,8 @@ public final class Constants {
     };
     public static final String[] WIDGET_BUTTON_ACTION = {"A", "0", "1", "2", "3"};
 
+    public static final int CANCEL_WAKE_UP_ALARM = 0;
+    public static final int SET_WAKE_UP_ALARM = 1;
+
     public static final int OFF_SCREEN_DEACTIVATED = 0;
 }

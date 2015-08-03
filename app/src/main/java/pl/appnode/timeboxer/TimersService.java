@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
+import static pl.appnode.timeboxer.Constants.CANCEL_WAKE_UP_ALARM;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION_MODIFIER;
 import static pl.appnode.timeboxer.Constants.FINISHED;
@@ -276,6 +277,7 @@ public class TimersService extends Service {
             }
             sTimers[position].cancel();
             sTimers[position] = null;
+            WakeUpAlarmHelper.alarmManager(0l, position, CANCEL_WAKE_UP_ALARM);
         }
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;

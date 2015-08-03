@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import static pl.appnode.timeboxer.Constants.CANCEL_WAKE_UP_ALARM;
 import static pl.appnode.timeboxer.Constants.SET_WAKE_UP_ALARM;
@@ -16,7 +17,9 @@ import static pl.appnode.timeboxer.Constants.WAKE_UP_MARGIN;
 
 public class WakeUpAlarmHelper {
 
-    public static void alarmManagerWakeUp (Long timerDuration, int timerId, int command) {
+    private static final String TAG = "WakeUpAlarmHelper";
+
+    public static void alarmManager(Long timerDuration, int timerId, int command) {
         Intent alarmIntent = new Intent(AppContextHelper.getContext(), WakeUpAlarmReceiver.class);
         alarmIntent.setData(Uri.parse("TimerID://" + timerId));
         alarmIntent.setAction(String.valueOf(timerId));
@@ -28,8 +31,10 @@ public class WakeUpAlarmHelper {
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     timerDuration - WAKE_UP_MARGIN,
                     alarmWakeIntent);
+            Log.d(TAG, "Setting WakeUp alarm for timer #" + timerId);
         } else if (command == CANCEL_WAKE_UP_ALARM) {
             alarmManager.cancel(alarmWakeIntent);
+            Log.d(TAG, "Cancelled WakeUp alarm for timer #" + timerId);
         }
     }
 }

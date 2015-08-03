@@ -1,6 +1,5 @@
 package pl.appnode.timeboxer;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,7 +12,7 @@ import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import static pl.appnode.timeboxer.Constants.WAKE_UP_MARGIN;
+import static pl.appnode.timeboxer.Constants.SET_WAKE_UP_ALARM;
 
 public class CustomCountDownTimer extends CountDownTimer {
 
@@ -36,7 +35,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         mTimeUnitFactor = timeUnitFactor;
         setUpRingtone();
         notificationStart();
-        setAlarmManagerWakeUp(millisInFuture);
+        WakeUpAlarmHelper.alarmManager(millisInFuture, mTimerId, SET_WAKE_UP_ALARM);
     }
 
     @Override
@@ -144,17 +143,17 @@ public class CustomCountDownTimer extends CountDownTimer {
         restoreVolume();
     }
 
-    private void setAlarmManagerWakeUp (Long timerDuration) {
-        Intent alarmIntent = new Intent(mContext, WakeUpAlarmReceiver.class);
-        alarmIntent.setData(Uri.parse("TimerID:" + mTimerId));
-        alarmIntent.setAction(String.valueOf(mTimerId));
-        PendingIntent alarmWakeIntent = PendingIntent.getBroadcast(
-                mContext.getApplicationContext(), 0, alarmIntent, 0);
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                timerDuration - WAKE_UP_MARGIN,
-                alarmWakeIntent);
-    }
+//    private void setAlarmManagerWakeUp (Long timerDuration) {
+//        Intent alarmIntent = new Intent(mContext, WakeUpAlarmReceiver.class);
+//        alarmIntent.setData(Uri.parse("TimerID:" + mTimerId));
+//        alarmIntent.setAction(String.valueOf(mTimerId));
+//        PendingIntent alarmWakeIntent = PendingIntent.getBroadcast(
+//                mContext.getApplicationContext(), 0, alarmIntent, 0);
+//        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                timerDuration - WAKE_UP_MARGIN,
+//                alarmWakeIntent);
+//    }
 
     public void cancelAlarmManagerWakeUp() {
         WakeUpAlarmReceiver.releaseLock();

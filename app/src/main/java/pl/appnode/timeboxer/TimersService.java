@@ -369,7 +369,6 @@ public class TimersService extends Service {
     private static PendingIntent getPendingSelfIntent(Context context, String action) {
         Intent intent = new Intent(context, TimeBoxerWidgetProvider.class);
         intent.setAction(action);
-        Log.d(TAG, "WidgetSetUp Service pendingSelfIntent for action: " + action);
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 

@@ -50,6 +50,9 @@
             android:configChanges="keyboardHidden|orientation"
             android:icon="@mipmap/ic_launcher" />
         <receiver android:name=".WakeUpAlarmReceiver" >
+            <intent-filter>
+                <action android:name="pl.appnode.timeboxer.TIMER_WAKE_UP" />
+            </intent-filter>
         </receiver>
         <receiver android:name=".TimeBoxerWidgetProvider" >
             <intent-filter>

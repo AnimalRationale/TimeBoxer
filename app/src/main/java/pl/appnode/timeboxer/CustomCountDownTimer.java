@@ -52,7 +52,7 @@ public class CustomCountDownTimer extends CountDownTimer {
         notificationFinish();
         setVolume();
         mRingtone.play();
-        WakeUpAlarmReceiver.releaseLock();
+        WakeUpAlarmReceiver.releaseLock(mTimerId);
         TimersService.finishTimer(mTimerId);
     }
 
@@ -144,6 +144,6 @@ public class CustomCountDownTimer extends CountDownTimer {
     }
 
     public void cancelAlarmManagerWakeUp() {
-        WakeUpAlarmReceiver.releaseLock();
+        WakeUpAlarmReceiver.releaseLock(mTimerId);
     }
 }

@@ -7,46 +7,50 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import static pl.appnode.timeboxer.Constants.EXTRA_TIMER_ID;
+import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 
 
 public class WakeUpAlarmReceiver extends BroadcastReceiver {
 
     private static final String TAG = "WakeUpAlarmReceiver";
     private static final String LOCK_TAG = "pl.appnode.timeboxer";
-    private static PowerManager.WakeLock sWakeLock = null;
+    private static PowerManager.WakeLock[] sWakeLocks = new PowerManager.WakeLock[4];
 
-    private static synchronized void acquireWakeLock (Context context) {
-        if (sWakeLock == null) {
-            Log.d(TAG, "Wake lock == null, setting up.");
+    private static synchronized void acquireWakeLock (Context context, int timerId) {
+        if (sWakeLocks[timerId] == null) {
+            Log.d(TAG, "Wake lock null, setting up for timer #" + timerId);
             PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            sWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOCK_TAG);
-            sWakeLock.setReferenceCounted(true);
+            sWakeLocks[timerId] = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOCK_TAG);
+            sWakeLocks[timerId].setReferenceCounted(true);
         }
-        sWakeLock.acquire();
+        sWakeLocks[timerId].acquire();
         Log.d(TAG, "Wake lock acquired.");
     }
 
-    public static synchronized void releaseLock() {
-        if (sWakeLock != null) {
-            Log.d(TAG, "Releasing wakelock.");
+    public static synchronized void releaseLock(int timerId) {
+        if (sWakeLocks[timerId] != null) {
+            Log.d(TAG, "Releasing wake lock for timer #" + timerId);
             try {
-                sWakeLock.release();
-                Log.d(TAG, "Wake lock released.");
+                sWakeLocks[timerId].release();
+                Log.d(TAG, "Wake lock released for timer #" + timerId);
             } catch (Throwable thex) {
-                Log.d(TAG, "Wake lock exception catch.");
+                Log.d(TAG, "Wake lock exception catch for timer #" + timerId);
                 // wakeLock should be already released
             }
         } else {
-            Log.d(TAG, "Wakelock null.");
+            Log.d(TAG, "Wakelock null - timer #" + timerId);
         }
     }
 
     @Override
     public void onReceive(Context context, Intent alarmIntent) {
-        acquireWakeLock(context);
-        Log.d(TAG, "Timer wake up for timer #" + alarmIntent.getIntExtra(EXTRA_TIMER_ID, 99));
-        Intent serviceIntent = new Intent(context, TimersService.class);
-        context.startService(serviceIntent);
-        Log.d(TAG, "Starting service.");
+        int timerId = alarmIntent.getIntExtra(EXTRA_TIMER_ID, 99);
+        if (timerId >= 0 & timerId < TIMERS_COUNT) {
+            acquireWakeLock(context, timerId);
+            Log.d(TAG, "Wake up lock for timer #" + timerId);
+            Intent serviceIntent = new Intent(context, TimersService.class);
+            context.startService(serviceIntent);
+            Log.d(TAG, "Starting service.");
+        } else Log.d(TAG, "Invalid timer ID, wake lock not acquired, ID:" + timerId);
     }
 }

@@ -47,10 +47,9 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
         int timerId = alarmIntent.getIntExtra(EXTRA_TIMER_ID, 99);
         if (timerId >= 0 & timerId < TIMERS_COUNT) {
             acquireWakeLock(context, timerId);
-            Log.d(TAG, "Wake up lock for timer #" + timerId);
             Intent serviceIntent = new Intent(context, TimersService.class);
             context.startService(serviceIntent);
-            Log.d(TAG, "Starting service.");
+            Log.d(TAG, "Starting service after wake lock.");
         } else Log.d(TAG, "Invalid timer ID, wake lock not acquired, ID:" + timerId);
     }
 }

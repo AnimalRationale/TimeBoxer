@@ -24,7 +24,7 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
             sWakeLocks[timerId].setReferenceCounted(true);
         }
         sWakeLocks[timerId].acquire();
-        Log.d(TAG, "Wake lock acquired.");
+        Log.d(TAG, "Wake lock acquired for timer #" + timerId);
     }
 
     public static synchronized void releaseLock(int timerId) {
@@ -34,7 +34,7 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
                 sWakeLocks[timerId].release();
                 Log.d(TAG, "Wake lock released for timer #" + timerId);
             } catch (Throwable thex) {
-                Log.d(TAG, "Wake lock exception catch for timer #" + timerId);
+                Log.d(TAG, "Wake lock exception catch for timer #" + timerId + " - msg:" + thex.getMessage());
                 // wakeLock should be already released
             }
         } else {
@@ -49,7 +49,7 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
             acquireWakeLock(context, timerId);
             Intent serviceIntent = new Intent(context, TimersService.class);
             context.startService(serviceIntent);
-            Log.d(TAG, "Starting service after wake lock.");
+            Log.d(TAG, "Starting service after wake lock for timer#" + timerId);
         } else Log.d(TAG, "Invalid timer ID, wake lock not acquired, ID:" + timerId);
     }
 }

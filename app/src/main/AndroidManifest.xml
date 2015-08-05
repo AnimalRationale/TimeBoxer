@@ -39,6 +39,7 @@
             android:label="@string/activity_fullscreen_off_title"
             android:parentActivityName=".MainActivity"
             android:showOnLockScreen="true"
+            android:excludeFromRecents="true"
             android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

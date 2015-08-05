@@ -183,6 +183,12 @@ public class FullscreenSwitchOffActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        stopTimer();
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away

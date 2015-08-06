@@ -16,6 +16,7 @@ import android.support.v4.app.NavUtils;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import static pl.appnode.timeboxer.Constants.EXTRA_FINISH_OFF;
 import static pl.appnode.timeboxer.Constants.OFF_SCREEN_DEACTIVATED;
 
 /**
@@ -185,8 +186,7 @@ public class FullscreenSwitchOffActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        stopTimer();
-        NavUtils.navigateUpFromSameTask(this);
+        return;
     }
 
     /**
@@ -200,7 +200,11 @@ public class FullscreenSwitchOffActivity extends Activity {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
                 stopTimer();
-                moveTaskToBack(true);
+                Intent intent  = new Intent(AppContextHelper.getContext(), MainActivity.class);
+                intent.putExtra(EXTRA_FINISH_OFF, true);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
             return true;
         }

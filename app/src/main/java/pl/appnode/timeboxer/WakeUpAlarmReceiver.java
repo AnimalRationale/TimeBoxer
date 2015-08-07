@@ -8,6 +8,7 @@ import android.util.Log;
 
 import static pl.appnode.timeboxer.Constants.EXTRA_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
+import static pl.appnode.timeboxer.Constants.WAKE_LOCK_TIME_OUT;
 
 
 public class WakeUpAlarmReceiver extends BroadcastReceiver {
@@ -21,9 +22,9 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
             Log.d(TAG, "Wake lock null, setting up for timer #" + timerId);
             PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             sWakeLocks[timerId] = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOCK_TAG);
-            sWakeLocks[timerId].setReferenceCounted(true);
+            sWakeLocks[timerId].setReferenceCounted(false);
         }
-        sWakeLocks[timerId].acquire();
+        sWakeLocks[timerId].acquire(WAKE_LOCK_TIME_OUT);
         Log.d(TAG, "Wake lock acquired for timer #" + timerId);
     }
 
@@ -39,6 +40,20 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
             }
         } else {
             Log.d(TAG, "Wakelock null - timer #" + timerId);
+        }
+    }
+
+    public static void wakeLocksCheck() {
+        int i = 0;
+        for (PowerManager.WakeLock wakeLock : sWakeLocks) {
+            if (wakeLock != null) {
+                Log.d(TAG, "Wake locks list: #" + i + " held:" + wakeLock.isHeld());
+                if (wakeLock.isHeld()) {
+                    wakeLock.release();
+                    Log.d(TAG, "Wake lock #" + i + " released, status:" + wakeLock.isHeld());
+                }
+            } else Log.d(TAG, "Wake locks list: #" + i + " NULL");
+            i++;
         }
     }
 

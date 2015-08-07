@@ -56,6 +56,7 @@ public final class Constants {
     public static final int SET_WAKE_UP_ALARM = 1;
     public static final String ACTION_TIMER_WAKE_UP = "TIMER_WAKE_UP";
     public static final String EXTRA_TIMER_ID = "TimerID";
+    public static final int WAKE_LOCK_TIME_OUT = 4000;
 
     public static final int OFF_SCREEN_DEACTIVATED = 0;
     public static final String EXTRA_FINISH_OFF = "Finish_Off";

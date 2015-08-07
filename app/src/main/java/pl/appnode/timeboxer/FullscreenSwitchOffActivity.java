@@ -12,12 +12,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import static pl.appnode.timeboxer.Constants.EXTRA_FINISH_OFF;
-import static pl.appnode.timeboxer.Constants.OFF_SCREEN_DEACTIVATED;
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

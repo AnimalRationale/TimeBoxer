@@ -151,6 +151,7 @@ public class FullscreenSwitchOffActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume.");
     }
 
     /**
@@ -178,16 +179,18 @@ public class FullscreenSwitchOffActivity extends Activity {
             // TODO: If Settings has multiple levels, Up should navigate up
             // that hierarchy.
             stopTimer();
-            NavUtils.navigateUpFromSameTask(this);
+            Intent intent  = new Intent(AppContextHelper.getContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        return;
-    }
+//    @Override
+//    public void onBackPressed() {
+//        return;
+//    }
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the

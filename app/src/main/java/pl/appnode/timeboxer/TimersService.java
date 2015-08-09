@@ -107,11 +107,13 @@ public class TimersService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startMode = START_STICKY;
-        int ids[] = AppWidgetManager.getInstance(sContext).getAppWidgetIds(new ComponentName(sContext,TimeBoxerWidgetProvider.class));
+        int ids[] = AppWidgetManager.getInstance(sContext).getAppWidgetIds(
+                new ComponentName(sContext,TimeBoxerWidgetProvider.class));
         if (ids.length != 0) {
             setUpWidget();
         }
-        PowerManager device = (PowerManager) AppContextHelper.getContext().getSystemService(Context.POWER_SERVICE);
+        PowerManager device = (PowerManager) AppContextHelper.getContext()
+                .getSystemService(Context.POWER_SERVICE);
         sIsScreenInteractive = device.isScreenOn();
         Log.d(TAG, "Starting timers service.");
         return startMode;
@@ -150,7 +152,8 @@ public class TimersService extends Service {
             if (timer.mStatus == RUNNING && timer.mFinishTime != 0) {
                 int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime())
                         + timeFactor) / timeFactor);
-                Log.d(TAG, "Alarm #" + i + " status RUNNING, continuation: " + continuation + " / finishTime: " + timer.mFinishTime);
+                Log.d(TAG, "Alarm #" + i + " status RUNNING, continuation: " + continuation
+                        + " / finishTime: " + timer.mFinishTime);
                 if (continuation < 100) {
                     timer.mDurationCounter = continuation;
                     timer.mStatus = RESTORE;
@@ -217,7 +220,8 @@ public class TimersService extends Service {
         if (timer.mStatus == RUNNING) {
             editor.putLong(timerPrefix + PREFS_FINISHTIME, timer.mFinishTime);
         } else editor.putLong(timerPrefix + PREFS_FINISHTIME, 0);
-        Log.d(TAG, "Saved timer #" + position + " status: " + timer.mStatus + " / finishTime: " + timer.mFinishTime);
+        Log.d(TAG, "Saved timer #" + position + " status: " + timer.mStatus + " / finishTime: "
+                + timer.mFinishTime);
         editor.apply();
     }
 
@@ -261,7 +265,8 @@ public class TimersService extends Service {
         } else {timeUnitFactor = (MINUTE_IN_MILLIS);}
         timer.mFinishTime = SystemClock.elapsedRealtime() + (timer.mDurationCounter * timeUnitFactor);
         sTimers[position] = new CustomCountDownTimer(timer.mDurationCounter * timeUnitFactor,
-                timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK), position, timeUnitFactor);
+                timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK),
+                position, timeUnitFactor);
         Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDurationCounter * timeUnitFactor + ", "
                 + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
         sTimers[position].start();
@@ -284,7 +289,8 @@ public class TimersService extends Service {
         timer.mDurationCounter = timer.mDuration;
         saveTimerStatus(position);
         NotificationManager notificationManager =
-                (NotificationManager) AppContextHelper.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) AppContextHelper.getContext()
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(position);
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
@@ -343,14 +349,20 @@ public class TimersService extends Service {
         for (int i = 0; i < TIMERS_COUNT; i++) {
             TimerItem timer = sTimersList.get(i);
             if (timer.mStatus == RUNNING) {
-                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource", R.drawable.round_button_orange);
-                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1], timer.mDurationCounter + timer.mTimeUnitSymbol);
+                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
+                        R.drawable.round_button_orange);
+                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
+                        timer.mDurationCounter + timer.mTimeUnitSymbol);
             } else if (timer.mStatus == IDLE) {
-                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource", R.drawable.round_button_green);
-                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1], timer.mDuration + timer.mTimeUnitSymbol);
+                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
+                        R.drawable.round_button_green);
+                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
+                        timer.mDuration + timer.mTimeUnitSymbol);
             } else if (timer.mStatus == FINISHED) {
-                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource", R.drawable.round_button_red);
-                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1], timer.mDurationCounter + timer.mTimeUnitSymbol);
+                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
+                        R.drawable.round_button_red);
+                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
+                        timer.mDurationCounter + timer.mTimeUnitSymbol);
             }
         }
     }
@@ -361,8 +373,10 @@ public class TimersService extends Service {
         sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[0], pendingIntent);
         Log.d(TAG, "Reassigning widget app button.");
         for (int i = 1; i <= TIMERS_COUNT; i++) {
-            sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[i], getPendingSelfIntent(context, WIDGET_BUTTON_ACTION[i]));
-            Log.d(TAG, "Reassigning timer #" + i + " widget button for action: " + WIDGET_BUTTON_ACTION[i]);
+            sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[i],
+                    getPendingSelfIntent(context, WIDGET_BUTTON_ACTION[i]));
+            Log.d(TAG, "Reassigning timer #" + i + " widget button for action: "
+                    + WIDGET_BUTTON_ACTION[i]);
         }
     }
 

@@ -70,6 +70,11 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+    @Override
     public void onResume() {
         if (getIntent().getExtras() != null && getIntent().getBooleanExtra(EXTRA_FINISH_OFF, false)) {
             Log.d(TAG, "FINISH OFF.");

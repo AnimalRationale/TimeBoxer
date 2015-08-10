@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import static pl.appnode.timeboxer.Constants.WIDGET_BUTTONS;
 import static pl.appnode.timeboxer.Constants.WIDGET_BUTTON_ACTION;
 
 public class TimeBoxerWidgetProvider extends android.appwidget.AppWidgetProvider {
@@ -27,7 +26,8 @@ public class TimeBoxerWidgetProvider extends android.appwidget.AppWidgetProvider
             if (WIDGET_BUTTON_ACTION[i].equals(intent.getAction())) {
                 i = 5;
                 int j = Integer.parseInt(intent.getAction());
-                if (TimersService.sTimersList != null) {TimersService.timerAction(Integer.parseInt(intent.getAction()));
+                if (TimersService.sTimersList != null) {
+                    TimersService.timerAction(Integer.parseInt(intent.getAction()));
                     Log.d(TAG, "Timers list not null. Action: " + j);}
                 else {
                     Log.d(TAG, "Timers list null. Action: " + j);
@@ -38,5 +38,4 @@ public class TimeBoxerWidgetProvider extends android.appwidget.AppWidgetProvider
             } else i++;
         }
     }
-
 }

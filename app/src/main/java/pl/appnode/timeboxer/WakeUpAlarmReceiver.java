@@ -35,7 +35,8 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
                 sWakeLocks[timerId].release();
                 Log.d(TAG, "Wake lock released for timer #" + timerId);
             } catch (Throwable thex) {
-                Log.d(TAG, "Wake lock exception catch for timer #" + timerId + " - msg:" + thex.getMessage());
+                Log.d(TAG, "Wake lock exception catch for timer #" + timerId + " - msg:"
+                        + thex.getMessage());
                 // wakeLock should be already released
             }
         } else {

@@ -76,10 +76,6 @@ public class MainActivity extends Activity {
 
     @Override
     public void onResume() {
-        if (getIntent().getExtras() != null && getIntent().getBooleanExtra(EXTRA_FINISH_OFF, false)) {
-            Log.d(TAG, "FINISH OFF.");
-            finish();
-        }
         Log.d(TAG, "onResume.");
         TimersService.setIsMainActivityVisible(true);
         orientationSetup(this);

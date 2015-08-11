@@ -41,7 +41,7 @@ public final class Constants {
     public static final int TIMERS_COUNT = 4;
     public static final int SETTINGS_INTENT_REQUEST = 501;
     public static final int RINGTONE_INTENT_REQUEST = 502;
-    public static final float TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY = 0.8f;
+    public static final float TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY = 0.7f;
 
     public static final int[] WIDGET_BUTTONS = {
             R.id.widget_round_button0,

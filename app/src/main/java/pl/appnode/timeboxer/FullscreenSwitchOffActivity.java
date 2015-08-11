@@ -187,10 +187,10 @@ public class FullscreenSwitchOffActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        return;
-//    }
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
@@ -203,12 +203,7 @@ public class FullscreenSwitchOffActivity extends Activity {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
                 stopTimer();
-                Intent intent  = new Intent(AppContextHelper.getContext(), MainActivity.class);
-                intent.putExtra(EXTRA_FINISH_OFF, true);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                onBackPressed();
             }
             return true;
         }

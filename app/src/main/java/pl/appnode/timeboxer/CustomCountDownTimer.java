@@ -19,6 +19,7 @@ public class CustomCountDownTimer extends CountDownTimer {
     private static final String TAG = "CustomCountDownTimer";
     private int mTimeUnitFactor;
     private int mTimerId;
+    private long mTickMillisUntilFinished;
     private NotificationManager mNM ;
     private NotificationCompat.Builder mNotify;
     Context mContext = AppContextHelper.getContext();
@@ -40,11 +41,8 @@ public class CustomCountDownTimer extends CountDownTimer {
 
     @Override
     public void onTick(long millisUntilFinished) {
-        mTimer.mDurationCounter = (int) millisUntilFinished / mTimeUnitFactor;
-        if (TimersService.getIsScreenInteractive()) {
-            TimersService.updateTime(mTimerId);
-        }
-        notificationUpdate();
+        mTickMillisUntilFinished = millisUntilFinished;
+        onTickUpdate();
     }
 
     @Override
@@ -52,8 +50,15 @@ public class CustomCountDownTimer extends CountDownTimer {
         notificationFinish();
         setVolume();
         mRingtone.play();
-        WakeUpAlarmReceiver.releaseLock(mTimerId);
         TimersService.finishTimer(mTimerId);
+    }
+
+    public void onTickUpdate() {
+        mTimer.mDurationCounter = (int) mTickMillisUntilFinished / mTimeUnitFactor;
+        if (TimersService.getIsScreenInteractive()) {
+            TimersService.updateTime(mTimerId);
+        }
+        notificationUpdate();
     }
 
     private void notificationStart () {
@@ -141,9 +146,5 @@ public class CustomCountDownTimer extends CountDownTimer {
     public void stopRingtone () {
         mRingtone.stop();
         restoreVolume();
-    }
-
-    public void cancelAlarmManagerWakeUp() {
-        WakeUpAlarmReceiver.releaseLock(mTimerId);
     }
 }

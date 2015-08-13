@@ -277,9 +277,6 @@ public class TimersService extends Service {
         TimerItem timer = sTimersList.get(position);
         if (sTimers[position] != null) {
             sTimers[position].stopRingtone();
-            if (timer.mStatus != FINISHED) {
-                sTimers[position].cancelAlarmManagerWakeUp();
-            }
             sTimers[position].cancel();
             sTimers[position] = null;
             WakeUpAlarmHelper.alarmManager(0l, position, CANCEL_WAKE_UP_ALARM);

@@ -82,6 +82,7 @@ public class TimersService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 sIsScreenInteractive = true;
+                refreshMinuteTimersAfterScreenOn();
                 updateWidget();
                 Log.d(TAG, "Receiver for SCREEN_ON.");
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
@@ -404,6 +405,17 @@ public class TimersService extends Service {
         intent.putExtra("AlarmID", timerId);
         intent.putExtra("AlarmName", timerName);
         sContext.startActivity(intent);
+    }
+
+    private void refreshMinuteTimersAfterScreenOn() {
+        int i = 0;
+        for (TimerItem timer : sTimersList) {
+            if (sTimers[i] != null && timer.mTimeUnit == MINUTE) {
+                sTimers[i].onTickUpdate();
+                Log.d(TAG, "Refresh longer minute timers after ScreenOn");
+            }
+            i++;
+        }
     }
 
     private void wakeUpTimer(int timerId) {

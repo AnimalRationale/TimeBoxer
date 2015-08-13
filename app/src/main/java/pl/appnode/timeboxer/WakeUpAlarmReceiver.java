@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.os.PowerManager;
 import android.util.Log;
 
-import static pl.appnode.timeboxer.Constants.EXTRA_COMMAND_WAKE_UP;
+import static pl.appnode.timeboxer.Constants.EXTRA_COMMAND_WAKE_UP_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.EXTRA_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 import static pl.appnode.timeboxer.Constants.WAKE_LOCK_TIME_OUT;
-import static pl.appnode.timeboxer.Constants.WAKE_UP_COMMAND;
 
 
 public class WakeUpAlarmReceiver extends BroadcastReceiver {
@@ -66,7 +65,7 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
         if (timerId >= 0 & timerId < TIMERS_COUNT) {
             acquireWakeLock(context, timerId);
             Intent serviceIntent = new Intent(context, TimersService.class);
-            serviceIntent.putExtra(EXTRA_COMMAND_WAKE_UP, WAKE_UP_COMMAND);
+            serviceIntent.putExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID, timerId);
             context.startService(serviceIntent);
             Log.d(TAG, "Starting service after wake lock for timer#" + timerId);
         } else Log.d(TAG, "Invalid timer ID, wake lock not acquired, ID:" + timerId);

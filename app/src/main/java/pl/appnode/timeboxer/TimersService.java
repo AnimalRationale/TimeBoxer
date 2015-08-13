@@ -27,6 +27,7 @@ import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
 import static pl.appnode.timeboxer.Constants.CANCEL_WAKE_UP_ALARM;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION_MODIFIER;
+import static pl.appnode.timeboxer.Constants.EXTRA_COMMAND_WAKE_UP_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.FINISHED;
 import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MINUTE_IN_MILLIS;
@@ -105,7 +106,7 @@ public class TimersService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent startIntent, int flags, int startId) {
         int startMode = START_STICKY;
         int ids[] = AppWidgetManager.getInstance(sContext).getAppWidgetIds(
                 new ComponentName(sContext,TimeBoxerWidgetProvider.class));
@@ -115,6 +116,9 @@ public class TimersService extends Service {
         PowerManager device = (PowerManager) AppContextHelper.getContext()
                 .getSystemService(Context.POWER_SERVICE);
         sIsScreenInteractive = device.isScreenOn();
+        if (startIntent.hasExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID)) {
+            wakeUpTimer(startIntent.getIntExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID, 99));
+        }
         Log.d(TAG, "Starting timers service.");
         return startMode;
     }
@@ -400,6 +404,14 @@ public class TimersService extends Service {
         intent.putExtra("AlarmID", timerId);
         intent.putExtra("AlarmName", timerName);
         sContext.startActivity(intent);
+    }
+
+    private void wakeUpTimer(int timerId) {
+        TimerItem timer = sTimersList.get(timerId);
+        if (sTimers[timerId] != null && timer.mTimeUnit == MINUTE) {
+            sTimers[timerId].cancel();
+            sTimers[timerId].onFinish();
+        }
     }
     
     @Override

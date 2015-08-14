@@ -411,8 +411,10 @@ public class TimersService extends Service {
         int i = 0;
         for (TimerItem timer : sTimersList) {
             if (sTimers[i] != null && timer.mTimeUnit == MINUTE) {
-                sTimers[i].onTickUpdate();
-                Log.d(TAG, "Refresh longer minute timers after ScreenOn");
+                if (timer.mFinishTime > SystemClock.elapsedRealtime()) {
+                    sTimers[i].onTick(timer.mFinishTime - SystemClock.elapsedRealtime());
+                    Log.d(TAG, "Refresh longer minute timers after ScreenOn");
+                }
             }
             i++;
         }

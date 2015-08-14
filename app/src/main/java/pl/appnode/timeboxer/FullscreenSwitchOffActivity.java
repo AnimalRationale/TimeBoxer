@@ -189,6 +189,8 @@ public class FullscreenSwitchOffActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed");
+        stopTimer();
         moveTaskToBack(true);
     }
 
@@ -202,7 +204,6 @@ public class FullscreenSwitchOffActivity extends Activity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                stopTimer();
                 onBackPressed();
             }
             return true;

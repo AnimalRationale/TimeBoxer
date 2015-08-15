@@ -55,6 +55,7 @@ public class FullscreenSwitchOffActivity extends Activity {
      * The instance of the {@link SystemUiHider} for this activity.
      */
     private SystemUiHider mSystemUiHider;
+    private boolean mSwitchedOff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +151,7 @@ public class FullscreenSwitchOffActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        mSwitchedOff = false;
         Log.d(TAG, "onResume.");
     }
 
@@ -190,7 +192,7 @@ public class FullscreenSwitchOffActivity extends Activity {
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        stopTimer();
+        if (!mSwitchedOff) {stopTimer();}
         moveTaskToBack(true);
     }
 
@@ -230,5 +232,6 @@ public class FullscreenSwitchOffActivity extends Activity {
     private void stopTimer() {
         Log.d(TAG, "Switching off timer#" + (mTimerId - 1));
         TimersService.timerAction(mTimerId - 1);
+        mSwitchedOff = true;
     }
 }

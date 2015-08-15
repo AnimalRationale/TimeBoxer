@@ -251,8 +251,10 @@ public class TimersService extends Service {
     public static void timerAction (int position) {
         TimerItem timer = sTimersList.get(position);
         if (timer.mStatus == RUNNING || timer.mStatus == FINISHED) {
+            Log.d(TAG, "ActionStop!");
             stopTimer(position);
         } else if (timer.mStatus == IDLE) {
+            Log.d(TAG, "ActionStart!");
             startTimer(position);
         }
     }

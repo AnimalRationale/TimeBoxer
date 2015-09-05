@@ -13,7 +13,6 @@ import android.view.ViewConfiguration;
 
 import java.lang.reflect.Field;
 
-import static pl.appnode.timeboxer.Constants.EXTRA_FINISH_OFF;
 import static pl.appnode.timeboxer.Constants.SECOND;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;

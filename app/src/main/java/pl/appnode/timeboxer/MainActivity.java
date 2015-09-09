@@ -138,6 +138,8 @@ public class MainActivity extends Activity {
     private void checkFirstRun() {
         if (isFirstRun(this)) {
             Log.d(TAG, "First run!");
+            Intent intent = new Intent(this, AppIntroActivity.class);
+            startActivity(intent);
         } else Log.d(TAG, "Not first run");
     }
 

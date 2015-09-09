@@ -10,4 +10,9 @@
         android:title="@string/preferences_checkbox_orientation"
         android:summary="@string/preferences_checkbox_orientation_description"
         android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="settings_first_run"
+        android:title="@string/preferences_checkbox_first_run"
+        android:summary="@string/preferences_checkbox_first_run_description"
+        android:defaultValue="false" />
 </PreferenceScreen>

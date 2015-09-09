@@ -9,4 +9,7 @@
     <string name="preferences_checkbox_orientation">Screen rotation</string>
     <string name="preferences_checkbox_orientation_description">Allow changing of screen orientation to landscape
     </string>
+
+    <string name="preferences_checkbox_first_run">Debug: intro on next MA resume</string>
+    <string name="preferences_checkbox_first_run_description">Temporary utility for displaying app intro</string>
 </resources>

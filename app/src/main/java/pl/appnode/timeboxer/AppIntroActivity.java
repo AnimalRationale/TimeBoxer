@@ -1,6 +1,7 @@
 package pl.appnode.timeboxer;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -15,7 +16,7 @@ public class AppIntroActivity extends AppIntro{
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest
         addSlide(AppIntroFragment.newInstance("First slide", "Set timer", R.mipmap.ic_launcher, Color.parseColor("#8BC34A")));
-        addSlide(AppIntroFragment.newInstance("Second slide", "Set ringtone and volume", R.mipmap.ic_launcher, Color.parseColor("#3F51B5")));
+        addSlide(AppIntroFragment.newInstance("Second slide", "Set ringtone and volume", R.mipmap.ic_launcher, Color.parseColor("#009688")));
         addSlide(AppIntroFragment.newInstance("Third slide", "Start/stop timer", R.mipmap.ic_launcher, Color.parseColor("#C5CAE9")));
 
         // OPTIONAL METHODS
@@ -25,7 +26,7 @@ public class AppIntroActivity extends AppIntro{
 
         // Hide Skip/Done button
         showSkipButton(false);
-        showDoneButton(false);
+        showDoneButton(true);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class AppIntroActivity extends AppIntro{
 
     @Override
     public void onDonePressed() {
-        // Do something when users tap on Done button.
+        Intent intent = new Intent(AppContextHelper.getContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

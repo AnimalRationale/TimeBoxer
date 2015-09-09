@@ -77,11 +77,11 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         Log.d(TAG, "onResume.");
-        checkFirstRun();
         TimersService.setIsMainActivityVisible(true);
         orientationSetup(this);
         super.onResume();
         checkThemeChange();
+        checkFirstRun();
         mTimersAdapter.notifyDataSetChanged();
     }
 
@@ -138,7 +138,7 @@ public class MainActivity extends Activity {
     private void checkFirstRun() {
         if (isFirstRun(this)) {
             Log.d(TAG, "First run!");
-            Intent intent = new Intent(this, AppIntroActivity.class);
+            Intent intent = new Intent(AppContextHelper.getContext(), AppIntroActivity.class);
             startActivity(intent);
         } else Log.d(TAG, "Not first run");
     }

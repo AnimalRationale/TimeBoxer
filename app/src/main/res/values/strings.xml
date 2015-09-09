@@ -8,6 +8,8 @@
 
     <string name="widget_button_default_text"></string>
 
+    <string name="appintro_activity_title">Introduction to TimeBoxer</string>
+
     <string name="settings_timer_activity">Timer Settings Dialog</string>
     <string name="settings_timer_title">Timer \u0020</string>
     <string name="settings_timer_name_hint">Timer name</string>

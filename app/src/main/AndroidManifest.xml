@@ -46,6 +46,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pl.appnode.timeboxer.MainActivity" />
         </activity>
+        <activity
+            android:name=".AppIntroActivity"
+            android:label="@string/appintro_activity_title"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pl.appnode.timeboxer.MainActivity" />
+        </activity>
         <service
             android:name=".TimersService"
             android:exported="false"

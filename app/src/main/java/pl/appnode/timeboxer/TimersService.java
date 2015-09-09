@@ -117,7 +117,7 @@ public class TimersService extends Service {
         PowerManager device = (PowerManager) AppContextHelper.getContext()
                 .getSystemService(Context.POWER_SERVICE);
         sIsScreenInteractive = device.isScreenOn();
-        if (startIntent.hasExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID)) {
+        if (startIntent != null && startIntent.hasExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID)) {
             wakeUpTimer(startIntent.getIntExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID, 99));
         }
         Log.d(TAG, "Starting timers service.");

@@ -22,6 +22,7 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTON
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.isFirstRun;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.orientationSetup;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
@@ -76,6 +77,7 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         Log.d(TAG, "onResume.");
+        checkFirstRun();
         TimersService.setIsMainActivityVisible(true);
         orientationSetup(this);
         super.onResume();
@@ -131,6 +133,12 @@ public class MainActivity extends Activity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
+    }
+
+    private void checkFirstRun() {
+        if (isFirstRun(this)) {
+            Log.d(TAG, "First run!");
+        } else Log.d(TAG, "Not first run");
     }
 
     @Override

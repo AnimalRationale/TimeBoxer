@@ -34,13 +34,18 @@ public class PreferencesSetupHelper {
 
     public static boolean isDarkTheme(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean themeDark = settings.getBoolean("settings_checkbox_theme", false);
-        return themeDark;
+        return settings.getBoolean("settings_checkbox_theme", false);
     }
 
     public static boolean isRotationOn(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean rotationOn = settings.getBoolean("settings_checkbox_orientation", false);
-        return rotationOn;
+        return settings.getBoolean("settings_checkbox_orientation", false);
+    }
+
+    public static boolean isFirstRun(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean firstRun = settings.getBoolean("settings_first_run", true);
+        settings.edit().putBoolean("settings_first_run", false).apply();
+        return firstRun;
     }
 }

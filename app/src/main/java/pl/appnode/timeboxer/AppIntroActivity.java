@@ -1,14 +1,13 @@
 package pl.appnode.timeboxer;
 
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import com.github.paolorotolo.appintro.AppIntro;
+import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
-public class AppIntroActivity extends AppIntro{
+public class AppIntroActivity extends AppIntro2 {
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -17,21 +16,8 @@ public class AppIntroActivity extends AppIntro{
         // Just set a title, description, background and image. AppIntro will do the rest
         addSlide(AppIntroFragment.newInstance("First slide", "Set timer", R.mipmap.ic_launcher, Color.parseColor("#8BC34A")));
         addSlide(AppIntroFragment.newInstance("Second slide", "Set ringtone and volume", R.mipmap.ic_launcher, Color.parseColor("#009688")));
-        addSlide(AppIntroFragment.newInstance("Third slide", "Start/stop timer", R.mipmap.ic_launcher, Color.parseColor("#C5CAE9")));
-
-        // OPTIONAL METHODS
-        // Override bar/separator color
-        setBarColor(Color.parseColor("#3F51B5"));
-        setSeparatorColor(Color.parseColor("#2196F3"));
-
-        // Hide Skip/Done button
-        showSkipButton(false);
+        addSlide(AppIntroFragment.newInstance("Third slide", "Start/stop timer", R.mipmap.ic_launcher, Color.parseColor("#FFC107")));
         showDoneButton(true);
-    }
-
-    @Override
-    public void onSkipPressed() {
-        // Do something when users tap on Skip button.
     }
 
     @Override

@@ -109,6 +109,10 @@ public class MainActivity extends Activity {
             Intent settingsIntent = new Intent(this, PreferencesActivity.class);
             this.startActivity(settingsIntent);
         }
+        if (id == R.id.action_help) {
+            Intent settingsIntent = new Intent(this, AppIntroActivity.class);
+            this.startActivity(settingsIntent);
+        }
         return super.onOptionsItemSelected(item);
     }
 

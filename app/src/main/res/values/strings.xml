@@ -8,8 +8,6 @@
 
     <string name="widget_button_default_text"></string>
 
-    <string name="appintro_activity_title">Introduction to TimeBoxer</string>
-
     <string name="settings_timer_activity">Timer Settings Dialog</string>
     <string name="settings_timer_title">Timer \u0020</string>
     <string name="settings_timer_name_hint">Timer name</string>
@@ -44,4 +42,12 @@
     <string name="activity_fullscreen_off_title">Timer finished</string>
     <string name="activity_fullscreen_off_button_off_default_text">OFF</string>
     <string name="activity_fullscreen_off_default_text">Timer X\nSTOP</string>
+
+    <string name="appintro_activity_title">Introduction</string>
+    <string name="introduction_slide01_title">Slide 1</string>
+    <string name="introduction_slide01_description">Set timer</string>
+    <string name="introduction_slide02_title">Slide 2</string>
+    <string name="introduction_slide02_description">Set ringtone and volume</string>
+    <string name="introduction_slide03_title">Slide 3</string>
+    <string name="introduction_slide03_description">Start/stop timer</string>
 </resources>

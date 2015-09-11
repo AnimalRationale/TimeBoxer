@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_about) {
-            WakeUpAlarmReceiver.wakeLocksCheck();
+            WakeUpAlarmReceiver.wakeLocksCheck(); // Debug: utility for checking wakelocks status
             AboutDialog.showDialog(MainActivity.this);
         }
         if (id == R.id.action_settings) {

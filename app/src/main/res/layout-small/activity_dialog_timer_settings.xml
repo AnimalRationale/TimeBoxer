@@ -27,7 +27,7 @@
         <Switch android:id="@+id/switchFullscreenOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="4dp"
             android:layout_gravity="center_horizontal"
             android:text="@string/settings_timer_fullscreen_off_switch"
             android:textOn="@string/settings_timer_fullscreen_off_switch_on"
@@ -61,7 +61,7 @@
             android:id="@+id/textRingtoneName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="@string/settings_timer_ringtone"
             android:textAppearance="?android:attr/textAppearanceSmall"/>

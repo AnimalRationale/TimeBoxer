@@ -23,16 +23,16 @@ public class AppIntroActivity extends AppIntro2 {
         // Slides: title, description, image, background colour
         addSlide(AppIntroFragment.newInstance(getString(R.string.introduction_slide00_title),
                 getString(R.string.introduction_slide00_description),
-                R.drawable.intro_0, Color.parseColor("#8BC34A")));
+                R.drawable.intro_a, Color.parseColor("#8BC34A")));
         addSlide(AppIntroFragment.newInstance(getString(R.string.introduction_slide01_title),
                 getString(R.string.introduction_slide01_description),
                 R.drawable.intro_a, Color.parseColor("#8BC34A")));
         addSlide(AppIntroFragment.newInstance(getString(R.string.introduction_slide02_title),
                 getString(R.string.introduction_slide02_description),
-                R.drawable.intro_b, Color.parseColor("#8BC34A")));
+                R.drawable.intro_a, Color.parseColor("#8BC34A")));
         addSlide(AppIntroFragment.newInstance(getString(R.string.introduction_slide03_title),
                 getString(R.string.introduction_slide03_description),
-                R.drawable.intro_d, Color.parseColor("#8BC34A")));
+                R.drawable.intro_a, Color.parseColor("#8BC34A")));
         showDoneButton(true);
     }
 

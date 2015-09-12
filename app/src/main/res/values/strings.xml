@@ -45,6 +45,8 @@
     <string name="activity_fullscreen_off_default_text">Timer X\nSTOP</string>
 
     <string name="appintro_activity_title">Introduction</string>
+    <string name="introduction_slide00_title">Slide 0</string>
+    <string name="introduction_slide00_description">Timer</string>
     <string name="introduction_slide01_title">Slide 1</string>
     <string name="introduction_slide01_description">Set timer</string>
     <string name="introduction_slide02_title">Slide 2</string>

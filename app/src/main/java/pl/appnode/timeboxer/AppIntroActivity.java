@@ -29,10 +29,10 @@ public class AppIntroActivity extends AppIntro2 {
                 R.drawable.intro_a, Color.parseColor("#8BC34A")));
         addSlide(AppIntroFragment.newInstance(getString(R.string.introduction_slide02_title),
                 getString(R.string.introduction_slide02_description),
-                R.drawable.intro_a, Color.parseColor("#8BC34A")));
+                R.drawable.intro_b, Color.parseColor("#8BC34A")));
         addSlide(AppIntroFragment.newInstance(getString(R.string.introduction_slide03_title),
                 getString(R.string.introduction_slide03_description),
-                R.drawable.intro_a, Color.parseColor("#8BC34A")));
+                R.drawable.intro_c, Color.parseColor("#8BC34A")));
         showDoneButton(true);
     }
 

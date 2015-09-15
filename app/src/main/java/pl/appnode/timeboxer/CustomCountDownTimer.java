@@ -79,6 +79,7 @@ public class CustomCountDownTimer extends CountDownTimer {
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(resultPendingIntent);
+        mNotify.addAction(android.R.drawable.ic_menu_close_clear_cancel,"Timer off", resultPendingIntent);
         mNM.notify(mTimerId, mNotify.build());
     }
 

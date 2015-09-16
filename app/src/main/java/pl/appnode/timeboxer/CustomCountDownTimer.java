@@ -85,7 +85,6 @@ public class CustomCountDownTimer extends CountDownTimer {
         Intent commandSwitchOffIntent = new Intent(mContext, TimersService.class);
         commandSwitchOffIntent.setAction(ACTION_TIMER_SWITCH_OFF);
         commandSwitchOffIntent.putExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID, mTimerId);
-        Log.d(TAG, "Setting notification action time ID: " + mTimerId);
         int requestId = (int) System.currentTimeMillis();
         PendingIntent resultSwitchOffPendingIntent = PendingIntent
                 .getService(mContext, requestId, commandSwitchOffIntent, PendingIntent.FLAG_CANCEL_CURRENT);

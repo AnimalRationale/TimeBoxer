@@ -124,7 +124,6 @@ public class TimersService extends Service {
         }
         if (startIntent != null && startIntent.hasExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID)) {
             timerAction(startIntent.getIntExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID, 99));
-            Log.d(TAG, "Intent from notification action timerID: " + startIntent.getIntExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID, 99));
         }
         Log.d(TAG, "Starting timers service.");
         return startMode;

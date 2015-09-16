@@ -23,10 +23,12 @@ import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.appnode.timeboxer.Constants.ACTION_TIMER_SWITCH_OFF;
 import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
 import static pl.appnode.timeboxer.Constants.CANCEL_WAKE_UP_ALARM;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION_MODIFIER;
+import static pl.appnode.timeboxer.Constants.EXTRA_COMMAND_SWITCH_OFF_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.EXTRA_COMMAND_WAKE_UP_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.FINISHED;
 import static pl.appnode.timeboxer.Constants.IDLE;
@@ -119,6 +121,10 @@ public class TimersService extends Service {
         sIsScreenInteractive = device.isScreenOn();
         if (startIntent != null && startIntent.hasExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID)) {
             wakeUpTimer(startIntent.getIntExtra(EXTRA_COMMAND_WAKE_UP_TIMER_ID, 99));
+        }
+        if (startIntent != null && startIntent.hasExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID)) {
+            timerAction(startIntent.getIntExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID, 99));
+            Log.d(TAG, "Intent from notification action timerID: " + startIntent.getIntExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID, 99));
         }
         Log.d(TAG, "Starting timers service.");
         return startMode;

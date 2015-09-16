@@ -57,7 +57,9 @@ public final class Constants {
     public static final String ACTION_TIMER_WAKE_UP = "TIMER_WAKE_UP";
     public static final String EXTRA_TIMER_ID = "TimerID";
     public static final int WAKE_LOCK_TIME_OUT = 6000;
-    public static final String EXTRA_COMMAND_WAKE_UP_TIMER_ID = "WakeUpCommand";    
+    public static final String EXTRA_COMMAND_WAKE_UP_TIMER_ID = "WakeUpCommand";
+    public static final String ACTION_TIMER_SWITCH_OFF = "TimerSwitchOff";
+    public static final String EXTRA_COMMAND_SWITCH_OFF_TIMER_ID = "SwitchOff";
 
     public static final String EXTRA_FINISH_OFF = "Finish_Off";
 }

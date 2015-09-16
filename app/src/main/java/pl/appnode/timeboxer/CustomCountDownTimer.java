@@ -12,6 +12,9 @@ import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import static pl.appnode.timeboxer.Constants.ACTION_TIMER_SWITCH_OFF;
+import static pl.appnode.timeboxer.Constants.ACTION_TIMER_WAKE_UP;
+import static pl.appnode.timeboxer.Constants.EXTRA_COMMAND_SWITCH_OFF_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.SET_WAKE_UP_ALARM;
 
 public class CustomCountDownTimer extends CountDownTimer {
@@ -79,7 +82,13 @@ public class CustomCountDownTimer extends CountDownTimer {
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(resultPendingIntent);
-        mNotify.addAction(android.R.drawable.ic_menu_close_clear_cancel,"Timer off", resultPendingIntent);
+        Intent commandSwitchOffIntent = new Intent(mContext, TimersService.class);
+        commandSwitchOffIntent.setAction(ACTION_TIMER_SWITCH_OFF);
+        commandSwitchOffIntent.putExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID, mTimerId);
+        Log.d(TAG, "Setting notification action time ID: " + mTimerId);
+        PendingIntent resultSwitchOffPendingIntent = PendingIntent
+                .getService(mContext, 0, commandSwitchOffIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        mNotify.addAction(android.R.drawable.ic_menu_close_clear_cancel,"Timer off", resultSwitchOffPendingIntent);
         mNM.notify(mTimerId, mNotify.build());
     }
 

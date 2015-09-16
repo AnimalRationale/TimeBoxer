@@ -88,7 +88,9 @@ public class CustomCountDownTimer extends CountDownTimer {
         int requestId = (int) System.currentTimeMillis();
         PendingIntent resultSwitchOffPendingIntent = PendingIntent
                 .getService(mContext, requestId, commandSwitchOffIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        mNotify.addAction(android.R.drawable.ic_menu_close_clear_cancel,"Timer off", resultSwitchOffPendingIntent);
+        mNotify.addAction(android.R.drawable.ic_menu_close_clear_cancel,
+                mContext.getResources().getString(R.string.notification_action_text_switch_off),
+                resultSwitchOffPendingIntent);
         mNM.notify(mTimerId, mNotify.build());
     }
 

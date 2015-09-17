@@ -64,6 +64,8 @@ public class TimersService extends Service {
     private static AppWidgetManager sWidgetManager = null;
     private static boolean sIsMainActivityVisible = false;
     private static boolean sIsScreenInteractive = true;
+    private static boolean sIsFullscreenSwitchOffRunning= false;
+
 
     protected static void setIsMainActivityVisible(boolean sIsMainActivityVisible) {
         TimersService.sIsMainActivityVisible = sIsMainActivityVisible;
@@ -71,6 +73,10 @@ public class TimersService extends Service {
 
     protected static boolean getIsScreenInteractive() {
         return sIsScreenInteractive;
+    }
+
+    public static void setIsFullscreenSwitchOffRunning(boolean sIsFullscreenSwitchOffRunning) {
+        TimersService.sIsFullscreenSwitchOffRunning = sIsFullscreenSwitchOffRunning;
     }
 
     protected static TimerItem getTimer(int position) {

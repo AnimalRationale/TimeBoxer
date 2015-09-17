@@ -152,6 +152,7 @@ public class FullscreenSwitchOffActivity extends Activity {
     protected void onResume() {
         super.onResume();
         mSwitchedOff = false;
+        TimersService.setIsFullscreenSwitchOffRunning(true);
         Log.d(TAG, "onResume.");
     }
 
@@ -193,6 +194,7 @@ public class FullscreenSwitchOffActivity extends Activity {
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
         if (!mSwitchedOff) {stopTimer();}
+        TimersService.setIsFullscreenSwitchOffRunning(false);
         moveTaskToBack(true);
     }
 

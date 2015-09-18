@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -298,6 +299,12 @@ public class TimersService extends Service {
             sTimers[position].cancel();
             sTimers[position] = null;
             WakeUpAlarmHelper.alarmManager(0l, position, CANCEL_WAKE_UP_ALARM);
+        }
+        if (sIsFullscreenSwitchOffRunning) {
+            Intent hideFullscreenOffIntent = new Intent("hideFullscreenOff");
+            LocalBroadcastManager.getInstance(AppContextHelper.getContext())
+                    .sendBroadcast(hideFullscreenOffIntent);
+            Log.d(TAG, "Sending hide intent: " + hideFullscreenOffIntent.toString());
         }
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;

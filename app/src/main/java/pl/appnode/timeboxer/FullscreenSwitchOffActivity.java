@@ -4,10 +4,14 @@ import pl.appnode.timeboxer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,6 +61,14 @@ public class FullscreenSwitchOffActivity extends Activity {
     private SystemUiHider mSystemUiHider;
     private boolean mSwitchedOff;
 
+    private final BroadcastReceiver hideFullscreenOffReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            hideFullscreenSwitchOff();
+            Log.d(TAG, "Hide broadcast received.");
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +79,8 @@ public class FullscreenSwitchOffActivity extends Activity {
 
         setContentView(R.layout.activity_fullscreen_switch_off);
         setupActionBar();
-
+        LocalBroadcastManager.getInstance(AppContextHelper.getContext())
+                .registerReceiver(hideFullscreenOffReceiver, new IntentFilter("hideFullscreenOff"));
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
         TextView alarmText = (TextView) contentView;
@@ -184,6 +197,7 @@ public class FullscreenSwitchOffActivity extends Activity {
             Intent intent  = new Intent(AppContextHelper.getContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            TimersService.setIsFullscreenSwitchOffRunning(false);
             startActivity(intent);
             return true;
         }
@@ -191,11 +205,19 @@ public class FullscreenSwitchOffActivity extends Activity {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(AppContextHelper.getContext())
+                .unregisterReceiver(hideFullscreenOffReceiver);
+    }
+
+    @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
         if (!mSwitchedOff) {stopTimer();}
-        TimersService.setIsFullscreenSwitchOffRunning(false);
-        moveTaskToBack(true);
+        hideFullscreenSwitchOff();
+//        TimersService.setIsFullscreenSwitchOffRunning(false);
+//        moveTaskToBack(true);
     }
 
     /**
@@ -221,6 +243,11 @@ public class FullscreenSwitchOffActivity extends Activity {
             mSystemUiHider.hide();
         }
     };
+
+    public void hideFullscreenSwitchOff() {
+        TimersService.setIsFullscreenSwitchOffRunning(false);
+        moveTaskToBack(true);
+    }
 
     /**
      * Schedules a call to hide() in [delay] milliseconds, canceling any

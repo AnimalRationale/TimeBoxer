@@ -60,6 +60,7 @@ public final class Constants {
     public static final String EXTRA_COMMAND_WAKE_UP_TIMER_ID = "WakeUpCommand";
     public static final String ACTION_TIMER_SWITCH_OFF = "TimerSwitchOff";
     public static final String EXTRA_COMMAND_SWITCH_OFF_TIMER_ID = "SwitchOff";
+    public static final String ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY = "HideFullscreenOff";
 
     public static final String EXTRA_FINISH_OFF = "Finish_Off";
 }

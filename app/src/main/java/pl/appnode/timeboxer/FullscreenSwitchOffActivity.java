@@ -19,8 +19,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import static pl.appnode.timeboxer.Constants.EXTRA_FINISH_OFF;
-
+import static pl.appnode.timeboxer.Constants.ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -80,7 +79,7 @@ public class FullscreenSwitchOffActivity extends Activity {
         setContentView(R.layout.activity_fullscreen_switch_off);
         setupActionBar();
         LocalBroadcastManager.getInstance(AppContextHelper.getContext())
-                .registerReceiver(hideFullscreenOffReceiver, new IntentFilter("hideFullscreenOff"));
+                .registerReceiver(hideFullscreenOffReceiver, new IntentFilter(ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY));
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
         TextView alarmText = (TextView) contentView;

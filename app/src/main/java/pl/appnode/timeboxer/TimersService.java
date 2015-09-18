@@ -24,7 +24,7 @@ import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pl.appnode.timeboxer.Constants.ACTION_TIMER_SWITCH_OFF;
+import static pl.appnode.timeboxer.Constants.ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY;
 import static pl.appnode.timeboxer.Constants.ALARMS_PREFS_FILE;
 import static pl.appnode.timeboxer.Constants.CANCEL_WAKE_UP_ALARM;
 import static pl.appnode.timeboxer.Constants.DEFAULT_TIMER_DURATION;
@@ -301,7 +301,7 @@ public class TimersService extends Service {
             WakeUpAlarmHelper.alarmManager(0l, position, CANCEL_WAKE_UP_ALARM);
         }
         if (sIsFullscreenSwitchOffRunning) {
-            Intent hideFullscreenOffIntent = new Intent("hideFullscreenOff");
+            Intent hideFullscreenOffIntent = new Intent(ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY);
             LocalBroadcastManager.getInstance(AppContextHelper.getContext())
                     .sendBroadcast(hideFullscreenOffIntent);
             Log.d(TAG, "Sending hide intent: " + hideFullscreenOffIntent.toString());

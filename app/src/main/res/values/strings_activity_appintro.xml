@@ -1,0 +1,20 @@
+<resources>
+    <string name="appintro_activity_title">Introduction</string>
+
+    <string name="introduction_slide00_title">Simple timeboxing</string>
+    <string name="introduction_slide00_description">TimeBoxer is a handy multi-timer tool helping
+        to manage everyday tasks.</string>
+
+    <string name="introduction_slide01_title">Countdown duration</string>
+    <string name="introduction_slide01_description">Use slider to set duration of each timer
+        countdown.</string>
+
+    <string name="introduction_slide02_title">Timer settings</string>
+    <string name="introduction_slide02_description">Tap description to change it,
+        choose time unit (seconds/minutes), set ringtone and volume.</string>
+
+    <string name="introduction_slide03_title">Start/stop timer</string>
+    <string name="introduction_slide03_description">Start and stop timer by tapping round button;
+        green button - timer is idle, yellow - running, red - countdown finished.</string>
+
+</resources>

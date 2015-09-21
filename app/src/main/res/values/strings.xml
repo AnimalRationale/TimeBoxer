@@ -33,7 +33,7 @@
     <string name="notification_text03">) started.</string>
     <string name="notification_text03_finished">) finished.</string>
     <string name="notification_text_finished">Have a good day :)</string>
-    <string name="notification_action_text_switch_off">Timer OFF</string>
+    <string name="notification_action_text_switch_off">Dismiss timer</string>
 
     <string name="dialog_about_title"></string>
     <string name="dialog_about_version">Version: \u0020</string>

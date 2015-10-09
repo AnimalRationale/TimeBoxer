@@ -27,11 +27,11 @@
     <string name="menu_action_about">About</string>
     <string name="menu_action_help">Help</string>
 
-    <string name="notification_title">\u0020 left</string>
+    <string name="notification_title">\u0020left</string>
     <string name="notification_text01">Timer\u0020</string>
-    <string name="notification_text02">\u0020(</string>
-    <string name="notification_text03">) started.</string>
-    <string name="notification_text03_finished">) finished.</string>
+    <string name="notification_text02">started\u0020</string>
+    <string name="notification_text03">for\u0020</string>
+    <string name="notification_text03_finished">\u0020finished.</string>
     <string name="notification_text_finished">Have a good day :)</string>
     <string name="notification_action_text_switch_off">Dismiss timer</string>
 

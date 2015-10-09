@@ -74,9 +74,9 @@ public class CustomCountDownTimer extends CountDownTimer {
                 .setContentTitle(mTimer.mDuration
                         + mContext.getResources().getString(R.string.notification_title))
                 .setContentText(mTimer.mName
-                        + mContext.getResources().getString(R.string.notification_text02)
-                        + mTimer.mDuration + mTimer.mTimeUnitSymbol
-                        + mContext.getResources().getString(R.string.notification_text03))
+                        + mContext.getResources().getString(R.string.notification_text02) // TODO: time of start
+                        + mContext.getResources().getString(R.string.notification_text03)
+                        + mTimer.mDuration + mTimer.mTimeUnitSymbol)
                 .setSmallIcon(R.mipmap.ic_alarm_add_grey600_24dp)
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

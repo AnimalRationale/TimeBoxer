@@ -22,6 +22,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static pl.appnode.timeboxer.Constants.ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY;
@@ -283,6 +285,11 @@ public class TimersService extends Service {
             timeUnitFactor = SECOND_IN_MILLIS;
         } else {timeUnitFactor = (MINUTE_IN_MILLIS);}
         timer.mFinishTime = SystemClock.elapsedRealtime() + (timer.mDurationCounter * timeUnitFactor);
+        Calendar calendar = GregorianCalendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        timer.mTimeOfStart = hour + ":" + minutes;
+        Log.d(TAG, "Calendar time of start: " + timer.mTimeOfStart);
         sTimers[position] = new CustomCountDownTimer(timer.mDurationCounter * timeUnitFactor,
                 timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK),
                 position, timeUnitFactor);

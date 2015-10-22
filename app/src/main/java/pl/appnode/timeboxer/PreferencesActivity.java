@@ -20,10 +20,10 @@ public class PreferencesActivity extends PreferenceActivity
         themeSetup(this);
         super.onCreate(savedInstanceState);
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setIcon(R.mipmap.ic_launcher);
         }
         getFragmentManager().beginTransaction()

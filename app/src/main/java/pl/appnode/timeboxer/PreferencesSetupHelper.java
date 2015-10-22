@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Build;
 
+import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_FIRSTRUN;
+import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_ORIENTATION;
 import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_THEME;
 
 public class PreferencesSetupHelper {
@@ -40,13 +42,13 @@ public class PreferencesSetupHelper {
 
     public static boolean isRotationOn(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        return settings.getBoolean("settings_checkbox_orientation", false);
+        return settings.getBoolean(KEY_SETTINGS_ORIENTATION, false);
     }
 
     public static boolean isFirstRun(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean firstRun = settings.getBoolean("settings_first_run", true);
-        settings.edit().putBoolean("settings_first_run", false).apply();
+        boolean firstRun = settings.getBoolean(KEY_SETTINGS_FIRSTRUN, true);
+        settings.edit().putBoolean(KEY_SETTINGS_FIRSTRUN, false).apply();
         return firstRun;
     }
 }

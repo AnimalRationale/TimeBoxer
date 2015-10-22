@@ -16,6 +16,9 @@ public final class Constants {
     public static final String PREFS_FULLSCREEN_OFF = "_FullScreenOff";
     public static final String PREFS_FINISHTIME = "_FinishTime";
 
+    /** Key for saving theme settings */
+    public static final String KEY_SETTINGS_THEME = "settings_checkbox_theme";
+
     public static final String TIMER_SETTINGS_INTENT_TIMER_ID = "TimerId";
     public static final String TIMER_SETTINGS_INTENT_TIMER_NAME = "TimerName";
     public static final String TIMER_SETTINGS_INTENT_TIMER_UNIT = "TimerUnit";

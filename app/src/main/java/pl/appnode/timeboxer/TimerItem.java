@@ -12,4 +12,5 @@ public class TimerItem {
     String mRingtoneUri;
     int mRingtoneVolume;
     boolean mFullscreenSwitchOff;
+    String mTimeOfStart;
 }

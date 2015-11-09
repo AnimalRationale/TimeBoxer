@@ -45,20 +45,6 @@ public class WakeUpAlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    public static void wakeLocksCheck() {
-        int i = 0;
-        for (PowerManager.WakeLock wakeLock : sWakeLocks) {
-            if (wakeLock != null) {
-                Log.d(TAG, "Wake locks list: #" + i + " held:" + wakeLock.isHeld());
-                if (wakeLock.isHeld()) {
-                    wakeLock.release();
-                    Log.d(TAG, "Wake lock #" + i + " released, status:" + wakeLock.isHeld());
-                }
-            } else Log.d(TAG, "Wake locks list: #" + i + " NULL");
-            i++;
-        }
-    }
-
     @Override
     public void onReceive(Context context, Intent alarmIntent) {
         int timerId = alarmIntent.getIntExtra(EXTRA_TIMER_ID, 99);

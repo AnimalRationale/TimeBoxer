@@ -193,10 +193,10 @@ public class FullscreenSwitchOffActivity extends Activity {
             // TODO: If Settings has multiple levels, Up should navigate up
             // that hierarchy.
             stopTimer();
-            Intent intent  = new Intent(AppContextHelper.getContext(), MainActivity.class);
+            TimersService.setIsFullscreenSwitchOffRunning(false);
+            Intent intent  = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            TimersService.setIsFullscreenSwitchOffRunning(false);
             startActivity(intent);
             return true;
         }
@@ -215,8 +215,6 @@ public class FullscreenSwitchOffActivity extends Activity {
         Log.d(TAG, "onBackPressed");
         if (!mSwitchedOff) {stopTimer();}
         hideFullscreenSwitchOff();
-//        TimersService.setIsFullscreenSwitchOffRunning(false);
-//        moveTaskToBack(true);
     }
 
     /**

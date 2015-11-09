@@ -3,7 +3,7 @@
     <string name="preferences_header_general">General</string>
 
     <string name="preferences_checkbox_theme">Dark theme</string>
-    <string name="preferences_checkbox_theme_description">Switch to dark version of device\'s default theme
+    <string name="preferences_checkbox_theme_description">Set dark version of device\'s default theme
     </string>
 
     <string name="preferences_checkbox_orientation">Screen rotation</string>

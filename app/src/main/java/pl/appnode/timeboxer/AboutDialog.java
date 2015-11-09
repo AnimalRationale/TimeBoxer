@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class AboutDialog {
         new AlertDialog.Builder(callingActivity)
                 .setTitle(callingActivity.getResources().getString(R.string.dialog_about_title)
                         + callingActivity.getString(R.string.app_name))
-                .setIcon(callingActivity.getResources().getDrawable(R.mipmap.ic_launcher))
+                .setIcon(-1).setIcon(ContextCompat.getDrawable(callingActivity, R.mipmap.ic_launcher))
                 .setCancelable(true)
                 .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_about_ok), null)
                 .setView(aboutDialog)

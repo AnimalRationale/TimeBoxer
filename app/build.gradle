@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "pl.appnode.timeboxer"
         minSdkVersion 14
-        targetSdkVersion 23
-        versionCode 46
-        versionName "0.9.4"
+        targetSdkVersion 22
+        versionCode 52
+        versionName "0.9.6"
     }
     buildTypes {
         all {

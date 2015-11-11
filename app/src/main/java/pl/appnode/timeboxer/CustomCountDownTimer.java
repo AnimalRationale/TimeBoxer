@@ -16,7 +16,7 @@ import static pl.appnode.timeboxer.Constants.ACTION_TIMER_SWITCH_OFF;
 import static pl.appnode.timeboxer.Constants.EXTRA_COMMAND_SWITCH_OFF_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.SET_WAKE_UP_ALARM;
 
-public class CustomCountDownTimer extends CountDownTimer {
+class CustomCountDownTimer extends CountDownTimer {
 
     private static final String TAG = "CustomCountDownTimer";
     private int mTimeUnitFactor;

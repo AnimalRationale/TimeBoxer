@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-public class AboutDialog {
+class AboutDialog {
 
     private static String sVersionName;
     private static String sVersionCode;

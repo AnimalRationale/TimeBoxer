@@ -124,9 +124,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
 
     public static class TimerViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView vTitle;
-        protected Button vDuration;
-        protected SeekBar vMinutesBar;
+        TextView vTitle;
+        Button vDuration;
+        SeekBar vMinutesBar;
 
         public TimerViewHolder(View v) {
             super(v);
@@ -148,7 +148,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         ((MainActivity)mContext).startActivityForResult(settingsIntent, SETTINGS_INTENT_REQUEST);
     }
 
-    public void setDuration(final TimerItem timer) {
+    private void setDuration(final TimerItem timer) {
         final int position = sTimersList.indexOf(timer);
         notifyItemChanged(position);
         TimersService.saveTimerDuration(position);

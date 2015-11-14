@@ -30,8 +30,8 @@ import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
-    protected static TimersAdapter mTimersAdapter;
-    protected static boolean sIsTimersBroadcastService = false;
+    static TimersAdapter mTimersAdapter;
+    static boolean sIsTimersBroadcastService = false;
     private static boolean sThemeChangeFlag;
 
     @Override

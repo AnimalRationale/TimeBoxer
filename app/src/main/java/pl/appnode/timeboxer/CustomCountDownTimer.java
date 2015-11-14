@@ -24,8 +24,8 @@ class CustomCountDownTimer extends CountDownTimer {
     private long mTickMillisUntilFinished;
     private NotificationManager mNM ;
     private NotificationCompat.Builder mNotify;
-    Context mContext = AppContextHelper.getContext();
-    TimerItem mTimer;
+    private Context mContext = AppContextHelper.getContext();
+    private TimerItem mTimer;
     private Ringtone mRingtone;
     private int mRingtoneVolume;
     private int mOriginalVolume;
@@ -55,7 +55,7 @@ class CustomCountDownTimer extends CountDownTimer {
         TimersService.finishTimer(mTimerId);
     }
 
-    public void onTickUpdate() {
+    private void onTickUpdate() {
         mTimer.mDurationCounter = (int) mTickMillisUntilFinished / mTimeUnitFactor;
         if (TimersService.getIsScreenInteractive()) {
             TimersService.updateTime(mTimerId);

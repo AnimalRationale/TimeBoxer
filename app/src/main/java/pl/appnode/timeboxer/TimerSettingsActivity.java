@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -251,7 +252,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
             imageViews[1] = (ImageView) findViewById(R.id.volumeIconUp);
             for (int i = 0; i < imageViews.length; i++) {
                 GradientDrawable drawable = (GradientDrawable) imageViews[i].getBackground().getCurrent();
-                drawable.setColor(getResources().getColor(R.color.primary_light));
+                drawable.setColor(ContextCompat.getColor(this, R.color.primary_light));
             }
         }
     }

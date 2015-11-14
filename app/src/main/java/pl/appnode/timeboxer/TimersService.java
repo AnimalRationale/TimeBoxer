@@ -58,7 +58,7 @@ import static pl.appnode.timeboxer.Constants.WIDGET_BUTTON_ACTION;
 public class TimersService extends Service {
 
     private static final String TAG = "TimersService";
-    protected static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
+    static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
     private static CustomCountDownTimer[] sTimers = new CustomCountDownTimer[4];
     private static Context sContext;
     private int mOrientation;
@@ -70,11 +70,11 @@ public class TimersService extends Service {
     private static boolean sIsFullscreenSwitchOffRunning= false;
 
 
-    protected static void setIsMainActivityVisible(boolean sIsMainActivityVisible) {
+    static void setIsMainActivityVisible(boolean sIsMainActivityVisible) {
         TimersService.sIsMainActivityVisible = sIsMainActivityVisible;
     }
 
-    protected static boolean getIsScreenInteractive() {
+    static boolean getIsScreenInteractive() {
         return sIsScreenInteractive;
     }
 
@@ -82,7 +82,7 @@ public class TimersService extends Service {
         TimersService.sIsFullscreenSwitchOffRunning = sIsFullscreenSwitchOffRunning;
     }
 
-    protected static TimerItem getTimer(int position) {
+    static TimerItem getTimer(int position) {
         if (position > 0 && position < sTimersList.size()) {
             return sTimersList.get(position);
         } else return sTimersList.get(0);
@@ -328,7 +328,7 @@ public class TimersService extends Service {
         updateWidget();
     }
 
-    protected static void updateTime(int position) {
+    static void updateTime(int position) {
         if (sIsMainActivityVisible) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
         } else {
@@ -336,7 +336,7 @@ public class TimersService extends Service {
         }
     }
 
-    protected static void finishTimer(int position) {
+    static void finishTimer(int position) {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = 0;
         timer.mStatus = FINISHED;
@@ -358,7 +358,7 @@ public class TimersService extends Service {
         sWidgetManager = AppWidgetManager.getInstance(context);
     }
 
-    protected static void updateWidget() {
+    static void updateWidget() {
         int ids[] = AppWidgetManager.getInstance(sContext)
                 .getAppWidgetIds(new ComponentName(sContext, TimeBoxerWidgetProvider.class));
         if (ids.length != 0) {

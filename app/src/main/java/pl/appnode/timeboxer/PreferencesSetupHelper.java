@@ -11,10 +11,18 @@ import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_FIRSTRUN;
 import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_ORIENTATION;
 import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_THEME;
 
+/**
+ * Reads (and uses some of) application settings
+ * from app's default shared preferences.
+ */
 public class PreferencesSetupHelper {
 
+    /**
+     * Sets up proper (dark or light) system theme.
+     *
+     * @param context the context of calling activity
+     */
     public static void themeSetup(Context context) {
-
         if (isDarkTheme(context)) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 context.setTheme(android.R.style.Theme_Holo);
@@ -28,23 +36,45 @@ public class PreferencesSetupHelper {
         }
     }
 
+    /**
+     * Controls ability to change app display orientation accordingly to device state.
+     *
+     * @param activity the activity which is to be allowed to be displayed in portrait/landscape or
+     *                 limited to only portrait orientation
+     */
     public static void orientationSetup(Activity activity) {
-
         if (isRotationOn(activity)) {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         } else activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
+    /**
+     * Returns state of dark theme setting in app preferences, used to set proper system theme.
+     *
+     * @return true if dark theme is set in preferences
+     */
     public static boolean isDarkTheme(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getBoolean(KEY_SETTINGS_THEME, false);
     }
 
+    /**
+     * Returns state of preference setting allowing app display orientation change.
+     *
+     * @param context the context of calling activity
+     *
+     * @return true if display orientation change is allowed in preferences
+     */
     public static boolean isRotationOn(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getBoolean(KEY_SETTINGS_ORIENTATION, false);
     }
 
+    /**
+     * Checks if app is started first time after installation.
+     *
+     * @return true if application is started with no previously existing preferences
+     */
     public static boolean isFirstRun(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         boolean firstRun = settings.getBoolean(KEY_SETTINGS_FIRSTRUN, true);

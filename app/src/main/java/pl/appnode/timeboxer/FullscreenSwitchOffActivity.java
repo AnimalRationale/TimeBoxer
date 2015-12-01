@@ -22,7 +22,7 @@ import android.widget.TextView;
 import static pl.appnode.timeboxer.Constants.ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
+ * Full-screen timer switch off activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  *
  * @see SystemUiHider

@@ -26,7 +26,10 @@ import static pl.appnode.timeboxer.PreferencesSetupHelper.isFirstRun;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.orientationSetup;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
-
+/**
+ * Starts TimeBoxer service if needed, displays user interface of TimeBoxer (with list of timers),
+ * shows app introduction on first run.
+ */
 public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
@@ -115,6 +118,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Shows main menu on top of the screen on devices with physical menu button
     private void showActionOverflowMenu() {
         try {
             ViewConfiguration config = ViewConfiguration.get(this);

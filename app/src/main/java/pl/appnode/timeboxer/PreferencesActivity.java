@@ -13,6 +13,9 @@ import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_THEME;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.orientationSetup;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
+/**
+ * Displays application's preferences settings and handles changes in settings.
+ */
 public class PreferencesActivity extends PreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override

@@ -3,6 +3,9 @@ package pl.appnode.timeboxer;
 import android.app.Application;
 import android.content.Context;
 
+/**
+ * Provides application context.
+ */
 public class AppContextHelper extends Application {
     private static Context sContext;
 
@@ -11,6 +14,12 @@ public class AppContextHelper extends Application {
         super.onCreate();
         sContext = getApplicationContext();
     }
+
+    /**
+     * Returns application context.
+     *
+     * @return application context
+     */
     public static Context getContext() {
         return sContext;
     }

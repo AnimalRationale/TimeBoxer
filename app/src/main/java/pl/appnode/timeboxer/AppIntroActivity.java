@@ -10,6 +10,10 @@ import android.view.MenuItem;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
+/**
+ * Displays slides with TimeBoxer introduction/help, using AppIntro library
+ *
+ */
 public class AppIntroActivity extends AppIntro2 {
 
     @Override
@@ -18,9 +22,8 @@ public class AppIntroActivity extends AppIntro2 {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-            // actionBar.setIcon(R.drawable.ic_launcher);
         }
-        // Slides: title, description, image, background colour
+        // Slides/fragments params: title, description, image, background colour
         addSlide(AppIntroFragment.newInstance(getString(R.string.introduction_slide00_title),
                 getString(R.string.introduction_slide00_description),
                 R.drawable.intro_0, Color.parseColor("#8BC34A")));

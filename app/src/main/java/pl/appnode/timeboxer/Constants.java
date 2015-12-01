@@ -5,6 +5,10 @@ package pl.appnode.timeboxer;
 final class Constants {
     private Constants() {} /** Private constructor of final class to prevent instantiating. */
 
+    /**
+     * Filename for sharedprefernces file with saved timers settings,
+     * keys with suffixes used for saving and reading timers settings.
+     */
     public static final String ALARMS_PREFS_FILE = "TimersPrefsFile";
     public static final String TIMER_PREFIX = "Timer_";
     public static final String DEFAULT_TIMER_NAME = "Timer ";
@@ -16,11 +20,12 @@ final class Constants {
     public static final String PREFS_FULLSCREEN_OFF = "_FullScreenOff";
     public static final String PREFS_FINISHTIME = "_FinishTime";
 
-    /** Keys for saving app settings (theme, orientation) and first run check) */
+    /** Keys for saving app settings (theme, orientation) and first run check). */
     public static final String KEY_SETTINGS_THEME = "settings_checkbox_theme";
     public static final String KEY_SETTINGS_ORIENTATION = "settings_checkbox_orientation";
     public static final String KEY_SETTINGS_FIRSTRUN = "settings_first_run";
 
+    /** Keys for intent for timer's settings activity. */
     public static final String TIMER_SETTINGS_INTENT_TIMER_ID = "TimerId";
     public static final String TIMER_SETTINGS_INTENT_TIMER_NAME = "TimerName";
     public static final String TIMER_SETTINGS_INTENT_TIMER_UNIT = "TimerUnit";
@@ -28,13 +33,19 @@ final class Constants {
     public static final String TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL = "TimerRingtoneVol";
     public static final String TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF = "TimerFullscreenOff";
 
+    /** Default values for timers, used on first run or if sharedpreferences file was removed. */
     public static final int DEFAULT_TIMER_DURATION = 12;
+    // Time duration modifier for generating different timers (value added to previous timer duration)
     public static final int DEFAULT_TIMER_DURATION_MODIFIER = 4;
     public static final int MAX_TIMER_DURATION = 100;
+
+    /** Timers states. */
     public static final int IDLE = 0;
     public static final int RUNNING = 1;
     public static final int FINISHED = 2;
     public static final int RESTORE = 3;
+
+    /** Time values used in TimeBoxer.*/
     public static final int SECOND = 0;
     public static final int MINUTE = 1;
     public static final int SECOND_IN_MILLIS = 1000;
@@ -43,11 +54,12 @@ final class Constants {
     public static final int WAKE_UP_MARGIN = 2000;
     public static final int BUTTON_PRESS_DELAY = 700;
 
-    public static final int TIMERS_COUNT = 4;
+    public static final int TIMERS_COUNT = 4; // Number of timers
     public static final int SETTINGS_INTENT_REQUEST = 501;
     public static final int RINGTONE_INTENT_REQUEST = 502;
     public static final float TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY = 0.7f;
 
+    /** Array with stored ids of widget buttons. */
     public static final int[] WIDGET_BUTTONS = {
             R.id.widget_round_button0,
             R.id.widget_round_button1,
@@ -55,6 +67,7 @@ final class Constants {
             R.id.widget_round_button3,
             R.id.widget_round_button4,
     };
+    /** Array with defined widget buttons actions. */
     public static final String[] WIDGET_BUTTON_ACTION = {"A", "0", "1", "2", "3"};
 
     public static final int CANCEL_WAKE_UP_ALARM = 0;
@@ -66,6 +79,4 @@ final class Constants {
     public static final String ACTION_TIMER_SWITCH_OFF = "TimerSwitchOff";
     public static final String EXTRA_COMMAND_SWITCH_OFF_TIMER_ID = "SwitchOff";
     public static final String ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY = "HideFullscreenOff";
-
-    public static final String EXTRA_FINISH_OFF = "Finish_Off";
 }

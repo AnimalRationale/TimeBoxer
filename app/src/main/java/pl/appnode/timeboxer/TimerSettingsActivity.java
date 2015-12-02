@@ -37,7 +37,10 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.themeSetup;
 
-
+/**
+ * Displays in form of dialog given timer's current settings (included in starting intent: name, mode of finish,
+ * time units, ringtone sound, ringtone volume) and handles changes of settings.
+ */
 public class TimerSettingsActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "TimerSettingsActivity";
@@ -63,7 +66,8 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        themeSetup(this); // Setting theme
+        // Settings proper color theme and dialog form of interface
+        themeSetup(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dialog_timer_settings);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -72,6 +76,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         getWindow().setAttributes(layoutParams);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         this.setFinishOnTouchOutside(false);
+        // Fixes wrong color of some elements background in Material Dark Theme
         colorFixForMaterialDarkTheme();
         getSettingsIntentData(getIntent());
         setUpDialogElements();
@@ -101,17 +106,17 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         if (mTimerTimeUnit == SECOND) {
             mRbSeconds.toggle();
         } else rbMinutes.toggle();
-        Log.d(TAG, "AlarmSettingsActivity started.");
     }
 
     public void onResume() {
         super.onResume();
+        // Keeps initial ringtone volume
         mOriginalVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
     }
 
+    // Handles result from ringtone picker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
-        Log.d(TAG, "onActivityResult fo Ringtone Picker.");
         if (requestCode == RINGTONE_INTENT_REQUEST && resultCode == RESULT_OK
                 && resultIntent.getExtras() != null) {
             mCurrentRingtoneUri = resultIntent.getParcelableExtra(RingtoneManager
@@ -119,10 +124,10 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
             mRingtone = RingtoneManager.getRingtone(this.getApplicationContext(), mCurrentRingtoneUri);
             mRingtoneName =  mRingtone.getTitle(this.getApplicationContext());
             mRingtoneTextButton.setText(mRingtoneName);
-            Log.d(TAG, "Ringtone Result: " + mRingtoneName);
         }
     }
 
+    // Keeps ringtone null safe as it is possible, at least one of ringtone types should be present
     private Uri setNotNullRingtone(String ringtoneIn) {
         Uri ringtoneOut;
         if (ringtoneIn == null) {
@@ -138,6 +143,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         return Uri.parse(ringtoneIn);
     }
 
+    // Sets ringtone volume in given device volume range
     private void setVolume() {
         if (mTimerRingtoneVolume <= 0) {
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
@@ -146,7 +152,6 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
                     mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
         } else {
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mTimerRingtoneVolume, 0);}
-        Log.d(TAG, "Set ringtone volume: " + mTimerRingtoneVolume);
     }
 
     private void playRingtone() {
@@ -160,12 +165,13 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
     private void stopRingtone() {
         mRingtone.stop();
         mIsPlaying = false;
+        // Restores initial volume level
         mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mOriginalVolume, 0);
         mPlayStopButton.setBackgroundResource(R.drawable.round_button_green);
         mPlayStopButton.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
-        Log.d(TAG, "Restored ringtone volume: " + mOriginalVolume);
     }
 
+    // Reads timer's data from starting intent
     private void getSettingsIntentData(Intent settingsIntent) {
         if (settingsIntent.getExtras() != null) {
             mTimerId = (int) settingsIntent.getExtras().get(TIMER_SETTINGS_INTENT_TIMER_ID);
@@ -206,6 +212,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         mFullscreenOffSwitch.setChecked(mTimerFullscreenOff);
     }
 
+    // Prepares and executes result intent with timer's settings (positive button action)
     private void resultOk() {
         Intent resultIntent = getIntent();
         resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_ID, mTimerId);
@@ -220,19 +227,18 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_UNIT, mTimerTimeUnit);
         resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_URI, mCurrentRingtoneUri.toString());
         resultIntent.putExtra(TIMER_SETTINGS_INTENT_TIMER_RINGTONE_VOL, mTimerRingtoneVolume);
-        Log.d(TAG, "INTENT: ID=" + mTimerId + " Name:"
-                + mEditTimerName.getText().toString() + " Unit:" + mTimerTimeUnit
-                + " Ringtone:" + mCurrentRingtoneUri.toString() + " Volume: " + mTimerRingtoneVolume);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
 
+    // Prepares and executes intent for negative button action
     private void resultCancel() {
         Intent resultIntent = getIntent();
         setResult(RESULT_CANCELED, resultIntent);
         finish();
     }
 
+    // Prepares and executes intent for system ringtone picker
     private void ringtonePicker() {
         Intent ringtoneIntent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
         ringtoneIntent.putExtra
@@ -245,6 +251,8 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         startActivityForResult(ringtoneIntent, RINGTONE_INTENT_REQUEST);
     }
 
+    // Some UI elements in Material Dark Theme have wrong background color (Holo), this fixes
+    // backgrounds with proper colored drawable
     private void colorFixForMaterialDarkTheme() {
         if (isDarkTheme(this) & Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ImageView[] imageViews = new ImageView[2];

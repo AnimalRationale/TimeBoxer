@@ -30,6 +30,9 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
 import static pl.appnode.timeboxer.TimersService.sTimersList;
 
+/**
+ * Adapts items from data set into views grouped in list.
+ */
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewHolder>{
 
     private static final String TAG = "TimersAdapter";
@@ -60,21 +63,19 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         if (timer.mStatus == RUNNING) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
-            Log.d(TAG, "Timer running view (1): alarm = " + timer.mName + " // duration = " +
-                    timer.mDurationCounter + "/" + timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
         } else if (timer.mStatus == IDLE) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
             timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
-            Log.d(TAG, "Timer idle view (2): alarm = " + timer.mName + " // duration = " + timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
         } else if (timer.mStatus == FINISHED) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
-            Log.d(TAG, "Timer finished view (3): alarm = " + timer.mName + " // duration = " +
-                    timer.mDurationCounter + "/" + timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
         }
+        // Timers list has constant number of elements, there should be no scrolling
+        // and re-binding (spawning and garbage collecting of listeners); in case of adding
+        // option for increasing amount ot timers, listeners should be removed from onBindViewHolder
         timerViewHolder.vDuration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +83,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Log.d(TAG, "Alarm #" + position + " tapped *** timer.mStatus = " + timer.mStatus);
                 TimersService.timerAction(position);
             }
         });

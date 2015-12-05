@@ -36,7 +36,7 @@ import static pl.appnode.timeboxer.TimersService.sTimersList;
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewHolder>{
 
     private static final String TAG = "TimersAdapter";
-    private Context mContext;
+    private final Context mContext;
     private long mLastClickTime = 0;
 
     public TimersAdapter(Context context) {
@@ -124,9 +124,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
 
     public static class TimerViewHolder extends RecyclerView.ViewHolder {
 
-        TextView vTitle;
-        Button vDuration;
-        SeekBar vMinutesBar;
+        final TextView vTitle;
+        final Button vDuration;
+        final SeekBar vMinutesBar;
 
         public TimerViewHolder(View v) {
             super(v);

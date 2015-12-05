@@ -88,7 +88,7 @@ public class TimersService extends Service {
         } else return sTimersList.get(0);
     }
 
-    private BroadcastReceiver mScreenStatusBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mScreenStatusBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {

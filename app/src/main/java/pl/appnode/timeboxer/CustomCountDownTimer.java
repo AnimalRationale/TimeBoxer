@@ -19,13 +19,13 @@ import static pl.appnode.timeboxer.Constants.SET_WAKE_UP_ALARM;
 class CustomCountDownTimer extends CountDownTimer {
 
     private static final String TAG = "CustomCountDownTimer";
-    private int mTimeUnitFactor;
-    private int mTimerId;
+    private final int mTimeUnitFactor;
+    private final int mTimerId;
     private long mTickMillisUntilFinished;
     private NotificationManager mNM ;
     private NotificationCompat.Builder mNotify;
-    private Context mContext = AppContextHelper.getContext();
-    private TimerItem mTimer;
+    private final Context mContext = AppContextHelper.getContext();
+    private final TimerItem mTimer;
     private Ringtone mRingtone;
     private int mRingtoneVolume;
     private int mOriginalVolume;

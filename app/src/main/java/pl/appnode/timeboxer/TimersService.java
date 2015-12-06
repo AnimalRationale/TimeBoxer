@@ -55,9 +55,19 @@ import static pl.appnode.timeboxer.Constants.TIMER_PREFIX;
 import static pl.appnode.timeboxer.Constants.WIDGET_BUTTONS;
 import static pl.appnode.timeboxer.Constants.WIDGET_BUTTON_ACTION;
 
+/**
+ * Controls timers states:
+ * - initialises list of timers;
+ * - starts, stops and cancels timers;
+ * - saves timers settings to persistent storage;
+ * - sets up and if needed updates widget;
+ *
+ * Updates user interface, depending on app's and device
+ * current state (no updates if screen is off, no widget updates if app is visible).
+ */
 public class TimersService extends Service {
 
-    private static final String TAG = "TimersService";
+    private static final String LOGTAG = "TimersService";
     static List<TimerItem> sTimersList = new ArrayList<>(TIMERS_COUNT);
     private static CustomCountDownTimer[] sTimers = new CustomCountDownTimer[4];
     private static Context sContext;
@@ -95,10 +105,8 @@ public class TimersService extends Service {
                 sIsScreenInteractive = true;
                 refreshMinuteTimersAfterScreenOn();
                 updateWidget();
-                Log.d(TAG, "Receiver for SCREEN_ON.");
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 sIsScreenInteractive = false;
-                Log.d(TAG, "Receiver for SCREEN_OFF.");
             }
         }
     };
@@ -114,7 +122,6 @@ public class TimersService extends Service {
         screenStatusIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
         screenStatusIntentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mScreenStatusBroadcastReceiver, new IntentFilter(screenStatusIntentFilter));
-        Log.d(TAG, "Creating timers service.");
     }
 
     @Override
@@ -134,7 +141,6 @@ public class TimersService extends Service {
         if (startIntent != null && startIntent.hasExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID)) {
             timerAction(startIntent.getIntExtra(EXTRA_COMMAND_SWITCH_OFF_TIMER_ID, 99));
         }
-        Log.d(TAG, "Starting timers service.");
         return startMode;
     }
 
@@ -144,6 +150,7 @@ public class TimersService extends Service {
         unregisterReceiver(mScreenStatusBroadcastReceiver);
     }
 
+    // Initialise timers list, if needed restores state of interrupted timers
     private void createTimersList() {
         SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         int timeFactor = SECOND_IN_MILLIS;
@@ -167,31 +174,34 @@ public class TimersService extends Service {
             timer.mRingtoneVolume = timersPrefs.getInt(timerPrefix + PREFS_RINGTONE_VOL, setMaxVolume());
             timer.mFullscreenSwitchOff = timersPrefs.getBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, true);
             timer.mFinishTime = timersPrefs.getLong(timerPrefix + PREFS_FINISHTIME, 0);
-            Log.d(TAG, "Alarm #" + i + " status: " + timer.mStatus + " / finishTime: " + timer.mFinishTime);
+            Log.d(LOGTAG, "Alarm #" + i + " status: " + timer.mStatus + " / finishTime: " + timer.mFinishTime);
             if (timer.mStatus == RUNNING && timer.mFinishTime != 0) {
                 int continuation = (int) (((timer.mFinishTime - SystemClock.elapsedRealtime())
                         + timeFactor) / timeFactor);
-                Log.d(TAG, "Alarm #" + i + " status RUNNING, continuation: " + continuation
+                Log.d(LOGTAG, "Alarm #" + i + " status RUNNING, continuation: " + continuation
                         + " / finishTime: " + timer.mFinishTime);
                 if (continuation < 100) {
                     timer.mDurationCounter = continuation;
                     timer.mStatus = RESTORE;
-                    Log.d(TAG, "Alarm #" + i + " restored with duration: " + continuation);
+                    Log.d(LOGTAG, "Alarm #" + i + " restored with duration: " + continuation);
                 }
             } else {
                 timer.mDurationCounter = timer.mDuration;
                 timer.mStatus = IDLE;
             }
             sTimersList.add(timer);
-            Log.d(TAG, "Timer #" + i + " added to list.");
+            Log.d(LOGTAG, "Timer #" + i + " added to list.");
             if (timer.mStatus == RESTORE ) {
                 startTimer( i - 1 );
-                Log.d(TAG, "Timer #" + i + " restored.");
+                Log.d(LOGTAG, "Timer #" + i + " restored.");
             }
         }
-        Log.d(TAG, "TimersList created.");
+        Log.d(LOGTAG, "TimersList created.");
     }
 
+    /**
+     * Saves all timers settings to persistent storage (shared preferences).
+     */
     public static void saveSharedPrefs() {
         SharedPreferences timersPrefs = AppContextHelper.getContext()
                 .getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
@@ -209,15 +219,15 @@ public class TimersService extends Service {
             editor.putString(timerPrefix + PREFS_RINGTONE, timer.mRingtoneUri);
             editor.putInt(timerPrefix + PREFS_RINGTONE_VOL, timer.mRingtoneVolume);
             editor.putBoolean(timerPrefix + PREFS_FULLSCREEN_OFF, timer.mFullscreenSwitchOff);
-            Log.d(TAG, "Create SharedPrefs: " + timerPrefix + ": " + timer.mDuration
-                    + ": TimeUnit: " + timer.mTimeUnitSymbol
-                    + " :: Status: " + timer.mStatus + " Vol: " + timer.mRingtoneVolume
-                    + " FSOFF: " + timer.mFullscreenSwitchOff);
         }
         editor.apply();
-        Log.d(TAG, "SharedPrefs saved.");
     }
 
+    /**
+     * Saves given timer duration time to persistent storage (shared preferences).
+     *
+     * @param position timer's id (position on timers list)
+     */
     public static void saveTimerDuration(int position) {
         SharedPreferences timersPrefs = AppContextHelper.getContext()
                 .getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
@@ -226,9 +236,14 @@ public class TimersService extends Service {
         TimerItem timer = sTimersList.get(position);
         editor.putInt(timerPrefix + PREFS_DURATION, timer.mDuration);
         editor.apply();
-        Log.d(TAG, "Saved timer #" + position + " duration: " + timer.mDuration);
     }
 
+    /**
+     * Saves given timer current status to persistent storage (shared preferences), used
+     * in case of restoring timers (eg. after timer's service force close by system).
+     *
+     * @param position timer's id (position on timers list)
+     */
     private static void saveTimerStatus(int position) {
         SharedPreferences timersPrefs = AppContextHelper.getContext()
                 .getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
@@ -239,7 +254,7 @@ public class TimersService extends Service {
         if (timer.mStatus == RUNNING) {
             editor.putLong(timerPrefix + PREFS_FINISHTIME, timer.mFinishTime);
         } else editor.putLong(timerPrefix + PREFS_FINISHTIME, 0);
-        Log.d(TAG, "Saved timer #" + position + " status: " + timer.mStatus + " / finishTime: "
+        Log.d(LOGTAG, "Saved timer #" + position + " status: " + timer.mStatus + " / finishTime: "
                 + timer.mFinishTime);
         editor.apply();
     }
@@ -256,19 +271,25 @@ public class TimersService extends Service {
         return ringtoneUri.toString();
     }
 
+    // Returns given device maximum volume level for alarm ringtone
     private static int setMaxVolume() {
         AudioManager audioManager = (AudioManager) AppContextHelper
                 .getContext().getSystemService(AUDIO_SERVICE);
         return audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
     }
 
+    /**
+     * Performs proper action on timer, depending on given timer's current status
+     * - starts timer if current status is idle;
+     * - stops timer if current status is running;
+     *
+     * @param position timer's id (position on timers list)
+     */
     public static void timerAction (int position) {
         TimerItem timer = sTimersList.get(position);
         if (timer.mStatus == RUNNING || timer.mStatus == FINISHED) {
-            Log.d(TAG, "ActionStop!");
             stopTimer(position);
         } else if (timer.mStatus == IDLE) {
-            Log.d(TAG, "ActionStart!");
             startTimer(position);
         }
     }
@@ -278,7 +299,7 @@ public class TimersService extends Service {
         timer.mStatus = RUNNING;
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
-            Log.d(TAG, "Timer start: #" + position);
+            Log.d(LOGTAG, "Timer start: #" + position);
         }
         int timeUnitFactor;
         if (timer.mTimeUnit == SECOND) {
@@ -289,11 +310,11 @@ public class TimersService extends Service {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         timer.mTimeOfStart = hour + ":" + minutes;
-        Log.d(TAG, "Calendar time of start: " + timer.mTimeOfStart);
+        Log.d(LOGTAG, "Calendar time of start: " + timer.mTimeOfStart);
         sTimers[position] = new CustomCountDownTimer(timer.mDurationCounter * timeUnitFactor,
                 timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK),
                 position, timeUnitFactor);
-        Log.d(TAG, "CustomCDT #" + position + " started for: " + timer.mDurationCounter * timeUnitFactor + ", "
+        Log.d(LOGTAG, "CustomCDT #" + position + " started for: " + timer.mDurationCounter * timeUnitFactor + ", "
                 + (timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK)));
         sTimers[position].start();
         saveTimerStatus(position);
@@ -311,7 +332,7 @@ public class TimersService extends Service {
             Intent hideFullscreenOffIntent = new Intent(ACTION_INTENT_HIDE_SWITCHOFF_ACTIVITY);
             LocalBroadcastManager.getInstance(AppContextHelper.getContext())
                     .sendBroadcast(hideFullscreenOffIntent);
-            Log.d(TAG, "Sending hide intent: " + hideFullscreenOffIntent.toString());
+            Log.d(LOGTAG, "Sending hide intent: " + hideFullscreenOffIntent.toString());
         }
         timer.mStatus = IDLE;
         timer.mFinishTime = 0;
@@ -323,11 +344,17 @@ public class TimersService extends Service {
         notificationManager.cancel(position);
         if (MainActivity.mTimersAdapter != null) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
-            Log.d(TAG, "Timer stop: #" + position);
+            Log.d(LOGTAG, "Timer stop: #" + position);
         }
         updateWidget();
     }
 
+    /**
+     * Updates user interface, if timers list is visible then proper element on timers list,
+     * otherwise updates widget.
+     *
+     * @param position timer's id (position on timers list)
+     */
     static void updateTime(int position) {
         if (sIsMainActivityVisible) {
             MainActivity.mTimersAdapter.notifyItemChanged(position);
@@ -336,6 +363,11 @@ public class TimersService extends Service {
         }
     }
 
+    /**
+     * Handles given timer's finish.
+     *
+     * @param position timer's id (position on timers list)
+     */
     static void finishTimer(int position) {
         TimerItem timer = sTimersList.get(position);
         timer.mDurationCounter = 0;
@@ -349,7 +381,7 @@ public class TimersService extends Service {
         if (timer.mFullscreenSwitchOff) {
             showFullscreenSwitchOff(position + 1, timer.mName);
         }
-        Log.d(TAG, "Timer finished: #" + position);
+        Log.d(LOGTAG, "Timer finished: #" + position);
     }
 
     private static void getWidget(Context context) {
@@ -358,6 +390,9 @@ public class TimersService extends Service {
         sWidgetManager = AppWidgetManager.getInstance(context);
     }
 
+    /**
+     * Updates widget.
+     */
     static void updateWidget() {
         int ids[] = AppWidgetManager.getInstance(sContext)
                 .getAppWidgetIds(new ComponentName(sContext, TimeBoxerWidgetProvider.class));
@@ -366,14 +401,17 @@ public class TimersService extends Service {
         }
     }
 
+    // Provides full structure of widget (proper button assigns and states) - on every widget update
+    // widget have to be completely rebuild.
     private static void setUpWidget() {
         getWidget(sContext);
         assignWidgetButtons(sContext);
         setUpWidgetFromTimersList();
         sWidgetManager.updateAppWidget(sWidget, sWidgetViews);
-        Log.d(TAG, "Widget updated.");
+        Log.d(LOGTAG, "Widget updated.");
     }
 
+    // TODO: refactor to switch/case
     private static void setUpWidgetFromTimersList() {
         for (int i = 0; i < TIMERS_COUNT; i++) {
             TimerItem timer = sTimersList.get(i);
@@ -400,12 +438,9 @@ public class TimersService extends Service {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[0], pendingIntent);
-        Log.d(TAG, "Reassigning widget app button.");
         for (int i = 1; i <= TIMERS_COUNT; i++) {
             sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[i],
                     getPendingSelfIntent(context, WIDGET_BUTTON_ACTION[i]));
-            Log.d(TAG, "Reassigning timer #" + i + " widget button for action: "
-                    + WIDGET_BUTTON_ACTION[i]);
         }
     }
 
@@ -417,11 +452,9 @@ public class TimersService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Log.d(TAG, "Configuration change.");
         if(newConfig.orientation != mOrientation)
         {
             mOrientation = newConfig.orientation;
-            Log.d(TAG, "Orientation change.");
             setUpWidget();
         }
     }
@@ -440,7 +473,6 @@ public class TimersService extends Service {
             if (sTimers[i] != null && timer.mTimeUnit == MINUTE) {
                 if (timer.mFinishTime > SystemClock.elapsedRealtime()) {
                     sTimers[i].onTick(timer.mFinishTime - SystemClock.elapsedRealtime());
-                    Log.d(TAG, "Refresh longer minute timers after ScreenOn");
                 }
             }
             i++;

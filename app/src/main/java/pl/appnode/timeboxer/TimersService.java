@@ -150,7 +150,7 @@ public class TimersService extends Service {
         unregisterReceiver(mScreenStatusBroadcastReceiver);
     }
 
-    // Initialise timers list, if needed restores state of interrupted timers
+    // Initialises timers list, if needed restores state of interrupted timers
     private void createTimersList() {
         SharedPreferences timersPrefs = getSharedPreferences(ALARMS_PREFS_FILE, MODE_PRIVATE);
         int timeFactor = SECOND_IN_MILLIS;
@@ -401,7 +401,7 @@ public class TimersService extends Service {
         }
     }
 
-    // Provides full structure of widget (proper button assigns and states) - on every widget update
+    // Provides full structure of widget (proper button assigns and states) - on every update
     // widget have to be completely rebuild.
     private static void setUpWidget() {
         getWidget(sContext);
@@ -411,25 +411,32 @@ public class TimersService extends Service {
         Log.d(LOGTAG, "Widget updated.");
     }
 
-    // TODO: refactor to switch/case
     private static void setUpWidgetFromTimersList() {
         for (int i = 0; i < TIMERS_COUNT; i++) {
             TimerItem timer = sTimersList.get(i);
-            if (timer.mStatus == RUNNING) {
-                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
-                        R.drawable.round_button_orange);
-                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
-                        timer.mDurationCounter + timer.mTimeUnitSymbol);
-            } else if (timer.mStatus == IDLE) {
-                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
-                        R.drawable.round_button_green);
-                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
-                        timer.mDuration + timer.mTimeUnitSymbol);
-            } else if (timer.mStatus == FINISHED) {
-                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
-                        R.drawable.round_button_red);
-                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
-                        timer.mDurationCounter + timer.mTimeUnitSymbol);
+            switch (timer.mStatus) {
+                case IDLE:
+                                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
+                                        R.drawable.round_button_green);
+                                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
+                                        timer.mDuration + timer.mTimeUnitSymbol);
+                                break;
+
+                case RUNNING:
+                                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
+                                        R.drawable.round_button_orange);
+                                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
+                                        timer.mDurationCounter + timer.mTimeUnitSymbol);
+                                break;
+
+                case FINISHED:
+                                sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
+                                        R.drawable.round_button_red);
+                                sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
+                                        timer.mDurationCounter + timer.mTimeUnitSymbol);
+                                break;
+                default:
+                                break;
             }
         }
     }

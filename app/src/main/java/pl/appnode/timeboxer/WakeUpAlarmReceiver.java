@@ -11,7 +11,10 @@ import static pl.appnode.timeboxer.Constants.EXTRA_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 import static pl.appnode.timeboxer.Constants.WAKE_LOCK_TIME_OUT;
 
-
+/**
+ * Receives wake up alarm set for {@value #WAKE_UP_MARGIN} before every timer finish
+ * and acquires partial wake lock for {@value #WAKE_LOCK_TIME_OUT} period.
+ */
 public class WakeUpAlarmReceiver extends BroadcastReceiver {
 
     private static final String TAG = "WakeUpAlarmReceiver";

@@ -50,11 +50,22 @@ final class Constants {
     public static final int MINUTE = 1;
     public static final int SECOND_IN_MILLIS = 1000;
     public static final int MINUTE_IN_MILLIS = 1000 * 60;
+
+    /** Countdown time deviation making possible PERFORMING last onTick() of countdown timer. */
     public static final int TIME_DEVIATION_FOR_LAST_TICK = 200;
+
+    /** Time in milliseconds before timer's finish for system wake up alarm. */
     public static final int WAKE_UP_MARGIN = 2000;
+
+    /**
+     * Delay before accepting next click of button on timers list
+     * (preventing accidental timer on/off).
+     */
     public static final int BUTTON_PRESS_DELAY = 700;
 
-    public static final int TIMERS_COUNT = 4; // Number of timers
+    /** Number of timers. */
+    public static final int TIMERS_COUNT = 4;
+
     public static final int SETTINGS_INTENT_REQUEST = 501;
     public static final int RINGTONE_INTENT_REQUEST = 502;
     public static final float TIMER_SETTINGS_DIALOG_BACKGROUND_TRANSPARENCY = 0.7f;
@@ -74,6 +85,8 @@ final class Constants {
     public static final int SET_WAKE_UP_ALARM = 1;
     public static final String ACTION_TIMER_WAKE_UP = "TIMER_WAKE_UP";
     public static final String EXTRA_TIMER_ID = "TimerID";
+
+    /** Period of time in milliseconds for setting up device wake lock to perform timer's finish. */
     public static final int WAKE_LOCK_TIME_OUT = 6000;
     public static final String EXTRA_COMMAND_WAKE_UP_TIMER_ID = "WakeUpCommand";
     public static final String ACTION_TIMER_SWITCH_OFF = "TimerSwitchOff";

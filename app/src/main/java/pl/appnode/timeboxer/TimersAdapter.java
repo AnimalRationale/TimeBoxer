@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import static android.app.Service.START_CONTINUATION_MASK;
 import static pl.appnode.timeboxer.Constants.BUTTON_PRESS_DELAY;
 import static pl.appnode.timeboxer.Constants.FINISHED;
 import static pl.appnode.timeboxer.Constants.IDLE;
@@ -78,10 +76,12 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
             timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
+            timerViewHolder.vProgressBar.setProgress(0);
         } else if (timer.mStatus == FINISHED) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
+            timerViewHolder.vProgressBar.setProgress(0);
         }
         // Timers list has constant number of elements, there should be no scrolling
         // and re-binding (spawning and garbage collecting of listeners); in case of adding
@@ -144,7 +144,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             vTitle = (TextView) v.findViewById(R.id.title);
             vDuration = (Button) v.findViewById(R.id.button_round_01);
             vMinutesBar = (SeekBar) v.findViewById(R.id.time_seek_bar);
-            vProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+            vProgressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         }
     }
 

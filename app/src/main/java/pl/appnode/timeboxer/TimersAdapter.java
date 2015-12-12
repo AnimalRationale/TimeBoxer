@@ -165,18 +165,4 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         notifyItemChanged(position);
         TimersService.saveTimerDuration(position);
     }
-
-    private void progressBarAnimation(ProgressBar progressBar, TimerItem timer, int action) {
-        if (progressBar != null) {
-            if (action == 1) {
-                ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, timer.mDuration);
-                if (timer.mTimeUnit == SECOND) {
-                    animation.setDuration(timer.mDuration * SECOND_IN_MILLIS);
-                } else animation.setDuration(timer.mDuration * MINUTE_IN_MILLIS);
-                animation.setInterpolator (new DecelerateInterpolator());
-                animation.start();
-            } else progressBar.clearAnimation();
-        }
-
-    }
 }

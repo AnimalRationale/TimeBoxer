@@ -1,5 +1,6 @@
 package pl.appnode.timeboxer;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,15 +11,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import static android.app.Service.START_CONTINUATION_MASK;
 import static pl.appnode.timeboxer.Constants.BUTTON_PRESS_DELAY;
 import static pl.appnode.timeboxer.Constants.FINISHED;
 import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
+import static pl.appnode.timeboxer.Constants.MINUTE_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.RUNNING;
+import static pl.appnode.timeboxer.Constants.SECOND;
+import static pl.appnode.timeboxer.Constants.SECOND_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_ID;
@@ -52,6 +59,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     public void onBindViewHolder(final TimerViewHolder timerViewHolder, final int position) {
         final TimerItem timer = sTimersList.get(position);
         timerViewHolder.vTitle.setText(timer.mName);
+        timerViewHolder.vProgressBar.setMax(timer.mDuration);
+
         timerViewHolder.vTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +72,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         if (timer.mStatus == RUNNING) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
+            timerViewHolder.vProgressBar.setProgress(timer.mDurationCounter);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
         } else if (timer.mStatus == IDLE) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
@@ -127,12 +137,14 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         final TextView vTitle;
         final Button vDuration;
         final SeekBar vMinutesBar;
+        final ProgressBar vProgressBar;
 
         public TimerViewHolder(View v) {
             super(v);
             vTitle = (TextView) v.findViewById(R.id.title);
             vDuration = (Button) v.findViewById(R.id.button_round_01);
             vMinutesBar = (SeekBar) v.findViewById(R.id.time_seek_bar);
+            vProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         }
     }
 
@@ -152,5 +164,19 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         final int position = sTimersList.indexOf(timer);
         notifyItemChanged(position);
         TimersService.saveTimerDuration(position);
+    }
+
+    private void progressBarAnimation(ProgressBar progressBar, TimerItem timer, int action) {
+        if (progressBar != null) {
+            if (action == 1) {
+                ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, timer.mDuration);
+                if (timer.mTimeUnit == SECOND) {
+                    animation.setDuration(timer.mDuration * SECOND_IN_MILLIS);
+                } else animation.setDuration(timer.mDuration * MINUTE_IN_MILLIS);
+                animation.setInterpolator (new DecelerateInterpolator());
+                animation.start();
+            } else progressBar.clearAnimation();
+        }
+
     }
 }

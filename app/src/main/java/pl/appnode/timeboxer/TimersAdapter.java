@@ -70,18 +70,21 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         if (timer.mStatus == RUNNING) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
-            timerViewHolder.vProgressBar.setProgress(timer.mDurationCounter);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
+            timerViewHolder.vProgressBar.setProgress(timer.mDurationCounter);
+            timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);
         } else if (timer.mStatus == IDLE) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
             timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);
+            timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_green);
         } else if (timer.mStatus == FINISHED) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);
+            timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);
         }
         // Timers list has constant number of elements, there should be no scrolling
         // and re-binding (spawning and garbage collecting of listeners); in case of adding

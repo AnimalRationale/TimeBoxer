@@ -95,7 +95,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startTimerWithAnimation(timerViewHolder.vProgressBar, position);
+                if (timer.mStatus == IDLE) {
+                    startTimerWithAnimation(timerViewHolder.vProgressBar, position);
+                } else TimersService.timerAction(position);
             }
         });
         timerViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);

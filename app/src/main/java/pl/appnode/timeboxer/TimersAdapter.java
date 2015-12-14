@@ -1,5 +1,7 @@
 package pl.appnode.timeboxer;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
@@ -20,10 +22,7 @@ import static pl.appnode.timeboxer.Constants.BUTTON_PRESS_DELAY;
 import static pl.appnode.timeboxer.Constants.FINISHED;
 import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
-import static pl.appnode.timeboxer.Constants.MINUTE_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.RUNNING;
-import static pl.appnode.timeboxer.Constants.SECOND;
-import static pl.appnode.timeboxer.Constants.SECOND_IN_MILLIS;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_ID;
@@ -96,7 +95,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                TimersService.timerAction(position);
+                startTimerWithAnimation(timerViewHolder.vProgressBar, position);
             }
         });
         timerViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
@@ -167,5 +166,23 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         final int position = sTimersList.indexOf(timer);
         notifyItemChanged(position);
         TimersService.saveTimerDuration(position);
+    }
+
+    private void startTimerWithAnimation(final ProgressBar progressBar, final int position) {
+        if (progressBar != null) {
+            final int originalMax = progressBar.getMax();
+            int animationMax = 300;
+            progressBar.setMax(animationMax);
+            ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, animationMax);
+            animation.setDuration(700);
+            animation.setInterpolator(new DecelerateInterpolator());
+            animation.start();
+            animation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setMax(originalMax);
+                    TimersService.timerAction(position);
+                }
+            });
+        }
     }
 }

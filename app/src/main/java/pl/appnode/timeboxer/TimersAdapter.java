@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -57,6 +58,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         final TimerItem timer = sTimersList.get(position);
         timerViewHolder.vTitle.setText(timer.mName);
         timerViewHolder.vProgressBar.setMax(timer.mDuration);
+        timerViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
+        timerViewHolder.vMinutesBar.setProgress(timer.mDuration);
 
         timerViewHolder.vTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +81,18 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_green);
+            if (MainActivity.isShowSeekbarAnimation()) {
+                MainActivity.setShowSeekbarAnimation(false);
+                ObjectAnimator animation = ObjectAnimator.ofInt(timerViewHolder.vMinutesBar, "progress", 0, timer.mDurationCounter);
+                animation.setInterpolator(new AccelerateInterpolator());
+                animation.setDuration(700);
+                animation.start();
+                animation.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animation) {
+                        timerViewHolder.vMinutesBar.setProgress(timer.mDuration);
+                    }
+                });
+            }
         } else if (timer.mStatus == FINISHED) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
@@ -100,8 +115,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 } else TimersService.timerAction(position);
             }
         });
-        timerViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
-        timerViewHolder.vMinutesBar.setProgress(timer.mDuration);
         timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

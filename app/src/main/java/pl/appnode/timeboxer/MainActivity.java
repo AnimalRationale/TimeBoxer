@@ -36,6 +36,15 @@ public class MainActivity extends Activity {
     static TimersAdapter mTimersAdapter;
     static boolean sIsTimersBroadcastService = false;
     private static boolean sThemeChangeFlag;
+    static boolean sShowSeekbarAnimation;
+
+    public static void setShowSeekbarAnimation(boolean sShowSeekbarAnimation) {
+        sShowSeekbarAnimation = sShowSeekbarAnimation;
+    }
+
+    public static boolean isShowSeekbarAnimation() {
+        return sShowSeekbarAnimation;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +94,7 @@ public class MainActivity extends Activity {
         super.onResume();
         checkThemeChange();
         checkFirstRun();
+        sShowSeekbarAnimation = true;
         mTimersAdapter.notifyDataSetChanged();
     }
 

@@ -13,14 +13,31 @@
         android:text=""
         android:textAllCaps="false"
         android:textColor="#fff" />
-    <Button
-        android:id="@+id/widget_round_button1"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:background="@drawable/round_button_background"
-        android:text="@string/widget_button_default_text"
-        android:textAllCaps="false"
-        android:textColor="#fff" />
+    <RelativeLayout
+        android:id="@+id/widget_button1_relative_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:id="@+id/widget_button1_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:background="@drawable/round_button_background"
+            android:max="100"
+            android:progress="50" />
+        <Button
+            android:id="@+id/widget_round_button1"
+            android:layout_width="46dip"
+            android:layout_height="46dip"
+            android:layout_centerInParent="true"
+            android:elevation="0dp"
+            android:background="@drawable/round_button_background"
+            android:text="@string/widget_button_default_text"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
+    </RelativeLayout>
     <Button
         android:id="@+id/widget_round_button2"
         android:layout_width="50dip"

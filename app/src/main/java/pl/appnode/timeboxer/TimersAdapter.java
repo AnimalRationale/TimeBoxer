@@ -60,7 +60,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         timerViewHolder.vProgressBar.setMax(timer.mDuration);
         timerViewHolder.vMinutesBar.setMax(MAX_TIMER_DURATION);
         timerViewHolder.vMinutesBar.setProgress(timer.mDuration);
-
         timerViewHolder.vTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,21 +77,10 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         } else if (timer.mStatus == IDLE) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
             timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
+            minutesBarAnimation(timerViewHolder.vMinutesBar, timer.mDurationCounter, timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_green);
-            if (MainActivity.isShowSeekbarAnimation()) {
-                MainActivity.setShowSeekbarAnimation(false);
-                ObjectAnimator animation = ObjectAnimator.ofInt(timerViewHolder.vMinutesBar, "progress", 0, timer.mDurationCounter);
-                animation.setInterpolator(new AccelerateInterpolator());
-                animation.setDuration(700);
-                animation.start();
-                animation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        timerViewHolder.vMinutesBar.setProgress(timer.mDuration);
-                    }
-                });
-            }
         } else if (timer.mStatus == FINISHED) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
@@ -183,6 +171,20 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         TimersService.saveTimerDuration(position);
     }
 
+    private void minutesBarAnimation(final SeekBar seekBar, int durationCounter, final int duration) {
+        if (MainActivity.isShowSeekbarAnimation()) {
+            MainActivity.setShowSeekbarAnimation(false);
+            ObjectAnimator animation = ObjectAnimator.ofInt(seekBar, "progress", 0, durationCounter);
+            animation.setInterpolator(new AccelerateInterpolator());
+            animation.setDuration(durationCounter * 10);
+            animation.start();
+            animation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    seekBar.setProgress(duration);
+                }
+            });
+        }
+    }
     private void startTimerWithAnimation(final ProgressBar progressBar, final int position) {
         if (progressBar != null) {
             final int originalMax = progressBar.getMax();

@@ -53,6 +53,7 @@ import static pl.appnode.timeboxer.Constants.TIME_DEVIATION_FOR_LAST_TICK;
 import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 import static pl.appnode.timeboxer.Constants.TIMER_PREFIX;
 import static pl.appnode.timeboxer.Constants.WIDGET_BUTTONS;
+import static pl.appnode.timeboxer.Constants.WIDGET_BUTTONS_PROGRESS_BARS;
 import static pl.appnode.timeboxer.Constants.WIDGET_BUTTON_ACTION;
 
 /**
@@ -418,6 +419,12 @@ public class TimersService extends Service {
                 case IDLE:
                                 sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
                                         R.drawable.round_button_green);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setBackgroundResource", R.drawable.round_button_green);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setMax", timer.mDuration);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setProgress", 0);
                                 sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
                                         timer.mDuration + timer.mTimeUnitSymbol);
                                 break;
@@ -425,6 +432,12 @@ public class TimersService extends Service {
                 case RUNNING:
                                 sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
                                         R.drawable.round_button_orange);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setBackgroundResource", R.drawable.round_button_red);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setMax", timer.mDuration);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setProgress", timer.mDurationCounter);
                                 sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
                                         timer.mDurationCounter + timer.mTimeUnitSymbol);
                                 break;
@@ -432,6 +445,12 @@ public class TimersService extends Service {
                 case FINISHED:
                                 sWidgetViews.setInt(WIDGET_BUTTONS[i + 1], "setBackgroundResource",
                                         R.drawable.round_button_red);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setBackgroundResource", R.drawable.round_button_red);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setMax", timer.mDuration);
+                                sWidgetViews.setInt(WIDGET_BUTTONS_PROGRESS_BARS[i + 1],
+                                        "setProgress", 0);
                                 sWidgetViews.setTextViewText(WIDGET_BUTTONS[i + 1],
                                         timer.mDurationCounter + timer.mTimeUnitSymbol);
                                 break;

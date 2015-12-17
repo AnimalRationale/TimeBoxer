@@ -81,6 +81,15 @@ final class Constants {
     /** Array with defined widget buttons actions. */
     public static final String[] WIDGET_BUTTON_ACTION = {"A", "0", "1", "2", "3"};
 
+    /** Array with stored ids of widget buttons circular progress bars. */
+    public static final int[] WIDGET_BUTTONS_PROGRESS_BARS = {
+            R.id.widget_round_button0,
+            R.id.widget_button1_progress_bar,
+            R.id.widget_button2_progress_bar,
+            R.id.widget_button3_progress_bar,
+            R.id.widget_button4_progress_bar,
+    };
+
     public static final int CANCEL_WAKE_UP_ALARM = 0;
     public static final int SET_WAKE_UP_ALARM = 1;
     public static final String ACTION_TIMER_WAKE_UP = "TIMER_WAKE_UP";

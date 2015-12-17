@@ -32,7 +32,7 @@
             android:elevation="0dp"
             android:progressDrawable="@drawable/circular_progress_bar"
             android:background="@drawable/round_button_background"
-            android:max="100"
+            android:max="0"
             android:progress="100" />
         <Button
             android:id="@+id/widget_round_button1"
@@ -64,7 +64,7 @@
             android:elevation="0dp"
             android:progressDrawable="@drawable/circular_progress_bar"
             android:background="@drawable/round_button_background"
-            android:max="100"
+            android:max="0"
             android:progress="0" />
         <Button
             android:id="@+id/widget_round_button2"
@@ -96,7 +96,7 @@
             android:elevation="0dp"
             android:progressDrawable="@drawable/circular_progress_bar"
             android:background="@drawable/round_button_background"
-            android:max="100"
+            android:max="0"
             android:progress="0" />
         <Button
             android:id="@+id/widget_round_button3"
@@ -128,7 +128,7 @@
             android:elevation="0dp"
             android:progressDrawable="@drawable/circular_progress_bar"
             android:background="@drawable/round_button_background"
-            android:max="100"
+            android:max="0"
             android:progress="0" />
         <Button
             android:id="@+id/widget_round_button4"

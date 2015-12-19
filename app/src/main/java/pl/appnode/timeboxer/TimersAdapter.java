@@ -8,10 +8,12 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -211,9 +213,13 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     }
 
     private void buttonColorTransition(final View button) {
+        int startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                R.color.round_button_primary));
+        int endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                R.color.round_button_pressed));
         final ValueAnimator animation = ValueAnimator.ofObject(new ArgbEvaluator(),
-                0xFF99CC00,
-                0xFFFFAA00);
+                startColor,
+                endColor);
         final GradientDrawable background = (GradientDrawable) button.getBackground();
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -223,5 +229,13 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         });
         animation.setDuration(700);
         animation.start();
+    }
+
+    private int setColor(int colorResource) {
+        int color = Color.argb(Color.alpha(colorResource),
+                Color.red(colorResource),
+                Color.green(colorResource),
+                Color.blue(colorResource));
+        return color;
     }
 }

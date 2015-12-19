@@ -2,10 +2,15 @@ package pl.appnode.timeboxer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.SystemClock;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -101,6 +106,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 if (timer.mStatus == IDLE) {
                     startTimerWithAnimation(timerViewHolder.vProgressBar, position);
                 } else TimersService.timerAction(position);
+                buttonColorTransition(timerViewHolder.vDuration);
             }
         });
         timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -185,6 +191,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             });
         }
     }
+
     private void startTimerWithAnimation(final ProgressBar progressBar, final int position) {
         if (progressBar != null) {
             final int originalMax = progressBar.getMax();
@@ -201,5 +208,20 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
             });
         }
+    }
+
+    private void buttonColorTransition(final View button) {
+        final ValueAnimator animation = ValueAnimator.ofObject(new ArgbEvaluator(),
+                0xFF99CC00,
+                0xFFFFAA00);
+        final GradientDrawable background = (GradientDrawable) button.getBackground();
+        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(final ValueAnimator animator) {
+                background.setColor((Integer) animator.getAnimatedValue());
+            }
+        });
+        animation.setDuration(700);
+        animation.start();
     }
 }

@@ -8,14 +8,12 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,10 +103,10 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                buttonColorTransition(timerViewHolder.vDuration, timer.mStatus);
                 if (timer.mStatus == IDLE) {
                     startTimerWithAnimation(timerViewHolder.vProgressBar, position);
                 } else TimersService.timerAction(position);
-                buttonColorTransition(timerViewHolder.vDuration);
             }
         });
         timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -212,11 +210,39 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         }
     }
 
-    private void buttonColorTransition(final View button) {
-        int startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
-                R.color.round_button_primary));
-        int endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
-                R.color.round_button_pressed));
+    private void buttonColorTransition(final View button, int startState) {
+        int startColor;
+        int endColor;
+        switch (startState) {
+            case IDLE :
+                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_primary));
+                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_pressed));
+                Log.d(TAG, "Color set from IDLE");
+                break;
+            case RUNNING :
+                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_pressed));
+                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_primary));
+                Log.d(TAG, "Color set from RUNNING");
+                break;
+            case FINISHED :
+                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_selected));
+                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_primary));
+                Log.d(TAG, "Color set from FINISHED");
+                break;
+            default:
+                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_primary));
+                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                        R.color.round_button_pressed));
+                Log.d(TAG, "Color set default.");
+                break;
+        }
         final ValueAnimator animation = ValueAnimator.ofObject(new ArgbEvaluator(),
                 startColor,
                 endColor);
@@ -227,7 +253,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 background.setColor((Integer) animator.getAnimatedValue());
             }
         });
-        animation.setDuration(700);
+        animation.setDuration(500);
         animation.start();
     }
 

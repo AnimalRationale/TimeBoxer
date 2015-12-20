@@ -30,6 +30,7 @@ import static pl.appnode.timeboxer.Constants.IDLE;
 import static pl.appnode.timeboxer.Constants.MAX_TIMER_DURATION;
 import static pl.appnode.timeboxer.Constants.RUNNING;
 import static pl.appnode.timeboxer.Constants.SETTINGS_INTENT_REQUEST;
+import static pl.appnode.timeboxer.Constants.TIMERS_COUNT;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_FULLSCREEN_OFF;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_ID;
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_NAME;
@@ -178,8 +179,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     }
 
     private void minutesBarAnimation(final SeekBar seekBar, int durationCounter, final int duration) {
-        if (MainActivity.isShowSeekbarAnimation()) {
-            MainActivity.setShowSeekbarAnimation(false);
+        if (MainActivity.getSeekbarAnimationsCounter() < TIMERS_COUNT) {
+            MainActivity.increaseSeekbarAnimationsCounter();
             ObjectAnimator animation = ObjectAnimator.ofInt(seekBar, "progress", 0, durationCounter);
             animation.setInterpolator(new AccelerateInterpolator());
             animation.setDuration(durationCounter * 10);

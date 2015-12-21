@@ -310,7 +310,11 @@ public class TimersService extends Service {
         Calendar calendar = GregorianCalendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
-        timer.mTimeOfStart = hour + ":" + minutes;
+        String separator;
+        if (minutes < 10) {
+            separator = ":0";
+        } else separator = ":";
+        timer.mTimeOfStart = hour + separator + minutes;
         Log.d(LOGTAG, "Calendar time of start: " + timer.mTimeOfStart);
         sTimers[position] = new CustomCountDownTimer(timer.mDurationCounter * timeUnitFactor,
                 timeUnitFactor - (timeUnitFactor / TIME_DEVIATION_FOR_LAST_TICK),

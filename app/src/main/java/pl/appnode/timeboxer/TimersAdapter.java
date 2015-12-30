@@ -216,30 +216,30 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         int endColor;
         switch (startState) {
             case IDLE :
-                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
-                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
                 Log.d(TAG, "Color set from IDLE");
                 break;
             case RUNNING :
-                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
-                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
                 Log.d(TAG, "Color set from RUNNING");
                 break;
             case FINISHED :
-                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_selected));
-                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
                 Log.d(TAG, "Color set from FINISHED");
                 break;
             default:
-                startColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
-                endColor = setColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
                 Log.d(TAG, "Color set default.");
                 break;
@@ -247,18 +247,21 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         final ValueAnimator animation = ValueAnimator.ofObject(new ArgbEvaluator(),
                 startColor,
                 endColor);
+        button.setBackgroundResource(R.drawable.round_button_transition);
         final GradientDrawable background = (GradientDrawable) button.getBackground();
+        background.setColor(startColor);
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(final ValueAnimator animator) {
                 background.setColor((Integer) animator.getAnimatedValue());
+                Log.d(TAG, "Setting color: "  + animator.getAnimatedValue());
             }
         });
         animation.setDuration(500);
         animation.start();
     }
 
-    private int setColor(int colorResource) {
+    private int argbColor(int colorResource) {
         int color = Color.argb(Color.alpha(colorResource),
                 Color.red(colorResource),
                 Color.green(colorResource),

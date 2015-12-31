@@ -191,24 +191,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         }
     }
 
-    private void startTimerWithAnimation(final ProgressBar progressBar, final int position) {
-        if (progressBar != null) {
-            final int originalMax = progressBar.getMax();
-            int animationMax = 300;
-            progressBar.setMax(animationMax);
-            ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, animationMax);
-            animation.setDuration(700);
-            animation.setInterpolator(new DecelerateInterpolator());
-            animation.start();
-            animation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    progressBar.setMax(originalMax);
-                    TimersService.timerAction(position);
-                }
-            });
-        }
-    }
-
     private void timerActionWithButtonColorTransition(final View button, final ProgressBar progressBar,
                                                       final int startState, final int position) {
         int startColor;
@@ -219,28 +201,24 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                         R.color.round_button_primary));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
-                Log.d(TAG, "Color set from IDLE");
                 break;
             case RUNNING :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
-                Log.d(TAG, "Color set from RUNNING");
                 break;
             case FINISHED :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_selected));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
-                Log.d(TAG, "Color set from FINISHED");
                 break;
             default:
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
-                Log.d(TAG, "Color set default.");
                 break;
         }
         final ValueAnimator animation = ValueAnimator.ofObject(new ArgbEvaluator(),
@@ -253,7 +231,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             @Override
             public void onAnimationUpdate(final ValueAnimator animator) {
                 background.setColor((Integer) animator.getAnimatedValue());
-                Log.d(TAG, "Setting color: " + animator.getAnimatedValue());
             }
         });
         animation.setDuration(700);
@@ -276,5 +253,23 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 Color.green(colorResource),
                 Color.blue(colorResource));
         return color;
+    }
+
+    private void startTimerWithAnimation(final ProgressBar progressBar, final int position) {
+        if (progressBar != null) {
+            final int originalMax = progressBar.getMax();
+            int animationMax = 300;
+            progressBar.setMax(animationMax);
+            ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, animationMax);
+            animation.setDuration(700);
+            animation.setInterpolator(new DecelerateInterpolator());
+            animation.start();
+            animation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setMax(originalMax);
+                    TimersService.timerAction(position);
+                }
+            });
+        }
     }
 }

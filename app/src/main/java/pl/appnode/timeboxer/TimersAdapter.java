@@ -210,7 +210,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     }
 
     private void timerActionWithButtonColorTransition(final View button, final ProgressBar progressBar,
-                                                      int startState, final int position) {
+                                                      final int startState, final int position) {
         int startColor;
         int endColor;
         switch (startState) {
@@ -258,10 +258,16 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         });
         animation.setDuration(700);
         animation.start();
+        animation.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (startState != IDLE) {
+                    TimersService.timerAction(position);
+                }
+            }
+        });
         if (startState == IDLE) {
             startTimerWithAnimation(progressBar, position);
-        } else TimersService.timerAction(position);
-
+        }
     }
 
     private int argbColor(int colorResource) {

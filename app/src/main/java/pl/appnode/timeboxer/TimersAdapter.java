@@ -104,10 +104,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                buttonColorTransition(timerViewHolder.vDuration, timer.mStatus);
-                if (timer.mStatus == IDLE) {
-                    startTimerWithAnimation(timerViewHolder.vProgressBar, position);
-                } else TimersService.timerAction(position);
+                timerActionWithButtonColorTransition(timerViewHolder.vDuration, timerViewHolder.vProgressBar,
+                        timer.mStatus, position);
             }
         });
         timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -211,7 +209,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         }
     }
 
-    private void buttonColorTransition(final View button, int startState) {
+    private void timerActionWithButtonColorTransition(final View button, final ProgressBar progressBar,
+                                                      int startState, final int position) {
         int startColor;
         int endColor;
         switch (startState) {
@@ -254,11 +253,15 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             @Override
             public void onAnimationUpdate(final ValueAnimator animator) {
                 background.setColor((Integer) animator.getAnimatedValue());
-                Log.d(TAG, "Setting color: "  + animator.getAnimatedValue());
+                Log.d(TAG, "Setting color: " + animator.getAnimatedValue());
             }
         });
-        animation.setDuration(500);
+        animation.setDuration(700);
         animation.start();
+        if (startState == IDLE) {
+            startTimerWithAnimation(progressBar, position);
+        } else TimersService.timerAction(position);
+
     }
 
     private int argbColor(int colorResource) {

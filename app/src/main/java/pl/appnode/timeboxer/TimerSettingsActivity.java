@@ -157,7 +157,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
     private void playRingtone() {
         setVolume();
         mPlayStopButton.setBackgroundResource(R.drawable.round_button_red);
-        mPlayStopButton.setImageResource(R.mipmap.ic_stop_white_36dp);
+        mPlayStopButton.setImageResource(R.drawable.ic_stop_white_36dp);
         mIsPlaying = true;
         mRingtone.play();
     }
@@ -168,7 +168,7 @@ public class TimerSettingsActivity extends Activity implements View.OnClickListe
         // Restores initial volume level
         mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mOriginalVolume, 0);
         mPlayStopButton.setBackgroundResource(R.drawable.round_button_green);
-        mPlayStopButton.setImageResource(R.mipmap.ic_play_arrow_white_36dp);
+        mPlayStopButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
     }
 
     // Reads timer's data from starting intent

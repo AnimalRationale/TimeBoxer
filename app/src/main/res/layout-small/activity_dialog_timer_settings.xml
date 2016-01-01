@@ -94,14 +94,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center"
                 android:background="@drawable/round_icon_background"
-                android:src="@mipmap/ic_volume_mute_white_18dp"/>
+                android:src="@drawable/ic_volume_mute_white_18dp"/>
             <ImageView
                 android:id="@+id/volumeIconUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
                 android:background="@drawable/round_icon_background"
-                android:src="@mipmap/ic_volume_up_white_18dp"/>
+                android:src="@drawable/ic_volume_up_white_18dp"/>
 
         </FrameLayout>
         <ImageButton
@@ -109,7 +109,7 @@
             android:layout_width="38dip"
             android:layout_height="38dip"
             android:background="@drawable/round_button_background"
-            android:src="@mipmap/ic_play_arrow_white_36dp"
+            android:src="@drawable/ic_play_arrow_white_36dp"
             android:layout_gravity="center"
             style="?android:attr/borderlessButtonStyle"/>
         <FrameLayout

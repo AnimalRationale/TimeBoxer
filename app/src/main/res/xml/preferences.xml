@@ -3,10 +3,12 @@
     <CheckBoxPreference
         android:key="settings_checkbox_theme"
         android:title="@string/preferences_checkbox_theme"
+        android:icon="@drawable/ic_image_palette"
         android:summary="@string/preferences_checkbox_theme_description"
         android:defaultValue="false" />
     <CheckBoxPreference
         android:key="settings_checkbox_orientation"
+        android:icon="@drawable/ic_device_screen_rotation"
         android:title="@string/preferences_checkbox_orientation"
         android:summary="@string/preferences_checkbox_orientation_description"
         android:defaultValue="false" />

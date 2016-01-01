@@ -9,4 +9,9 @@
     <string name="preferences_checkbox_orientation">Screen rotation</string>
     <string name="preferences_checkbox_orientation_description">Allow changing of screen orientation to landscape
     </string>
+
+    <string name="preferences_checkbox_transitions">Color effects and animations</string>
+    <string name="preferences_checkbox_transitions_description">Show time seek bar animations and use color
+        transitions on timer\'s start/stop button click
+    </string>
 </resources>

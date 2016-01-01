@@ -12,4 +12,10 @@
         android:title="@string/preferences_checkbox_orientation"
         android:summary="@string/preferences_checkbox_orientation_description"
         android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="settings_checkbox_transitions"
+        android:icon="@drawable/ic_movie_filter_24px"
+        android:title="@string/preferences_checkbox_transitions"
+        android:summary="@string/preferences_checkbox_transitions_description"
+        android:defaultValue="true" />
 </PreferenceScreen>

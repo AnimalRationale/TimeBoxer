@@ -39,7 +39,9 @@ import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_RINGTON
 import static pl.appnode.timeboxer.Constants.TIMER_SETTINGS_INTENT_TIMER_UNIT;
 
 import static pl.appnode.timeboxer.PreferencesSetupHelper.isDarkTheme;
+import static pl.appnode.timeboxer.PreferencesSetupHelper.isTransitionsOn;
 import static pl.appnode.timeboxer.TimersService.sTimersList;
+import static pl.appnode.timeboxer.TimersService.timerAction;
 
 /**
  * Adapts items from data set into views grouped in list.
@@ -104,8 +106,10 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                timerActionWithButtonColorTransition(timerViewHolder.vDuration, timerViewHolder.vProgressBar,
-                        timer.mStatus, position);
+                if (isTransitionsOn(AppContextHelper.getContext())) {
+                    timerActionWithButtonColorTransition(timerViewHolder.vDuration, timerViewHolder.vProgressBar,
+                            timer.mStatus, position);
+                } else timerAction(position);
             }
         });
         timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

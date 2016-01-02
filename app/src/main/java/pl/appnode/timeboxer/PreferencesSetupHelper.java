@@ -10,6 +10,7 @@ import android.os.Build;
 import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_FIRSTRUN;
 import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_ORIENTATION;
 import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_THEME;
+import static pl.appnode.timeboxer.Constants.KEY_SETTINGS_TRANSITIONS;
 
 /**
  * Reads (and uses some of) application settings
@@ -69,6 +70,19 @@ public class PreferencesSetupHelper {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getBoolean(KEY_SETTINGS_ORIENTATION, false);
     }
+
+    /**
+     * Returns state of timer's button colors transitions preference setting
+     *
+     * @param context the context of calling activity
+     *
+     * @return true if timer's button colors transitions are allowed in preferences
+     */
+    public static boolean isTransitionsOn(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getBoolean(KEY_SETTINGS_TRANSITIONS, true);
+    }
+
 
     /**
      * Checks if app is started first time after installation.

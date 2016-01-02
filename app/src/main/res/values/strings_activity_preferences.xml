@@ -11,7 +11,7 @@
     </string>
 
     <string name="preferences_checkbox_transitions">Color effects and animations</string>
-    <string name="preferences_checkbox_transitions_description">Show time seek bar animations and use color
+    <string name="preferences_checkbox_transitions_description">Show animations and use colors
         transitions on timer\'s start/stop button click
     </string>
 </resources>

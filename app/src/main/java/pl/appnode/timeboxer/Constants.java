@@ -20,9 +20,10 @@ final class Constants {
     public static final String PREFS_FULLSCREEN_OFF = "_FullScreenOff";
     public static final String PREFS_FINISHTIME = "_FinishTime";
 
-    /** Keys for saving app settings (theme, orientation) and first run check). */
+    /** Keys for saving app settings (theme, orientation, colors transitions) and first run check). */
     public static final String KEY_SETTINGS_THEME = "settings_checkbox_theme";
     public static final String KEY_SETTINGS_ORIENTATION = "settings_checkbox_orientation";
+    public static final String KEY_SETTINGS_TRANSITIONS = "settings_checkbox_transitions";
     public static final String KEY_SETTINGS_FIRSTRUN = "settings_first_run";
 
     /** Keys for intent for timer's settings activity. */

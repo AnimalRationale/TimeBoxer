@@ -60,7 +60,7 @@ final class Constants {
 
     /**
      * Delay before accepting next click of button on timers list
-     * (preventing accidental timer on/off).
+     * (preventing accidental timer on/off), defining timer's button colors transition duration.
      */
     public static final int BUTTON_PRESS_DELAY = 700;
 

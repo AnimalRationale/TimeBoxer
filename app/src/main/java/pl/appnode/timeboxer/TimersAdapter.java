@@ -76,7 +76,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
             }
         });
-        if (timer.mStatus == RUNNING) {
+        if (timer.mStatus == RUNNING && !timerViewHolder.vInTransition) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             timerViewHolder.vMinutesBar.setVisibility(View.GONE);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
@@ -107,8 +107,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isTransitionsOn(AppContextHelper.getContext())) {
-                    timerActionWithButtonColorTransition(timerViewHolder.vDuration, timerViewHolder.vProgressBar,
-                            timer.mStatus, position);
+                    timerActionWithButtonColorTransition(timerViewHolder, timer.mStatus, position);
                 } else timerAction(position);
             }
         });
@@ -152,6 +151,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         final Button vDuration;
         final SeekBar vMinutesBar;
         final ProgressBar vProgressBar;
+        boolean vInTransition;
 
         public TimerViewHolder(View v) {
             super(v);
@@ -159,6 +159,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             vDuration = (Button) v.findViewById(R.id.button_round_01);
             vMinutesBar = (SeekBar) v.findViewById(R.id.time_seek_bar);
             vProgressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
+            vInTransition = false;
         }
     }
 
@@ -195,10 +196,12 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         }
     }
 
-    private void timerActionWithButtonColorTransition(final View button, final ProgressBar progressBar,
+    private void timerActionWithButtonColorTransition(final TimerViewHolder timeViewHolder,
                                                       final int startState, final int position) {
         int startColor;
         int endColor;
+        final View button = timeViewHolder.vDuration;
+        final ProgressBar progressBar = timeViewHolder.vProgressBar;
         switch (startState) {
             case IDLE :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
@@ -211,12 +214,14 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                         R.color.round_button_pressed));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
+                timeViewHolder.vInTransition = true;
                 break;
             case FINISHED :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_selected));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
+                timeViewHolder.vInTransition = true;
                 break;
             default:
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
@@ -229,20 +234,27 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 startColor,
                 endColor);
         button.setBackgroundResource(R.drawable.round_button_transition);
-        final GradientDrawable background = (GradientDrawable) button.getBackground();
-        background.setColor(startColor);
+        progressBar.setBackgroundResource(R.drawable.round_progress_bar_transition);
+        final GradientDrawable buttonBackground = (GradientDrawable) button.getBackground();
+        final GradientDrawable progressBarBackground = (GradientDrawable) progressBar.getBackground();
+        buttonBackground.setColor(startColor);
+        progressBarBackground.setColor(startColor);
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(final ValueAnimator animator) {
-                background.setColor((Integer) animator.getAnimatedValue());
+                buttonBackground.setColor((Integer) animator.getAnimatedValue());
+                progressBarBackground.setColor((Integer) animator.getAnimatedValue());
             }
         });
-        animation.setDuration(700);
+        animation.setDuration(BUTTON_PRESS_DELAY);
         animation.start();
         animation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (startState != IDLE) {
+                    button.setBackgroundResource(R.drawable.round_button_green);
+                    progressBar.setBackgroundResource(R.drawable.round_button_green);
                     TimersService.timerAction(position);
+                    timeViewHolder.vInTransition = false;
                 }
             }
         });
@@ -265,7 +277,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             int animationMax = 300;
             progressBar.setMax(animationMax);
             ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, animationMax);
-            animation.setDuration(700);
+            animation.setDuration(BUTTON_PRESS_DELAY);
             animation.setInterpolator(new DecelerateInterpolator());
             animation.start();
             animation.addListener(new AnimatorListenerAdapter() {

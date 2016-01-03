@@ -182,11 +182,12 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     }
 
     private void minutesBarAnimation(final SeekBar seekBar, int durationCounter, final int duration) {
-        if (MainActivity.getSeekbarAnimationsCounter() < TIMERS_COUNT) {
+        if (isTransitionsOn(AppContextHelper.getContext())
+                && MainActivity.getSeekbarAnimationsCounter() < TIMERS_COUNT) {
             MainActivity.increaseSeekbarAnimationsCounter();
             ObjectAnimator animation = ObjectAnimator.ofInt(seekBar, "progress", 0, durationCounter);
             animation.setInterpolator(new AccelerateInterpolator());
-            animation.setDuration(durationCounter * 10);
+            animation.setDuration(BUTTON_PRESS_DELAY);
             animation.start();
             animation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {

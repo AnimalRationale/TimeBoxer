@@ -243,7 +243,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         button.setBackgroundResource(R.drawable.round_button_transition);
         progressBar.setBackgroundResource(R.drawable.round_progress_bar_transition);
         final GradientDrawable buttonBackground = (GradientDrawable) button.getBackground();
-        final GradientDrawable progressBarBackground = (GradientDrawable) progressBar.getBackground();
         buttonBackground.setColor(startColor);
         if (startState != IDLE) {
             progressBar.getProgressDrawable()

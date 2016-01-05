@@ -109,7 +109,12 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isTransitionsOn(AppContextHelper.getContext())) {
                     timerActionWithButtonColorTransition(timerViewHolder, timer.mStatus, position);
-                } else timerAction(position);
+                } else {
+                    timerViewHolder.vProgressBar.getProgressDrawable()
+                            .setColorFilter(argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                                    R.color.round_button_pressed)), PorterDuff.Mode.SRC_IN);
+                    timerAction(position);
+                }
             }
         });
         timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

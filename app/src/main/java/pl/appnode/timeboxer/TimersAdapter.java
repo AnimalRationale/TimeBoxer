@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
@@ -239,12 +240,17 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         final GradientDrawable buttonBackground = (GradientDrawable) button.getBackground();
         final GradientDrawable progressBarBackground = (GradientDrawable) progressBar.getBackground();
         buttonBackground.setColor(startColor);
-        progressBarBackground.setColor(startColor);
+        if (startState != IDLE) {
+            progressBar.getProgressDrawable()
+                .setColorFilter(startColor, PorterDuff.Mode.SRC_IN);
+        } else {progressBar.getProgressDrawable()
+                .setColorFilter(endColor, PorterDuff.Mode.SRC_IN);}
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(final ValueAnimator animator) {
                 buttonBackground.setColor((Integer) animator.getAnimatedValue());
-                progressBarBackground.setColor((Integer) animator.getAnimatedValue());
+                if (startState != IDLE) {progressBar.getProgressDrawable()
+                        .setColorFilter((Integer) animator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);}
             }
         });
         animation.setDuration(BUTTON_PRESS_DELAY);

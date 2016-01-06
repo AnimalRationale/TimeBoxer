@@ -79,7 +79,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         });
         if (timer.mStatus == RUNNING && !timerViewHolder.vInTransition) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
-            timerViewHolder.vMinutesBar.setVisibility(View.GONE);
+            timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(timer.mDurationCounter);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);
@@ -208,6 +208,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         int startColor;
         int endColor;
         final View button = timeViewHolder.vDuration;
+        final View title = timeViewHolder.vTitle;
+        final View minutesBar = timeViewHolder.vMinutesBar;
         final ProgressBar progressBar = timeViewHolder.vProgressBar;
         switch (startState) {
             case IDLE :
@@ -215,6 +217,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                         R.color.round_button_primary));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
+                minutesBar.setVisibility(View.INVISIBLE);
+                title.animate().translationY((title.getHeight())/3);
                 break;
             case RUNNING :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
@@ -222,6 +226,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
                 timeViewHolder.vInTransition = true;
+                title.animate().translationY(0);
                 break;
             case FINISHED :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
@@ -229,6 +234,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
                 timeViewHolder.vInTransition = true;
+                title.animate().translationY(0);
                 break;
             default:
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),

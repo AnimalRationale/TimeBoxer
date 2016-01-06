@@ -79,7 +79,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         });
         if (timer.mStatus == RUNNING && !timerViewHolder.vInTransition) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
-            timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
+            if (isTransitionsOn(mContext)) {
+                timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
+            } else timerViewHolder.vMinutesBar.setVisibility(View.GONE);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(timer.mDurationCounter);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);
@@ -92,7 +94,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_green);
         } else if (timer.mStatus == FINISHED) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
-            timerViewHolder.vMinutesBar.setVisibility(View.GONE);
+            if (isTransitionsOn(mContext)) {
+                timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
+            } else timerViewHolder.vMinutesBar.setVisibility(View.GONE);
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);

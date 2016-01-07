@@ -89,6 +89,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             }
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(timer.mDurationCounter);
+            timerViewHolder.vProgressBar.getProgressDrawable()
+                    .setColorFilter(argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                            R.color.round_button_pressed)), PorterDuff.Mode.SRC_IN);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);
         } else if (timer.mStatus == IDLE) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);

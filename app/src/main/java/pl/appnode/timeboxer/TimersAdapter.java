@@ -81,6 +81,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             if (isTransitionsOn(mContext)) {
                 timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
+                timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight())/3);
             } else {
                 if (timerViewHolder.vMinutesBar.getVisibility() == View.INVISIBLE) {
                     timerViewHolder.vTitle.animate().translationY(0);
@@ -100,6 +101,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_green);
+            timerViewHolder.vProgressBar.getProgressDrawable()
+                    .setColorFilter(argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                            R.color.round_button_primary)), PorterDuff.Mode.SRC_IN);
         } else if (timer.mStatus == FINISHED) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_red);
             if (isTransitionsOn(mContext)) {
@@ -108,6 +112,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);
+            timerViewHolder.vProgressBar.getProgressDrawable()
+                    .setColorFilter(argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
+                            R.color.round_button_selected)), PorterDuff.Mode.SRC_IN);
         }
         // Timers list has constant number of elements, there should be no scrolling
         // and re-binding (spawning and garbage collecting of listeners); in case of adding

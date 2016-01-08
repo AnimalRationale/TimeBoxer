@@ -222,38 +222,45 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         }
     }
 
-    private void timerActionWithButtonColorTransition(final TimerViewHolder timeViewHolder,
+    private void timerActionWithButtonColorTransition(final TimerViewHolder timerViewHolder,
                                                       final int startState, final int position) {
         int startColor;
         int endColor;
-        final View button = timeViewHolder.vDuration;
-        final View title = timeViewHolder.vTitle;
-        final View minutesBar = timeViewHolder.vMinutesBar;
-        final ProgressBar progressBar = timeViewHolder.vProgressBar;
+        final View button = timerViewHolder.vDuration;
+        final View title = timerViewHolder.vTitle;
+        final View minutesBar = timerViewHolder.vMinutesBar;
+        final ProgressBar progressBar = timerViewHolder.vProgressBar;
         switch (startState) {
             case IDLE :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
+                timerViewHolder.vMinutesBar.animate().alpha(0.0f);
+                title.animate().translationY((title.getHeight()) / 3);
                 minutesBar.setVisibility(View.INVISIBLE);
-                title.animate().translationY((title.getHeight())/3);
                 break;
             case RUNNING :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
-                timeViewHolder.vInTransition = true;
+                timerViewHolder.vInTransition = true;
                 title.animate().translationY(0);
+                timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
+                timerViewHolder.vMinutesBar.setAlpha(0.0f);
+                timerViewHolder.vMinutesBar.animate().alpha(1.0f);
                 break;
             case FINISHED :
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_selected));
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_primary));
-                timeViewHolder.vInTransition = true;
+                timerViewHolder.vInTransition = true;
                 title.animate().translationY(0);
+                timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
+                timerViewHolder.vMinutesBar.setAlpha(1.0f);
+                timerViewHolder.vMinutesBar.animate().alpha(0.0f);
                 break;
             default:
                 startColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
@@ -273,13 +280,15 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             progressBar.getProgressDrawable()
                 .setColorFilter(startColor, PorterDuff.Mode.SRC_IN);
         } else {progressBar.getProgressDrawable()
-                .setColorFilter(endColor, PorterDuff.Mode.SRC_IN);}
+                .setColorFilter(endColor, PorterDuff.Mode.SRC_IN);
+        }
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(final ValueAnimator animator) {
                 buttonBackground.setColor((Integer) animator.getAnimatedValue());
-                if (startState != IDLE) {progressBar.getProgressDrawable()
-                        .setColorFilter((Integer) animator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);}
+                if (startState != IDLE) {
+                    progressBar.getProgressDrawable()
+                            .setColorFilter((Integer) animator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);}
             }
         });
         animation.setDuration(BUTTON_PRESS_DELAY);
@@ -290,7 +299,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     button.setBackgroundResource(R.drawable.round_button_green);
                     progressBar.setBackgroundResource(R.drawable.round_button_green);
                     TimersService.timerAction(position);
-                    timeViewHolder.vInTransition = false;
+                    timerViewHolder.vInTransition = false;
                 }
             }
         });

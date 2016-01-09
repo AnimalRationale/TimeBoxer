@@ -137,23 +137,28 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             }
         });
         timerViewHolder.vMinutesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            boolean isTouched = false;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (progress == 0) {
                     progress = 1;
                 }
-                timer.mDuration = progress;
-                timer.mDurationCounter = progress;
-                timerViewHolder.vDuration.setText(progress + timer.mTimeUnitSymbol);
+                if (isTouched) {
+                    timer.mDuration = progress;
+                    timer.mDurationCounter = progress;
+                    timerViewHolder.vDuration.setText(progress + timer.mTimeUnitSymbol);
+                }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                isTouched = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 setDuration(timer);
+                isTouched = false;
             }
         });
     }

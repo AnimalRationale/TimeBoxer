@@ -80,14 +80,21 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         if (timer.mStatus == RUNNING && !timerViewHolder.vInTransition) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             if (isTransitionsOn(mContext)) {
-                timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
-                timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight())/3);
-            } else {
-                if (timerViewHolder.vMinutesBar.getVisibility() == View.INVISIBLE) {
-                    timerViewHolder.vTitle.animate().translationY(0);
+                if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {
+                    timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
+                    timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                } else if (timerViewHolder.vMinutesBar.getVisibility() == View.GONE) {
+                    timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
+                    timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                } else if (timerViewHolder.vMinutesBar.getVisibility() == View.INVISIBLE) {
+                    timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
                 }
-                timerViewHolder.vMinutesBar.setVisibility(View.GONE);
-            }
+            } else if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {
+                        timerViewHolder.vMinutesBar.setVisibility(View.GONE);
+                    } else if (timerViewHolder.vMinutesBar.getVisibility() == View.INVISIBLE) {
+                                timerViewHolder.vTitle.animate().translationY(0);
+                                timerViewHolder.vMinutesBar.setVisibility(View.GONE);
+                            }
             timerViewHolder.vDuration.setText(timer.mDurationCounter + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(timer.mDurationCounter);
             timerViewHolder.vProgressBar.getProgressDrawable()
@@ -133,6 +140,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                             .setColorFilter(argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                                     R.color.round_button_pressed)), PorterDuff.Mode.SRC_IN);
                     timerAction(position);
+
                 }
             }
         });

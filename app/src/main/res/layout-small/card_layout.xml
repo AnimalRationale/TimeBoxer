@@ -12,25 +12,43 @@
     >
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_height="92dp"
         android:padding="6dip">
-        <Button
-            android:id="@+id/button_round_01"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="0dip"
-            android:layout_marginLeft="0dip"
-            android:background="@drawable/round_button_background"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="0"
-            android:textAllCaps="false"
-            android:textColor="#fff" />
+        <RelativeLayout
+            android:id="@+id/button_relative_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="0dp">
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:progressDrawable="@drawable/circular_progress_bar"
+                android:background="@drawable/round_button_background"
+                android:max="0"
+                android:progress="0" />
+            <Button
+                android:id="@+id/button_round_01"
+                android:stateListAnimator="@null"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="0dp"
+                android:layout_marginLeft="0dp"
+                android:elevation="0dp"
+                android:background="@drawable/round_button_background"
+                android:text="0"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+                android:textSize="24sp" />
+        </RelativeLayout>
         <SeekBar
             android:id="@+id/time_seek_bar"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/button_round_01"
+            android:layout_toRightOf="@id/button_relative_layout"
             android:gravity="bottom"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -44,7 +62,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_toRightOf="@id/button_round_01"
+            android:layout_toRightOf="@id/button_relative_layout"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/card_name"
             android:textColor="@color/primary"

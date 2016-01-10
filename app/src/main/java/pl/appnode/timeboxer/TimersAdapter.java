@@ -83,11 +83,14 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {
                     timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
                     timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                    Log.d(TAG, "Seekbar was VISIBLE - timer#" + position);
                 } else if (timerViewHolder.vMinutesBar.getVisibility() == View.GONE) {
                     timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
                     timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                    Log.d(TAG, "Seekbar was GONE - timer#" + position);
                 } else if (timerViewHolder.vMinutesBar.getVisibility() == View.INVISIBLE) {
                     timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                    Log.d(TAG, "Seekbar was INVISIBLE - timer#" + position);
                 }
             } else if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {
                         timerViewHolder.vMinutesBar.setVisibility(View.GONE);

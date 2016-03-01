@@ -79,6 +79,7 @@ class CustomCountDownTimer extends CountDownTimer {
                         + mContext.getResources().getString(R.string.notification_text03)
                         + mTimer.mDuration + mTimer.mTimeUnitSymbol)
                 .setSmallIcon(R.mipmap.ic_alarm_add_grey600_24dp)
+                .setProgress(mTimer.mDuration, mTimer.mDuration, false)
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(resultPendingIntent);
@@ -97,6 +98,7 @@ class CustomCountDownTimer extends CountDownTimer {
     private void notificationUpdate() {
         mNotify.setContentTitle(mTimer.mDurationCounter + mTimer.mTimeUnitSymbol
                 + mContext.getResources().getString(R.string.notification_title));
+        mNotify.setProgress(mTimer.mDuration, mTimer.mDurationCounter, false);
         mNM.notify(mTimerId, mNotify.build());
     }
 
@@ -106,6 +108,7 @@ class CustomCountDownTimer extends CountDownTimer {
                 + mTimer.mDuration + mTimer.mTimeUnitSymbol
                 + mContext.getResources().getString(R.string.notification_text03_finished))
                 .setContentText(mContext.getResources().getString(R.string.notification_text_finished))
+                .setProgress(0,0, false)
                 .setSmallIcon(R.mipmap.ic_launcher);
         mNM.notify(mTimerId, mNotify.build());
     }

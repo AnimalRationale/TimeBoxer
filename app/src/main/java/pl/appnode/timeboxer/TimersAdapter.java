@@ -77,19 +77,20 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
             }
         });
+        int titleAnimationOffset = timerViewHolder.vTitle.getHeight();
         if (timer.mStatus == RUNNING && !timerViewHolder.vInTransition) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             if (isTransitionsOn(mContext)) {
                 if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {
                     timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
-                    timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                    timerViewHolder.vTitle.animate().translationY(titleAnimationOffset);
                     Log.d(TAG, "Seekbar was VISIBLE - timer#" + position);
                 } else if (timerViewHolder.vMinutesBar.getVisibility() == View.GONE) {
                     timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
-                    timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                    timerViewHolder.vTitle.animate().translationY(titleAnimationOffset);
                     Log.d(TAG, "Seekbar was GONE - timer#" + position);
                 } else if (timerViewHolder.vMinutesBar.getVisibility() == View.INVISIBLE) {
-                    timerViewHolder.vTitle.animate().translationY((timerViewHolder.vTitle.getHeight()) / 3);
+                    timerViewHolder.vTitle.animate().translationY(titleAnimationOffset);
                     Log.d(TAG, "Seekbar was INVISIBLE - timer#" + position);
                 }
             } else if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {

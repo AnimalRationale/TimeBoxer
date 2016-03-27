@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -52,6 +53,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
     private static final String TAG = "TimersAdapter";
     private final Context mContext;
     private long mLastClickTime = 0;
+    private int mTitleAnimationOffset;
 
     public TimersAdapter(Context context) {
         mContext = context;
@@ -77,20 +79,23 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
             }
         });
-        int titleAnimationOffset = timerViewHolder.vTitle.getHeight();
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            mTitleAnimationOffset = timerViewHolder.vTitle.getHeight() / 3;
+        } else mTitleAnimationOffset = timerViewHolder.vTitle.getHeight();
         if (timer.mStatus == RUNNING && !timerViewHolder.vInTransition) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_orange);
             if (isTransitionsOn(mContext)) {
                 if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {
                     timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
-                    timerViewHolder.vTitle.animate().translationY(titleAnimationOffset);
+                    timerViewHolder.vTitle.animate().translationY(mTitleAnimationOffset);
                     Log.d(TAG, "Seekbar was VISIBLE - timer#" + position);
                 } else if (timerViewHolder.vMinutesBar.getVisibility() == View.GONE) {
                     timerViewHolder.vMinutesBar.setVisibility(View.INVISIBLE);
-                    timerViewHolder.vTitle.animate().translationY(titleAnimationOffset);
+                    timerViewHolder.vTitle.animate().translationY(mTitleAnimationOffset);
                     Log.d(TAG, "Seekbar was GONE - timer#" + position);
                 } else if (timerViewHolder.vMinutesBar.getVisibility() == View.INVISIBLE) {
-                    timerViewHolder.vTitle.animate().translationY(titleAnimationOffset);
+                    timerViewHolder.vTitle.animate().translationY(mTitleAnimationOffset);
                     Log.d(TAG, "Seekbar was INVISIBLE - timer#" + position);
                 }
             } else if (timerViewHolder.vMinutesBar.getVisibility() == View.VISIBLE) {
@@ -138,6 +143,9 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isTransitionsOn(AppContextHelper.getContext())) {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                        mTitleAnimationOffset = timerViewHolder.vTitle.getHeight() / 3;
+                    } else mTitleAnimationOffset = timerViewHolder.vTitle.getHeight();
                     timerActionWithButtonColorTransition(timerViewHolder, timer.mStatus, position);
                 } else {
                     timerViewHolder.vProgressBar.getProgressDrawable()
@@ -254,7 +262,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 endColor = argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                         R.color.round_button_pressed));
                 timerViewHolder.vMinutesBar.animate().alpha(0.0f);
-                title.animate().translationY((title.getHeight()) / 3);
+                title.animate().translationY(mTitleAnimationOffset);
                 minutesBar.setVisibility(View.INVISIBLE);
                 break;
             case RUNNING :

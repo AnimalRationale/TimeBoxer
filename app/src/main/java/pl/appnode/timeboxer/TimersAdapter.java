@@ -79,7 +79,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
             }
         });
-
+        // Set title animation offset to proper value to move title to card center, depending of SDK version
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             mTitleAnimationOffset = timerViewHolder.vTitle.getHeight() / 3;
         } else mTitleAnimationOffset = timerViewHolder.vTitle.getHeight();
@@ -143,6 +143,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isTransitionsOn(AppContextHelper.getContext())) {
+                    // Set title animation offset to proper value to move title to card center,
+                    // depending of SDK version
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                         mTitleAnimationOffset = timerViewHolder.vTitle.getHeight() / 3;
                     } else mTitleAnimationOffset = timerViewHolder.vTitle.getHeight();

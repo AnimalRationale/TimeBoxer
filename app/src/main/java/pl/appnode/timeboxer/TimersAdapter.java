@@ -112,6 +112,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vProgressBar.setBackgroundResource(R.drawable.round_button_red);
         } else if (timer.mStatus == IDLE) {
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
+            timerViewHolder.vTitle.animate().translationY(0);
             timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
             minutesBarAnimation(timerViewHolder.vMinutesBar, timer.mDurationCounter, timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);

@@ -154,6 +154,10 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
                     timerViewHolder.vProgressBar.getProgressDrawable()
                             .setColorFilter(argbColor(ContextCompat.getColor(AppContextHelper.getContext(),
                                     R.color.round_button_pressed)), PorterDuff.Mode.SRC_IN);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        mTitleAnimationOffset = timerViewHolder.vTitle.getHeight();
+                        timerViewHolder.vTitle.animate().translationY(mTitleAnimationOffset);
+                    }
                     timerAction(position);
 
                 }

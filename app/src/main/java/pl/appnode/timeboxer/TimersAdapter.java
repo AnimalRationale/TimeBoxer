@@ -114,6 +114,10 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             timerViewHolder.vDuration.setBackgroundResource(R.drawable.round_button_green);
             timerViewHolder.vTitle.animate().translationY(0);
             timerViewHolder.vMinutesBar.setVisibility(View.VISIBLE);
+            // Check if timer was dismissed form widget or notification
+            if (timerViewHolder.vMinutesBar.getAlpha() < 1.0f) {
+                timerViewHolder.vMinutesBar.animate().alpha(1.0f);
+            }
             minutesBarAnimation(timerViewHolder.vMinutesBar, timer.mDurationCounter, timer.mDuration);
             timerViewHolder.vDuration.setText(timer.mDuration + timer.mTimeUnitSymbol);
             timerViewHolder.vProgressBar.setProgress(0);

@@ -3,7 +3,10 @@ package pl.appnode.timeboxer;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -108,6 +111,18 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Sets color of menu icons in light theme
+        if (!isDarkTheme(this)) {
+            for(int i = 0; i < menu.size(); i++){
+                Drawable drawable = menu.getItem(i).getIcon();
+                if (drawable != null) {
+                    drawable.mutate();
+                    drawable.setColorFilter(ContextCompat
+                            .getColor(AppContextHelper.getContext(), R.color.black_overlay),
+                            PorterDuff.Mode.SRC_IN);
+                }
+            }
+        }
         return true;
     }
 

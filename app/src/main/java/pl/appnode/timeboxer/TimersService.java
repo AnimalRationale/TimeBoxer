@@ -465,7 +465,7 @@ public class TimersService extends Service {
     }
 
     private static void assignWidgetButtons(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, SplashActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         sWidgetViews.setOnClickPendingIntent(WIDGET_BUTTONS[0], pendingIntent);
         for (int i = 1; i <= TIMERS_COUNT; i++) {

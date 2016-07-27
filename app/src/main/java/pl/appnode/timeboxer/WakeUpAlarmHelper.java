@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -32,9 +33,15 @@ public class WakeUpAlarmHelper {
         AlarmManager alarmManager = (AlarmManager) AppContextHelper.getContext()
                 .getSystemService(Context.ALARM_SERVICE);
         if (command == SET_WAKE_UP_ALARM) {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + (timerDuration - WAKE_UP_MARGIN),
-                    alarmWakeIntent);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + (timerDuration - WAKE_UP_MARGIN),
+                        alarmWakeIntent);
+            } else {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + (timerDuration - WAKE_UP_MARGIN),
+                        alarmWakeIntent);
+            }
             Log.d(TAG, "Setting WakeUp alarm for timer #" + timerId + ", for time in secs: "
                     + ((timerDuration - WAKE_UP_MARGIN) / 1000));
         } else if (command == CANCEL_WAKE_UP_ALARM) {

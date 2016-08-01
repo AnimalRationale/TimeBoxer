@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "pl.appnode.timeboxer"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 81
+        versionCode 82
         versionName "0.9.8"
     }
     buildTypes {
